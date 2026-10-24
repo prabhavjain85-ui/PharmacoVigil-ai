@@ -189,6 +189,17 @@ Each quarter's zip contains `DEMOyyQq.txt`, `DRUGyyQq.txt`, `REACyyQq.txt`
 `primaryid`, `drugname`, `role_cod`, `pt`). Point `--demo/--drug/--reac`
 at those files directly, or upload a small extract via the web UI.
 
+## Bayesian screens & ML prioritisation
+
+| Method | Signal rule (this app) | Module |
+|--------|------------------------|--------|
+| **PRR / χ²** | PRR ≥ 2, χ² ≥ 4, cases ≥ 3 | `faers_signal_detection.py` |
+| **BCPNN** | IC025 > 0 (95% credibility interval on IC) | `bayesian_stats.py` |
+| **EBGM (MGPS)** | EB05 > 2 (gamma–Poisson shrinkage prior fit on all pairs) | `bayesian_stats.py` |
+| **ML priority** | Gradient boosting probability from **weak labels** (`reference_signals.py`) | `ml_prioritization.py` |
+
+**Limitations:** FAERS is spontaneous reporting; Bayesian and frequentist screens can disagree on sparse cells. The ML model is trained on planted demo pairs plus a small literature reference set—it is for **triage ranking only**, not validated pharmacovigilance performance. See `GET /api/prioritization/meta` for feature importances and documentation.
+
 ## How the statistics work
 
 For each drug–event pair, a 2×2 contingency table is built:

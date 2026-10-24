@@ -15,6 +15,7 @@ from threading import RLock
 from typing import Any
 from urllib.parse import unquote
 
+import pandas as pd
 from fastapi import FastAPI, File, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
@@ -27,6 +28,8 @@ from faers_signal_detection import (
     normalize_drug_name,
 )
 from make_sample_data import generate_sample_dataframes
+from ml_prioritization import DISPLAY_NAMES, FEATURE_COLUMNS, train_prioritization_model
+from reference_signals import REFERENCE_POSITIVE_PAIRS
 
 app = FastAPI(
     title="FAERS ADR Signal Detection",
@@ -87,6 +90,8 @@ def _jsonify_records(df) -> list[dict[str, Any]]:
                 row[key] = value.item()
             elif isinstance(value, bool):
                 row[key] = bool(value)
+            elif value is None or (isinstance(value, float) and pd.isna(value)):
+                row[key] = None
     return records
 
 
@@ -316,6 +321,34 @@ def api_drug_map() -> JSONResponse:
     return JSONResponse(drug_map_summary())
 
 
+@app.get("/api/prioritization/meta")
+def api_prioritization_meta(
+    min_cases: int = Query(3, ge=1, le=100),
+) -> JSONResponse:
+    """Document weak-label ML prioritisation and global feature importances."""
+    pairs, meta = _pairs_and_meta()
+    records = _all_signals(min_cases)
+    frame = pd.DataFrame(records)
+    model = train_prioritization_model(frame, int(meta["case_count"]))
+    return JSONResponse({
+        "method": "GradientBoostingClassifier on weak reference labels",
+        "label_source": "Planted boosted_pairs in sample data + small literature set",
+        "reference_positive_count": len(REFERENCE_POSITIVE_PAIRS),
+        "features": [
+            {"name": name, "label": DISPLAY_NAMES.get(name, name)}
+            for name in FEATURE_COLUMNS
+        ],
+        "global_importance": [
+            {"feature": name, "label": DISPLAY_NAMES.get(name, name), "importance": round(float(model.global_importance[name]), 4)}
+            for name in FEATURE_COLUMNS
+        ],
+        "limitations": [
+            "Not validated for regulatory use; ranks pairs for analyst triage only.",
+            "Labels are incomplete — many true signals are unlabelled in FAERS.",
+        ],
+    })
+
+
 @app.get("/api/drugs")
 def api_drugs() -> JSONResponse:
     drugs = _drug_stats()
@@ -417,7 +450,15 @@ def api_compare(
                 "PRR": row["PRR"],
                 "ROR": row["ROR"],
                 "chi_square": row["chi_square"],
+                "IC": row.get("IC"),
+                "IC025": row.get("IC025"),
+                "EBGM": row.get("EBGM"),
+                "EB05": row.get("EB05"),
                 "signal_detected": row["signal_detected"],
+                "signal_bcpnn": row.get("signal_bcpnn"),
+                "signal_ebgm": row.get("signal_ebgm"),
+                "priority_score": row.get("priority_score"),
+                "priority_rank": row.get("priority_rank"),
             }
         matrix.append({
             "adverse_event": event,
