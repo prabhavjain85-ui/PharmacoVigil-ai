@@ -33,6 +33,24 @@ Render, Fly.io, or local uvicorn), with **sample FAERS CSVs committed in the rep
 - `vercel.json` — static-only Vercel config (`outputDirectory: public`).
 - `Procfile` — process entry for Railway/Render (`uvicorn` on `0.0.0.0:$PORT`).
 
+## Seminar guided demo
+
+For live presentations (e.g. *AI & ML in Pharmacovigilance*), open **Seminar · Guided
+demo** from the home page or go directly to `/seminar` (Vercel) or
+http://127.0.0.1:8000/seminar locally.
+
+- **Five keyboard-navigated steps** (`←` / `→`): intro, disproportionality
+  (2×2 table + PRR/ROR/χ²), live WARFARIN analysis with charts, AI/ML context
+  with an illustrative prioritisation score, and summary.
+- **Bundled sample statistics** in `public/seminar-demo-data.js` so the demo never
+  shows an empty state without uploads; when `FARES_API_BASE_URL` points at a
+  running backend, step 3 uses the live API instead.
+- Regenerate the bundle after changing sample data:
+
+  ```bash
+  python3 scripts/generate_seminar_bundle.py
+  ```
+
 ## Web workflow
 
 1. **Dataset** — sample FAERS tables load by default. Optionally upload DEMO /

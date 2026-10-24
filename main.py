@@ -238,6 +238,24 @@ def config_js() -> FileResponse:
     return FileResponse(CONFIG_JS, media_type="application/javascript")
 
 
+def _public_file(name: str, media_type: str) -> FileResponse:
+    path = PUBLIC_DIR / name
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail=f"{name} not found")
+    return FileResponse(path, media_type=media_type)
+
+
+@app.get("/seminar.html", response_class=HTMLResponse)
+@app.get("/seminar", response_class=HTMLResponse)
+def seminar_page() -> FileResponse:
+    return _public_file("seminar.html", "text/html; charset=utf-8")
+
+
+@app.get("/seminar-demo-data.js")
+def seminar_demo_data() -> FileResponse:
+    return _public_file("seminar-demo-data.js", "application/javascript")
+
+
 @app.get("/api/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}

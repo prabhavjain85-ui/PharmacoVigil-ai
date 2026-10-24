@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI &amp; ML in Pharmacovigilance — Guided Demo</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent2: #34d399;
+      --warn: #fbbf24;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font: 20px/1.55 "Segoe UI", system-ui, sans-serif;
+      overflow: hidden;
+    }
+    .deck {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 28px;
+      border-bottom: 1px solid var(--border);
+      background: #0c1222;
+      font-size: 14px;
+    }
+    .topbar a { color: var(--accent); text-decoration: none; font-weight: 600; }
+    .progress {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--border);
+      transition: background .2s, transform .2s;
+    }
+    .dot.active { background: var(--accent); transform: scale(1.25); }
+    .dot.done { background: var(--accent2); }
+    .slide-area {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 24px 32px 80px;
+      overflow: auto;
+    }
+    .slide {
+      display: none;
+      width: min(1100px, 100%);
+      animation: fade .35s ease;
+    }
+    .slide.active { display: block; }
+    @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    h1 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.15; margin: 0 0 16px; }
+    h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); margin: 0 0 14px; color: var(--accent); }
+    h3 { font-size: 1.25rem; margin: 20px 0 10px; color: var(--accent2); }
+    p, li { font-size: clamp(1.05rem, 2vw, 1.35rem); color: #e2e8f0; }
+    .lead { font-size: clamp(1.2rem, 2.2vw, 1.5rem); color: var(--muted); max-width: 52ch; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-top: 20px;
+    }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 800px) { .grid2 { grid-template-columns: 1fr; } }
+    .pill {
+      display: inline-block;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    .table-2x2 {
+      width: 100%;
+      max-width: 520px;
+      border-collapse: collapse;
+      margin: 16px auto;
+      font-size: 1.1rem;
+    }
+    .table-2x2 th, .table-2x2 td {
+      border: 2px solid var(--accent);
+      padding: 16px 20px;
+      text-align: center;
+    }
+    .table-2x2 th { background: #0c4a6e; font-weight: 700; }
+    .table-2x2 .cell-a { background: #164e63; font-size: 1.5rem; font-weight: 800; color: var(--warn); }
+    .formula {
+      font-family: "Cambria Math", Georgia, serif;
+      font-size: 1.35rem;
+      background: #0c1222;
+      padding: 14px 18px;
+      border-radius: 10px;
+      border-left: 4px solid var(--accent);
+      margin: 10px 0;
+    }
+    .nav-hint {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 28px;
+      background: #0c1222ee;
+      border-top: 1px solid var(--border);
+      font-size: 15px;
+      color: var(--muted);
+    }
+    button.nav-btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 22px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--accent);
+      color: #0f172a;
+    }
+    button.nav-btn.sec { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    button.nav-btn:disabled { opacity: .4; cursor: not-allowed; }
+    .chart-box {
+      margin-top: 16px;
+      padding: 16px;
+      background: #0c1222;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    svg text { font-family: system-ui, sans-serif; }
+    table.data {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      margin-top: 12px;
+    }
+    table.data th, table.data td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    table.data th { color: var(--muted); text-transform: uppercase; font-size: 0.75rem; }
+    .sig-yes { color: var(--accent2); font-weight: 700; }
+    .illustrative {
+      border: 1px dashed var(--warn);
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 16px;
+      font-size: 0.95rem;
+      color: var(--warn);
+    }
+    .status-ok { color: var(--accent2); }
+    .status-fallback { color: var(--warn); }
+    kbd {
+      background: #334155;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+  </style>
+</head>
+<body>
+<div class="deck">
+  <header class="topbar">
+    <a href="/">← Back to FAERS workflow</a>
+    <span>AI &amp; ML in Pharmacovigilance</span>
+    <div class="progress" id="progressDots" aria-hidden="true"></div>
+  </header>
+
+  <main class="slide-area" id="slideArea">
+    <!-- Step 1: Intro -->
+    <section class="slide active" data-step="0">
+      <span class="pill">Seminar · Guided demo</span>
+      <h1>Pharmacovigilance &amp; FAERS signal detection</h1>
+      <p class="lead">A live walkthrough of disproportionality analysis—and where artificial intelligence fits in the safety surveillance lifecycle.</p>
+      <div class="card grid2">
+        <div>
+          <h3>What is pharmacovigilance?</h3>
+          <p>Science and activities for <strong>detecting, assessing, and preventing</strong> adverse drug reactions (ADRs) after marketing authorization.</p>
+        </div>
+        <div>
+          <h3>What is FAERS?</h3>
+          <p>The FDA <strong>Adverse Event Reporting System</strong>—spontaneous reports from clinicians, patients, and manufacturers. DEMO, DRUG, and REAC tables joined on <code>primaryid</code>.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Why manual signal detection is hard</h3>
+        <ul>
+          <li>Millions of drug–event pairs; rare events hide in noise.</li>
+          <li>Reporting bias, duplicate cases, and confounding by indication.</li>
+          <li>Analysts need repeatable statistics <em>and</em> clinical judgment—not slide decks alone.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Step 2: Disproportionality -->
+    <section class="slide" data-step="1">
+      <h2>Disproportionality analysis</h2>
+      <p>For each drug–ADR pair we build a <strong>2×2 contingency table</strong> across all cases in the dataset:</p>
+      <table class="table-2x2" id="contingencyTable">
+        <thead>
+          <tr><th></th><th>Event of interest</th><th>All other events</th></tr>
+        </thead>
+        <tbody>
+          <tr><th>Drug of interest</th><td class="cell-a" id="cellA">a</td><td id="cellB">b</td></tr>
+          <tr><th>All other drugs</th><td id="cellC">c</td><td id="cellD">d</td></tr>
+        </tbody>
+      </table>
+      <p class="lead" id="contingencyCaption" style="text-align:center;margin-top:8px"></p>
+      <div class="grid2">
+        <div class="formula">PRR = (a/(a+b)) ÷ (c/(c+d))</div>
+        <div class="formula">ROR = (a×d) / (b×c)</div>
+      </div>
+      <p>χ² (Yates-corrected) tests association. This app flags a <strong>signal</strong> when PRR ≥ 2, χ² ≥ 4, and cases ≥ 3—the FDA/MHRA-style screen used in <code>faers_signal_detection.py</code>.</p>
+    </section>
+
+    <!-- Step 3: Live demo -->
+    <section class="slide" data-step="2">
+      <h2>Live demo · sample FAERS data</h2>
+      <p id="demoStatus" class="lead">Running disproportionality on bundled sample data…</p>
+      <div class="card">
+        <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between">
+          <div>
+            <strong id="demoDrugName">WARFARIN</strong>
+            <span class="pill" id="demoDatasetPill">200 cases</span>
+          </div>
+          <button type="button" class="nav-btn" id="runDemoBtn">Re-run analysis</button>
+        </div>
+        <div class="chart-box">
+          <h3 style="margin-top:0">Top ADR signals by PRR</h3>
+          <svg id="demoChart" width="100%" height="280" viewBox="0 0 800 280" role="img" aria-label="Bar chart of PRR values"></svg>
+        </div>
+        <div style="max-height:220px;overflow:auto">
+          <table class="data">
+            <thead><tr><th>Adverse event</th><th>PRR</th><th>ROR</th><th>χ²</th><th>Cases</th><th>Signal</th></tr></thead>
+            <tbody id="demoTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step 4: AI/ML -->
+    <section class="slide" data-step="3">
+      <h2>Where AI &amp; ML fit</h2>
+      <div class="grid2">
+        <div class="card" style="margin-top:0">
+          <h3 style="margin-top:0">NLP on narratives</h3>
+          <p>Free-text case descriptions can be mined for symptoms, negation, and temporal cues—complementing structured MedDRA coding.</p>
+        </div>
+        <div class="card" style="margin-top:0">
+          <h3>ML prioritisation</h3>
+          <p>Models can rank drug–event pairs for human review using features beyond PRR (plausibility, novelty, seriousness).</p>
+        </div>
+        <div class="card" style="margin-top:0">
+          <h3>Bayesian extensions</h3>
+          <p>Regulatory systems often use <strong>BCPNN</strong> or <strong>EBGM</strong>—Bayesian shrinkage toward background rates, not just frequentist screens.</p>
+        </div>
+        <div class="card" style="margin-top:0">
+          <h3>Limits &amp; regulation</h3>
+          <p>Signals ≠ causality. AI outputs need validation, audit trails, and alignment with ICH E2B/E2E and FDA pharmacovigilance guidance.</p>
+        </div>
+      </div>
+      <div class="illustrative">
+        <strong>Illustrative only — not for regulatory submission.</strong> Below: a simple <em>prioritisation score</em> (weighted PRR, χ², log cases) to mimic ML ranking on the same demo pairs.
+      </div>
+      <div class="chart-box">
+        <h3 style="margin-top:0">Illustrative ML-style prioritisation (top 6)</h3>
+        <svg id="mlChart" width="100%" height="240" viewBox="0 0 800 240"></svg>
+        <table class="data">
+          <thead><tr><th>Drug</th><th>Event</th><th>Priority score</th><th>Cluster</th></tr></thead>
+          <tbody id="mlTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Step 5: Wrap-up -->
+    <section class="slide" data-step="4">
+      <h1>Summary</h1>
+      <div class="card">
+        <ul>
+          <li><strong>FAERS</strong> provides the real-world safety data backbone; disproportionality (PRR, ROR, χ²) scales screening across thousands of pairs.</li>
+          <li>This app implements the same formulas as the Python pipeline—with upload, drug mapping, and comparison views for hands-on exploration.</li>
+          <li><strong>AI/ML</strong> augments—not replaces—expert review: NLP for narratives, learning-to-rank for triage, Bayesian methods in production vigilance systems.</li>
+          <li>Always pair statistical signals with clinical context and regulatory process.</li>
+        </ul>
+      </div>
+      <p class="lead" style="margin-top:24px">
+        <a href="/" style="color:var(--accent)">Open the full FAERS workflow</a> to upload data, compare drugs, and explore signals interactively.
+      </p>
+      <p style="color:var(--muted);font-size:1rem">Press <kbd>←</kbd> <kbd>→</kbd> to move between steps · <kbd>F</kbd> for fullscreen (browser)</p>
+    </section>
+  </main>
+
+  <footer class="nav-hint">
+    <button type="button" class="nav-btn sec" id="prevBtn" disabled>← Previous</button>
+    <span id="stepLabel">Step 1 of 5</span>
+    <button type="button" class="nav-btn" id="nextBtn">Next →</button>
+  </footer>
+</div>
+
+<script src="/config.js"></script>
+<script src="/seminar-demo-data.js"></script>
+<script>
+(function () {
+  const SLIDES = 5;
+  let step = 0;
+  const $ = (id) => document.getElementById(id);
+  const esc = (x) => String(x ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] || c));
+  const n = (x) => Number(x || 0);
+  const fmt = (x) => (Number.isInteger(n(x)) ? String(n(x)) : n(x).toFixed(3));
+  const API_BASE = (window.FARES_API_BASE_URL || '').replace(/\/$/, '');
+  const api = (p) => API_BASE + p;
+  const BUNDLE = window.SEMINAR_DEMO_DATA || {};
+
+  function goTo(s) {
+    step = Math.max(0, Math.min(SLIDES - 1, s));
+    document.querySelectorAll('.slide').forEach((el, i) => el.classList.toggle('active', i === step));
+    document.querySelectorAll('.dot').forEach((el, i) => {
+      el.classList.toggle('active', i === step);
+      el.classList.toggle('done', i < step);
+    });
+    $('prevBtn').disabled = step === 0;
+    $('nextBtn').disabled = step === SLIDES - 1;
+    $('nextBtn').textContent = step === SLIDES - 1 ? 'End' : 'Next →';
+    $('stepLabel').textContent = `Step ${step + 1} of ${SLIDES}`;
+    if (step === 1) fillContingency();
+    if (step === 2) runLiveDemo();
+    if (step === 3) renderMlIllustration();
+  }
+
+  function initDots() {
+    const wrap = $('progressDots');
+    wrap.innerHTML = '';
+    for (let i = 0; i < SLIDES; i++) {
+      const d = document.createElement('span');
+      d.className = 'dot' + (i === 0 ? ' active' : '');
+      d.title = `Step ${i + 1}`;
+      d.onclick = () => goTo(i);
+      wrap.appendChild(d);
+    }
+  }
+
+  function featuredPair() {
+    return BUNDLE.featured_pair || (BUNDLE.warfarin_adrs && BUNDLE.warfarin_adrs[0]) || {};
+  }
+
+  function fillContingency() {
+    const cells = BUNDLE.featured_contingency || {};
+    const pair = featuredPair();
+    $('cellA').textContent = cells.a ?? 'a';
+    $('cellB').textContent = cells.b ?? 'b';
+    $('cellC').textContent = cells.c ?? 'c';
+    $('cellD').textContent = cells.d ?? 'd';
+    $('contingencyCaption').textContent =
+      `Example from this demo dataset: ${pair.drug || 'WARFARIN'} · ${pair.adverse_event || ''} — PRR ${fmt(pair.PRR)}, ROR ${fmt(pair.ROR)}, χ² ${fmt(pair.chi_square)}`;
+  }
+
+  function drawBars(svgId, items, valueKey, labelKey, color) {
+    const svg = $(svgId);
+    if (!svg || !items.length) return;
+    const W = 800, L = 240, H = 260, max = Math.max(...items.map((x) => n(x[valueKey])), 0.01);
+    const bh = Math.min(28, (H - 20) / items.length - 4);
+    svg.innerHTML = items.map((x, i) => {
+      const y = 10 + i * (bh + 5);
+      const w = ((W - L - 50) * n(x[valueKey])) / max;
+      const lab = String(x[labelKey] || '').slice(0, 42);
+      return `<text x="${L - 10}" y="${y + bh * 0.72}" text-anchor="end" fill="#94a3b8" font-size="13">${esc(lab)}</text>` +
+        `<rect x="${L}" y="${y}" width="${Math.max(3, w)}" height="${bh}" rx="5" fill="${color || '#38bdf8'}"></rect>` +
+        `<text x="${L + w + 8}" y="${y + bh * 0.72}" fill="#e2e8f0" font-size="13">${fmt(x[valueKey])}</text>`;
+    }).join('');
+  }
+
+  async function fetchWarfarinRows() {
+    const drug = BUNDLE.demo_drug || 'WARFARIN';
+    if (API_BASE) {
+      try {
+        const r = await fetch(api('/api/drugs/' + encodeURIComponent(drug) + '/adrs?min_cases=3&signals_only=false'));
+        const d = await r.json();
+        if (r.ok && d.results && d.results.length) {
+          return { rows: d.results, live: true, meta: null };
+        }
+      } catch (_) { /* fallback */ }
+    }
+    return {
+      rows: BUNDLE.warfarin_adrs || [],
+      live: false,
+      meta: BUNDLE.dataset,
+    };
+  }
+
+  async function runLiveDemo() {
+    $('demoStatus').innerHTML = 'Running disproportionality…';
+    const { rows, live, meta } = await fetchWarfarinRows();
+    const sorted = [...rows].sort((a, b) => n(b.PRR) - n(a.PRR));
+    const ds = meta || BUNDLE.dataset || {};
+    $('demoDrugName').textContent = BUNDLE.demo_drug || 'WARFARIN';
+    $('demoDatasetPill').textContent = `${n(ds.case_count) || 200} cases · ${live ? 'live API' : 'bundled sample'}`;
+    $('demoStatus').innerHTML = live
+      ? '<span class="status-ok">Connected to backend API — same computations as the main workflow.</span>'
+      : '<span class="status-fallback">Offline bundled sample (identical statistics to committed <code>sample_data/</code>).</span>';
+    const top = sorted.slice(0, 8);
+    drawBars('demoChart', top.map((r) => ({ label: r.adverse_event, v: r.PRR })), 'v', 'label', '#38bdf8');
+    $('demoTableBody').innerHTML = sorted.slice(0, 12).map((r) =>
+      `<tr><td>${esc(r.adverse_event)}</td><td>${fmt(r.PRR)}</td><td>${fmt(r.ROR)}</td><td>${fmt(r.chi_square)}</td><td>${n(r.case_count_a)}</td><td class="${r.signal_detected ? 'sig-yes' : ''}">${r.signal_detected ? 'Signal' : '—'}</td></tr>`
+    ).join('');
+  }
+
+  /** Illustrative priority: z-scaled log(PRR) + chi²/10 + log(cases) — then k-means style 2 clusters on score */
+  function renderMlIllustration() {
+    const pool = (BUNDLE.all_flagged_signals && BUNDLE.all_flagged_signals.length)
+      ? BUNDLE.all_flagged_signals
+      : (BUNDLE.all_results || []).filter((r) => r.signal_detected);
+    const scored = pool.map((r) => {
+      const score = Math.log(Math.max(n(r.PRR), 0.1)) * 2 + n(r.chi_square) / 8 + Math.log(Math.max(n(r.case_count_a), 1));
+      return { ...r, priority: Math.round(score * 100) / 100 };
+    }).sort((a, b) => b.priority - a.priority);
+    const top = scored.slice(0, 6);
+    const median = scored.length ? scored[Math.floor(scored.length / 2)].priority : 0;
+    top.forEach((r) => { r.cluster = r.priority >= median ? 'High triage' : 'Routine'; });
+    drawBars('mlChart', top.map((r) => ({ label: r.adverse_event, v: r.priority })), 'v', 'label', '#34d399');
+    $('mlTableBody').innerHTML = top.map((r) =>
+      `<tr><td>${esc(r.drug)}</td><td>${esc(r.adverse_event)}</td><td>${fmt(r.priority)}</td><td>${r.cluster}</td></tr>`
+    ).join('');
+  }
+
+  $('prevBtn').onclick = () => goTo(step - 1);
+  $('nextBtn').onclick = () => goTo(step + 1);
+  $('runDemoBtn').onclick = () => runLiveDemo();
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); goTo(step + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); goTo(step - 1); }
+    if (e.key === 'Home') goTo(0);
+    if (e.key === 'End') goTo(SLIDES - 1);
+  });
+
+  initDots();
+  const urlStep = parseInt(new URLSearchParams(location.search).get('step'), 10);
+  if (!Number.isNaN(urlStep)) goTo(urlStep);
+  else fillContingency();
+})();
+</script>
+</body>
+</html>

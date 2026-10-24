@@ -2,5 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "outputDirectory": "public",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/seminar", "destination": "/seminar.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
