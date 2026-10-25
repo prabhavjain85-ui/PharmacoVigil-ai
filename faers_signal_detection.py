@@ -11,8 +11,18 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
+from bayesian_stats import bcpnn, ebgm_pair, expected_count, fit_gamma_poisson_prior
 from drug_mapping import canonicalize_drug
 
+# MedDRA PTs treated as clinically serious for demo feature engineering
+SERIOUS_ADVERSE_EVENTS = frozenset({
+    "GASTROINTESTINAL HAEMORRHAGE",
+    "ANAPHYLACTIC REACTION",
+    "HEPATIC FAILURE",
+    "RHABDOMYOLYSIS",
+    "ANGIOEDEMA",
+    "DYSPNOEA",
+})
 
 SIGNAL_COLUMNS = [
     "drug",
@@ -26,7 +36,19 @@ SIGNAL_COLUMNS = [
     "ROR_95CI_high",
     "chi_square",
     "p_value",
+    "IC",
+    "IC025",
+    "IC975",
+    "signal_bcpnn",
+    "EBGM",
+    "EB05",
+    "EB95",
+    "signal_ebgm",
+    "serious_event",
     "signal_detected",
+    "priority_score",
+    "priority_rank",
+    "priority_explain",
 ]
 
 
@@ -122,7 +144,7 @@ def compute_disproportionality(pairs: pd.DataFrame, min_cases: int = 3) -> pd.Da
     )
     pair_counts = pair_counts[pair_counts["a"] >= min_cases]
 
-    results = []
+    strata: list[dict] = []
     for _, row in pair_counts.iterrows():
         drug_name, pt, a = row["drugname"], row["pt"], int(row["a"])
         drug_total = int(drug_totals[drug_name])
@@ -132,7 +154,30 @@ def compute_disproportionality(pairs: pd.DataFrame, min_cases: int = 3) -> pd.Da
         d = total_reports - drug_total - event_total + a
         if b <= 0 or c <= 0 or d <= 0:
             continue
+        strata.append({
+            "drug": drug_name,
+            "adverse_event": pt,
+            "a": a,
+            "b": b,
+            "c": c,
+            "d": d,
+            "drug_total_reports": drug_total,
+            "event_total_reports": event_total,
+        })
 
+    if not strata:
+        return pd.DataFrame(columns=SIGNAL_COLUMNS)
+
+    observed = np.array([s["a"] for s in strata], dtype=float)
+    expected = np.array([
+        expected_count(s["a"], s["b"], s["c"], s["d"], total_reports) for s in strata
+    ], dtype=float)
+    prior = fit_gamma_poisson_prior(observed, expected)
+
+    results = []
+    for s in strata:
+        a, b, c, d = s["a"], s["b"], s["c"], s["d"]
+        drug_name, pt = s["drug"], s["adverse_event"]
         prr = (a / (a + b)) / (c / (c + d))
         ror = (a * d) / (b * c)
         contingency = np.array([[a, b], [c, d]])
@@ -141,26 +186,43 @@ def compute_disproportionality(pairs: pd.DataFrame, min_cases: int = 3) -> pd.Da
         log_ror = np.log(ror)
         ror_ci_low = np.exp(log_ror - 1.96 * se_log_ror)
         ror_ci_high = np.exp(log_ror + 1.96 * se_log_ror)
+        bcp = bcpnn(a, b, c, d, total_reports)
+        exp_a = expected_count(a, b, c, d, total_reports)
+        ebg = ebgm_pair(a, exp_a, prior)
 
         results.append({
             "drug": drug_name,
             "adverse_event": pt,
             "case_count_a": a,
-            "drug_total_reports": drug_total,
-            "event_total_reports": event_total,
+            "drug_total_reports": s["drug_total_reports"],
+            "event_total_reports": s["event_total_reports"],
             "PRR": round(prr, 3),
             "ROR": round(ror, 3),
             "ROR_95CI_low": round(ror_ci_low, 3),
             "ROR_95CI_high": round(ror_ci_high, 3),
             "chi_square": round(chi2, 3),
             "p_value": round(p_value, 6),
+            "IC": bcp.ic,
+            "IC025": bcp.ic025,
+            "IC975": bcp.ic975,
+            "signal_bcpnn": bcp.signal_bcpnn,
+            "EBGM": ebg.ebgm,
+            "EB05": ebg.eb05,
+            "EB95": ebg.eb95,
+            "signal_ebgm": ebg.signal_ebgm,
+            "serious_event": pt in SERIOUS_ADVERSE_EVENTS,
             "signal_detected": bool((prr >= 2) and (chi2 >= 4) and (a >= min_cases)),
+            "priority_score": None,
+            "priority_rank": None,
+            "priority_explain": None,
         })
 
-    output = pd.DataFrame(results, columns=SIGNAL_COLUMNS)
-    if not output.empty:
-        output = output.sort_values("PRR", ascending=False).reset_index(drop=True)
-    return output
+    output = pd.DataFrame(results)
+    from ml_prioritization import apply_prioritization, train_prioritization_model
+
+    model = train_prioritization_model(output, total_reports)
+    output = apply_prioritization(output, model, total_reports)
+    return output.reindex(columns=SIGNAL_COLUMNS)
 
 
 def main() -> None:

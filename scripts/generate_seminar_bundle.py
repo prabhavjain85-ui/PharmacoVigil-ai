@@ -3,15 +3,19 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
 from faers_signal_detection import (
     build_case_level_table,
     compute_disproportionality,
     load_table,
 )
+from ml_prioritization import DISPLAY_NAMES, FEATURE_COLUMNS, train_prioritization_model
 
-ROOT = Path(__file__).resolve().parents[1]
 SAMPLE = ROOT / "sample_data"
 OUT = ROOT / "public" / "seminar-demo-data.js"
 
@@ -45,6 +49,8 @@ def main() -> None:
     )
     flagged = [r for r in records if r["signal_detected"]]
     featured = warfarin[0] if warfarin else (records[0] if records else {})
+    model = train_prioritization_model(signals, total)
+    priority_top = sorted(records, key=lambda r: -(r.get("priority_score") or 0))[:8]
 
     bundle = {
         "dataset": {
@@ -62,6 +68,19 @@ def main() -> None:
         "featured_pair": featured,
         "all_flagged_signals": flagged,
         "all_results": records,
+        "priority_top": priority_top,
+        "ml_meta": {
+            "model": "GradientBoostingClassifier",
+            "weak_labels": "planted sample pairs + literature reference set",
+            "global_importance": [
+                {
+                    "feature": name,
+                    "label": DISPLAY_NAMES.get(name, name),
+                    "importance": round(float(model.global_importance[name]), 4),
+                }
+                for name in FEATURE_COLUMNS
+            ],
+        },
     }
 
     OUT.parent.mkdir(parents=True, exist_ok=True)

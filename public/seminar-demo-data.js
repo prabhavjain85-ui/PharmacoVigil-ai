@@ -1,2 +1,6254 @@
 /** Bundled sample FAERS disproportionality results for offline seminar demo */
-window.SEMINAR_DEMO_DATA = {"dataset": {"source": "sample_data", "case_count": 200, "demo_rows": 200, "drug_rows": 305, "reac_rows": 448, "pair_count": 696, "drug_count": 10}, "demo_drug": "WARFARIN", "warfarin_adrs": [{"drug": "WARFARIN", "adverse_event": "GASTROINTESTINAL HAEMORRHAGE", "case_count_a": 18, "drug_total_reports": 38, "event_total_reports": 45, "PRR": 2.842, "ROR": 4.5, "ROR_95CI_low": 2.106, "ROR_95CI_high": 9.614, "chi_square": 14.924, "p_value": 0.000112, "signal_detected": true}, {"drug": "WARFARIN", "adverse_event": "HEADACHE", "case_count_a": 10, "drug_total_reports": 38, "event_total_reports": 33, "PRR": 1.854, "ROR": 2.158, "ROR_95CI_low": 0.926, "ROR_95CI_high": 5.031, "chi_square": 2.46, "p_value": 0.116766, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "VOMITING", "case_count_a": 7, "drug_total_reports": 38, "event_total_reports": 25, "PRR": 1.658, "ROR": 1.806, "ROR_95CI_low": 0.695, "ROR_95CI_high": 4.696, "chi_square": 0.91, "p_value": 0.340199, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "ANGIOEDEMA", "case_count_a": 8, "drug_total_reports": 38, "event_total_reports": 29, "PRR": 1.624, "ROR": 1.79, "ROR_95CI_low": 0.725, "ROR_95CI_high": 4.424, "chi_square": 1.038, "p_value": 0.308339, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "PRURITUS", "case_count_a": 5, "drug_total_reports": 38, "event_total_reports": 20, "PRR": 1.421, "ROR": 1.485, "ROR_95CI_low": 0.504, "ROR_95CI_high": 4.374, "chi_square": 0.177, "p_value": 0.674066, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "MYALGIA", "case_count_a": 5, "drug_total_reports": 38, "event_total_reports": 22, "PRR": 1.254, "ROR": 1.292, "ROR_95CI_low": 0.445, "ROR_95CI_high": 3.754, "chi_square": 0.034, "p_value": 0.853745, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "DYSPNOEA", "case_count_a": 6, "drug_total_reports": 38, "event_total_reports": 29, "PRR": 1.112, "ROR": 1.133, "ROR_95CI_low": 0.426, "ROR_95CI_high": 3.011, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "FATIGUE", "case_count_a": 7, "drug_total_reports": 38, "event_total_reports": 34, "PRR": 1.105, "ROR": 1.129, "ROR_95CI_low": 0.451, "ROR_95CI_high": 2.829, "chi_square": 0.0, "p_value": 0.984686, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "RASH", "case_count_a": 6, "drug_total_reports": 38, "event_total_reports": 30, "PRR": 1.066, "ROR": 1.078, "ROR_95CI_low": 0.407, "ROR_95CI_high": 2.855, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "HEPATIC FAILURE", "case_count_a": 9, "drug_total_reports": 38, "event_total_reports": 46, "PRR": 1.037, "ROR": 1.048, "ROR_95CI_low": 0.456, "ROR_95CI_high": 2.412, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "ANAPHYLACTIC REACTION", "case_count_a": 7, "drug_total_reports": 38, "event_total_reports": 40, "PRR": 0.904, "ROR": 0.883, "ROR_95CI_low": 0.357, "ROR_95CI_high": 2.182, "chi_square": 0.002, "p_value": 0.964058, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "RHABDOMYOLYSIS", "case_count_a": 5, "drug_total_reports": 38, "event_total_reports": 41, "PRR": 0.592, "ROR": 0.53, "ROR_95CI_low": 0.193, "ROR_95CI_high": 1.457, "chi_square": 1.045, "p_value": 0.30657, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "NAUSEA", "case_count_a": 3, "drug_total_reports": 38, "event_total_reports": 27, "PRR": 0.533, "ROR": 0.493, "ROR_95CI_low": 0.14, "ROR_95CI_high": 1.731, "chi_square": 0.739, "p_value": 0.38992, "signal_detected": false}], "featured_contingency": {"a": 18, "b": 20, "c": 27, "d": 135, "total_reports": 200}, "featured_pair": {"drug": "WARFARIN", "adverse_event": "GASTROINTESTINAL HAEMORRHAGE", "case_count_a": 18, "drug_total_reports": 38, "event_total_reports": 45, "PRR": 2.842, "ROR": 4.5, "ROR_95CI_low": 2.106, "ROR_95CI_high": 9.614, "chi_square": 14.924, "p_value": 0.000112, "signal_detected": true}, "all_flagged_signals": [{"drug": "WARFARIN", "adverse_event": "GASTROINTESTINAL HAEMORRHAGE", "case_count_a": 18, "drug_total_reports": 38, "event_total_reports": 45, "PRR": 2.842, "ROR": 4.5, "ROR_95CI_low": 2.106, "ROR_95CI_high": 9.614, "chi_square": 14.924, "p_value": 0.000112, "signal_detected": true}, {"drug": "SIMVASTATIN", "adverse_event": "RHABDOMYOLYSIS", "case_count_a": 13, "drug_total_reports": 29, "event_total_reports": 41, "PRR": 2.738, "ROR": 4.15, "ROR_95CI_low": 1.798, "ROR_95CI_high": 9.578, "chi_square": 10.633, "p_value": 0.001111, "signal_detected": true}, {"drug": "AMOXICILLIN", "adverse_event": "FATIGUE", "case_count_a": 10, "drug_total_reports": 27, "event_total_reports": 34, "PRR": 2.67, "ROR": 3.652, "ROR_95CI_low": 1.496, "ROR_95CI_high": 8.912, "chi_square": 7.316, "p_value": 0.006835, "signal_detected": true}, {"drug": "PREDNISONE", "adverse_event": "HEPATIC FAILURE", "case_count_a": 15, "drug_total_reports": 35, "event_total_reports": 46, "PRR": 2.281, "ROR": 3.242, "ROR_95CI_low": 1.493, "ROR_95CI_high": 7.038, "chi_square": 8.135, "p_value": 0.004341, "signal_detected": true}, {"drug": "AMOXICILLIN", "adverse_event": "ANAPHYLACTIC REACTION", "case_count_a": 10, "drug_total_reports": 27, "event_total_reports": 40, "PRR": 2.136, "ROR": 2.804, "ROR_95CI_low": 1.169, "ROR_95CI_high": 6.724, "chi_square": 4.499, "p_value": 0.033925, "signal_detected": true}], "all_results": [{"drug": "WARFARIN", "adverse_event": "GASTROINTESTINAL HAEMORRHAGE", "case_count_a": 18, "drug_total_reports": 38, "event_total_reports": 45, "PRR": 2.842, "ROR": 4.5, "ROR_95CI_low": 2.106, "ROR_95CI_high": 9.614, "chi_square": 14.924, "p_value": 0.000112, "signal_detected": true}, {"drug": "SIMVASTATIN", "adverse_event": "RHABDOMYOLYSIS", "case_count_a": 13, "drug_total_reports": 29, "event_total_reports": 41, "PRR": 2.738, "ROR": 4.15, "ROR_95CI_low": 1.798, "ROR_95CI_high": 9.578, "chi_square": 10.633, "p_value": 0.001111, "signal_detected": true}, {"drug": "AMOXICILLIN", "adverse_event": "FATIGUE", "case_count_a": 10, "drug_total_reports": 27, "event_total_reports": 34, "PRR": 2.67, "ROR": 3.652, "ROR_95CI_low": 1.496, "ROR_95CI_high": 8.912, "chi_square": 7.316, "p_value": 0.006835, "signal_detected": true}, {"drug": "PREDNISONE", "adverse_event": "HEPATIC FAILURE", "case_count_a": 15, "drug_total_reports": 35, "event_total_reports": 46, "PRR": 2.281, "ROR": 3.242, "ROR_95CI_low": 1.493, "ROR_95CI_high": 7.038, "chi_square": 8.135, "p_value": 0.004341, "signal_detected": true}, {"drug": "AMOXICILLIN", "adverse_event": "ANAPHYLACTIC REACTION", "case_count_a": 10, "drug_total_reports": 27, "event_total_reports": 40, "PRR": 2.136, "ROR": 2.804, "ROR_95CI_low": 1.169, "ROR_95CI_high": 6.724, "chi_square": 4.499, "p_value": 0.033925, "signal_detected": true}, {"drug": "METFORMIN", "adverse_event": "HEADACHE", "case_count_a": 7, "drug_total_reports": 23, "event_total_reports": 33, "PRR": 2.072, "ROR": 2.541, "ROR_95CI_low": 0.953, "ROR_95CI_high": 6.776, "chi_square": 2.609, "p_value": 0.106251, "signal_detected": false}, {"drug": "CLOPIDOGREL", "adverse_event": "NAUSEA", "case_count_a": 6, "drug_total_reports": 25, "event_total_reports": 27, "PRR": 2.0, "ROR": 2.316, "ROR_95CI_low": 0.831, "ROR_95CI_high": 6.453, "chi_square": 1.768, "p_value": 0.183661, "signal_detected": false}, {"drug": "CLOPIDOGREL", "adverse_event": "GASTROINTESTINAL HAEMORRHAGE", "case_count_a": 10, "drug_total_reports": 25, "event_total_reports": 45, "PRR": 2.0, "ROR": 2.667, "ROR_95CI_low": 1.104, "ROR_95CI_high": 6.44, "chi_square": 3.937, "p_value": 0.047249, "signal_detected": false}, {"drug": "ATORVASTATIN", "adverse_event": "FATIGUE", "case_count_a": 11, "drug_total_reports": 39, "event_total_reports": 34, "PRR": 1.974, "ROR": 2.357, "ROR_95CI_low": 1.033, "ROR_95CI_high": 5.381, "chi_square": 3.381, "p_value": 0.065955, "signal_detected": false}, {"drug": "LISINOPRIL", "adverse_event": "VOMITING", "case_count_a": 7, "drug_total_reports": 33, "event_total_reports": 25, "PRR": 1.968, "ROR": 2.229, "ROR_95CI_low": 0.847, "ROR_95CI_high": 5.863, "chi_square": 1.872, "p_value": 0.171294, "signal_detected": false}, {"drug": "SIMVASTATIN", "adverse_event": "PRURITUS", "case_count_a": 5, "drug_total_reports": 29, "event_total_reports": 20, "PRR": 1.966, "ROR": 2.167, "ROR_95CI_low": 0.722, "ROR_95CI_high": 6.506, "chi_square": 1.147, "p_value": 0.284139, "signal_detected": false}, {"drug": "OMEPRAZOLE", "adverse_event": "PRURITUS", "case_count_a": 6, "drug_total_reports": 37, "event_total_reports": 20, "PRR": 1.888, "ROR": 2.06, "ROR_95CI_low": 0.734, "ROR_95CI_high": 5.78, "chi_square": 1.194, "p_value": 0.274558, "signal_detected": false}, {"drug": "AMOXICILLIN", "adverse_event": "MYALGIA", "case_count_a": 5, "drug_total_reports": 27, "event_total_reports": 22, "PRR": 1.885, "ROR": 2.086, "ROR_95CI_low": 0.699, "ROR_95CI_high": 6.219, "chi_square": 1.024, "p_value": 0.311616, "signal_detected": false}, {"drug": "SIMVASTATIN", "adverse_event": "VOMITING", "case_count_a": 6, "drug_total_reports": 29, "event_total_reports": 25, "PRR": 1.862, "ROR": 2.087, "ROR_95CI_low": 0.755, "ROR_95CI_high": 5.772, "chi_square": 1.296, "p_value": 0.254882, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "HEADACHE", "case_count_a": 10, "drug_total_reports": 38, "event_total_reports": 33, "PRR": 1.854, "ROR": 2.158, "ROR_95CI_low": 0.926, "ROR_95CI_high": 5.031, "chi_square": 2.46, "p_value": 0.116766, "signal_detected": false}, {"drug": "ATORVASTATIN", "adverse_event": "DIZZINESS", "case_count_a": 8, "drug_total_reports": 39, "event_total_reports": 27, "PRR": 1.738, "ROR": 1.929, "ROR_95CI_low": 0.774, "ROR_95CI_high": 4.805, "chi_square": 1.363, "p_value": 0.2431, "signal_detected": false}, {"drug": "SIMVASTATIN", "adverse_event": "MYALGIA", "case_count_a": 5, "drug_total_reports": 29, "event_total_reports": 22, "PRR": 1.734, "ROR": 1.887, "ROR_95CI_low": 0.637, "ROR_95CI_high": 5.591, "chi_square": 0.707, "p_value": 0.400454, "signal_detected": false}, {"drug": "PREDNISONE", "adverse_event": "RASH", "case_count_a": 8, "drug_total_reports": 35, "event_total_reports": 30, "PRR": 1.714, "ROR": 1.926, "ROR_95CI_low": 0.777, "ROR_95CI_high": 4.774, "chi_square": 1.375, "p_value": 0.240938, "signal_detected": false}, {"drug": "OMEPRAZOLE", "adverse_event": "ANGIOEDEMA", "case_count_a": 8, "drug_total_reports": 37, "event_total_reports": 29, "PRR": 1.678, "ROR": 1.865, "ROR_95CI_low": 0.753, "ROR_95CI_high": 4.62, "chi_square": 1.219, "p_value": 0.269503, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "VOMITING", "case_count_a": 7, "drug_total_reports": 38, "event_total_reports": 25, "PRR": 1.658, "ROR": 1.806, "ROR_95CI_low": 0.695, "ROR_95CI_high": 4.696, "chi_square": 0.91, "p_value": 0.340199, "signal_detected": false}, {"drug": "IBUPROFEN", "adverse_event": "NAUSEA", "case_count_a": 4, "drug_total_reports": 19, "event_total_reports": 27, "PRR": 1.657, "ROR": 1.832, "ROR_95CI_low": 0.559, "ROR_95CI_high": 6.001, "chi_square": 0.435, "p_value": 0.509359, "signal_detected": false}, {"drug": "PREDNISONE", "adverse_event": "NAUSEA", "case_count_a": 7, "drug_total_reports": 35, "event_total_reports": 27, "PRR": 1.65, "ROR": 1.812, "ROR_95CI_low": 0.7, "ROR_95CI_high": 4.692, "chi_square": 0.934, "p_value": 0.333727, "signal_detected": false}, {"drug": "IBUPROFEN", "adverse_event": "RHABDOMYOLYSIS", "case_count_a": 6, "drug_total_reports": 19, "event_total_reports": 41, "PRR": 1.633, "ROR": 1.925, "ROR_95CI_low": 0.684, "ROR_95CI_high": 5.421, "chi_square": 0.919, "p_value": 0.337676, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "ANGIOEDEMA", "case_count_a": 8, "drug_total_reports": 38, "event_total_reports": 29, "PRR": 1.624, "ROR": 1.79, "ROR_95CI_low": 0.725, "ROR_95CI_high": 4.424, "chi_square": 1.038, "p_value": 0.308339, "signal_detected": false}, {"drug": "CLOPIDOGREL", "adverse_event": "DIZZINESS", "case_count_a": 5, "drug_total_reports": 25, "event_total_reports": 27, "PRR": 1.591, "ROR": 1.739, "ROR_95CI_low": 0.592, "ROR_95CI_high": 5.105, "chi_square": 0.495, "p_value": 0.481503, "signal_detected": false}, {"drug": "CLOPIDOGREL", "adverse_event": "MYALGIA", "case_count_a": 4, "drug_total_reports": 25, "event_total_reports": 22, "PRR": 1.556, "ROR": 1.661, "ROR_95CI_low": 0.513, "ROR_95CI_high": 5.381, "chi_square": 0.263, "p_value": 0.608299, "signal_detected": false}, {"drug": "OMEPRAZOLE", "adverse_event": "DIZZINESS", "case_count_a": 7, "drug_total_reports": 37, "event_total_reports": 27, "PRR": 1.542, "ROR": 1.668, "ROR_95CI_low": 0.647, "ROR_95CI_high": 4.299, "chi_square": 0.643, "p_value": 0.422545, "signal_detected": false}, {"drug": "METFORMIN", "adverse_event": "RASH", "case_count_a": 5, "drug_total_reports": 23, "event_total_reports": 30, "PRR": 1.539, "ROR": 1.689, "ROR_95CI_low": 0.575, "ROR_95CI_high": 4.96, "chi_square": 0.425, "p_value": 0.514545, "signal_detected": false}, {"drug": "SIMVASTATIN", "adverse_event": "FATIGUE", "case_count_a": 7, "drug_total_reports": 29, "event_total_reports": 34, "PRR": 1.529, "ROR": 1.697, "ROR_95CI_low": 0.66, "ROR_95CI_high": 4.364, "chi_square": 0.705, "p_value": 0.401261, "signal_detected": false}, {"drug": "PREDNISONE", "adverse_event": "DYSPNOEA", "case_count_a": 7, "drug_total_reports": 35, "event_total_reports": 29, "PRR": 1.5, "ROR": 1.625, "ROR_95CI_low": 0.633, "ROR_95CI_high": 4.169, "chi_square": 0.567, "p_value": 0.451354, "signal_detected": false}, {"drug": "ATORVASTATIN", "adverse_event": "HEPATIC FAILURE", "case_count_a": 12, "drug_total_reports": 39, "event_total_reports": 46, "PRR": 1.457, "ROR": 1.66, "ROR_95CI_low": 0.762, "ROR_95CI_high": 3.615, "chi_square": 1.151, "p_value": 0.283292, "signal_detected": false}, {"drug": "AMOXICILLIN", "adverse_event": "NAUSEA", "case_count_a": 5, "drug_total_reports": 27, "event_total_reports": 27, "PRR": 1.456, "ROR": 1.56, "ROR_95CI_low": 0.536, "ROR_95CI_high": 4.544, "chi_square": 0.268, "p_value": 0.604648, "signal_detected": false}, {"drug": "ATORVASTATIN", "adverse_event": "NAUSEA", "case_count_a": 7, "drug_total_reports": 39, "event_total_reports": 27, "PRR": 1.445, "ROR": 1.542, "ROR_95CI_low": 0.601, "ROR_95CI_high": 3.958, "chi_square": 0.416, "p_value": 0.518925, "signal_detected": false}, {"drug": "CLOPIDOGREL", "adverse_event": "RHABDOMYOLYSIS", "case_count_a": 7, "drug_total_reports": 25, "event_total_reports": 41, "PRR": 1.441, "ROR": 1.613, "ROR_95CI_low": 0.624, "ROR_95CI_high": 4.17, "chi_square": 0.53, "p_value": 0.466473, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "PRURITUS", "case_count_a": 5, "drug_total_reports": 38, "event_total_reports": 20, "PRR": 1.421, "ROR": 1.485, "ROR_95CI_low": 0.504, "ROR_95CI_high": 4.374, "chi_square": 0.177, "p_value": 0.674066, "signal_detected": false}, {"drug": "PREDNISONE", "adverse_event": "MYALGIA", "case_count_a": 5, "drug_total_reports": 35, "event_total_reports": 22, "PRR": 1.387, "ROR": 1.451, "ROR_95CI_low": 0.497, "ROR_95CI_high": 4.237, "chi_square": 0.149, "p_value": 0.699053, "signal_detected": false}, {"drug": "IBUPROFEN", "adverse_event": "ANAPHYLACTIC REACTION", "case_count_a": 5, "drug_total_reports": 19, "event_total_reports": 40, "PRR": 1.361, "ROR": 1.49, "ROR_95CI_low": 0.503, "ROR_95CI_high": 4.412, "chi_square": 0.178, "p_value": 0.673008, "signal_detected": false}, {"drug": "METFORMIN", "adverse_event": "ANAPHYLACTIC REACTION", "case_count_a": 6, "drug_total_reports": 23, "event_total_reports": 40, "PRR": 1.358, "ROR": 1.484, "ROR_95CI_low": 0.544, "ROR_95CI_high": 4.047, "chi_square": 0.249, "p_value": 0.617985, "signal_detected": false}, {"drug": "METFORMIN", "adverse_event": "NAUSEA", "case_count_a": 4, "drug_total_reports": 23, "event_total_reports": 27, "PRR": 1.338, "ROR": 1.41, "ROR_95CI_low": 0.44, "ROR_95CI_high": 4.514, "chi_square": 0.066, "p_value": 0.797793, "signal_detected": false}, {"drug": "AMOXICILLIN", "adverse_event": "ANGIOEDEMA", "case_count_a": 5, "drug_total_reports": 27, "event_total_reports": 29, "PRR": 1.335, "ROR": 1.411, "ROR_95CI_low": 0.488, "ROR_95CI_high": 4.083, "chi_square": 0.118, "p_value": 0.731001, "signal_detected": false}, {"drug": "LISINOPRIL", "adverse_event": "DYSPNOEA", "case_count_a": 6, "drug_total_reports": 33, "event_total_reports": 29, "PRR": 1.32, "ROR": 1.391, "ROR_95CI_low": 0.518, "ROR_95CI_high": 3.737, "chi_square": 0.15, "p_value": 0.69887, "signal_detected": false}, {"drug": "ATORVASTATIN", "adverse_event": "DYSPNOEA", "case_count_a": 7, "drug_total_reports": 39, "event_total_reports": 29, "PRR": 1.314, "ROR": 1.382, "ROR_95CI_low": 0.544, "ROR_95CI_high": 3.515, "chi_square": 0.183, "p_value": 0.668425, "signal_detected": false}, {"drug": "SIMVASTATIN", "adverse_event": "GASTROINTESTINAL HAEMORRHAGE", "case_count_a": 8, "drug_total_reports": 29, "event_total_reports": 45, "PRR": 1.275, "ROR": 1.38, "ROR_95CI_low": 0.565, "ROR_95CI_high": 3.366, "chi_square": 0.22, "p_value": 0.639141, "signal_detected": false}, {"drug": "PREDNISONE", "adverse_event": "HEADACHE", "case_count_a": 7, "drug_total_reports": 35, "event_total_reports": 33, "PRR": 1.269, "ROR": 1.337, "ROR_95CI_low": 0.528, "ROR_95CI_high": 3.381, "chi_square": 0.132, "p_value": 0.716239, "signal_detected": false}, {"drug": "CLOPIDOGREL", "adverse_event": "HEPATIC FAILURE", "case_count_a": 7, "drug_total_reports": 25, "event_total_reports": 46, "PRR": 1.256, "ROR": 1.356, "ROR_95CI_low": 0.528, "ROR_95CI_high": 3.482, "chi_square": 0.145, "p_value": 0.703169, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "MYALGIA", "case_count_a": 5, "drug_total_reports": 38, "event_total_reports": 22, "PRR": 1.254, "ROR": 1.292, "ROR_95CI_low": 0.445, "ROR_95CI_high": 3.754, "chi_square": 0.034, "p_value": 0.853745, "signal_detected": false}, {"drug": "OMEPRAZOLE", "adverse_event": "RHABDOMYOLYSIS", "case_count_a": 9, "drug_total_reports": 37, "event_total_reports": 41, "PRR": 1.239, "ROR": 1.316, "ROR_95CI_low": 0.565, "ROR_95CI_high": 3.062, "chi_square": 0.17, "p_value": 0.679794, "signal_detected": false}, {"drug": "SIMVASTATIN", "adverse_event": "DYSPNOEA", "case_count_a": 5, "drug_total_reports": 29, "event_total_reports": 29, "PRR": 1.228, "ROR": 1.276, "ROR_95CI_low": 0.444, "ROR_95CI_high": 3.667, "chi_square": 0.028, "p_value": 0.866381, "signal_detected": false}, {"drug": "IBUPROFEN", "adverse_event": "GASTROINTESTINAL HAEMORRHAGE", "case_count_a": 5, "drug_total_reports": 19, "event_total_reports": 45, "PRR": 1.191, "ROR": 1.259, "ROR_95CI_low": 0.428, "ROR_95CI_high": 3.706, "chi_square": 0.017, "p_value": 0.896615, "signal_detected": false}, {"drug": "PREDNISONE", "adverse_event": "VOMITING", "case_count_a": 5, "drug_total_reports": 35, "event_total_reports": 25, "PRR": 1.179, "ROR": 1.208, "ROR_95CI_low": 0.42, "ROR_95CI_high": 3.473, "chi_square": 0.005, "p_value": 0.943925, "signal_detected": false}, {"drug": "IBUPROFEN", "adverse_event": "HEPATIC FAILURE", "case_count_a": 5, "drug_total_reports": 19, "event_total_reports": 46, "PRR": 1.162, "ROR": 1.22, "ROR_95CI_low": 0.415, "ROR_95CI_high": 3.587, "chi_square": 0.006, "p_value": 0.940616, "signal_detected": false}, {"drug": "LISINOPRIL", "adverse_event": "DIZZINESS", "case_count_a": 5, "drug_total_reports": 33, "event_total_reports": 27, "PRR": 1.15, "ROR": 1.177, "ROR_95CI_low": 0.411, "ROR_95CI_high": 3.37, "chi_square": 0.001, "p_value": 0.979986, "signal_detected": false}, {"drug": "OMEPRAZOLE", "adverse_event": "DYSPNOEA", "case_count_a": 6, "drug_total_reports": 37, "event_total_reports": 29, "PRR": 1.149, "ROR": 1.178, "ROR_95CI_low": 0.443, "ROR_95CI_high": 3.136, "chi_square": 0.005, "p_value": 0.944336, "signal_detected": false}, {"drug": "AMOXICILLIN", "adverse_event": "HEADACHE", "case_count_a": 5, "drug_total_reports": 27, "event_total_reports": 33, "PRR": 1.144, "ROR": 1.177, "ROR_95CI_low": 0.411, "ROR_95CI_high": 3.37, "chi_square": 0.001, "p_value": 0.979986, "signal_detected": false}, {"drug": "LISINOPRIL", "adverse_event": "HEADACHE", "case_count_a": 6, "drug_total_reports": 33, "event_total_reports": 33, "PRR": 1.125, "ROR": 1.152, "ROR_95CI_low": 0.434, "ROR_95CI_high": 3.057, "chi_square": 0.001, "p_value": 0.97748, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "DYSPNOEA", "case_count_a": 6, "drug_total_reports": 38, "event_total_reports": 29, "PRR": 1.112, "ROR": 1.133, "ROR_95CI_low": 0.426, "ROR_95CI_high": 3.011, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "FATIGUE", "case_count_a": 7, "drug_total_reports": 38, "event_total_reports": 34, "PRR": 1.105, "ROR": 1.129, "ROR_95CI_low": 0.451, "ROR_95CI_high": 2.829, "chi_square": 0.0, "p_value": 0.984686, "signal_detected": false}, {"drug": "OMEPRAZOLE", "adverse_event": "VOMITING", "case_count_a": 5, "drug_total_reports": 37, "event_total_reports": 25, "PRR": 1.101, "ROR": 1.117, "ROR_95CI_low": 0.39, "ROR_95CI_high": 3.2, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "CLOPIDOGREL", "adverse_event": "RASH", "case_count_a": 4, "drug_total_reports": 25, "event_total_reports": 30, "PRR": 1.077, "ROR": 1.092, "ROR_95CI_low": 0.346, "ROR_95CI_high": 3.439, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "LISINOPRIL", "adverse_event": "ANAPHYLACTIC REACTION", "case_count_a": 7, "drug_total_reports": 33, "event_total_reports": 40, "PRR": 1.073, "ROR": 1.093, "ROR_95CI_low": 0.437, "ROR_95CI_high": 2.736, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "PREDNISONE", "adverse_event": "DIZZINESS", "case_count_a": 5, "drug_total_reports": 35, "event_total_reports": 27, "PRR": 1.071, "ROR": 1.083, "ROR_95CI_low": 0.38, "ROR_95CI_high": 3.089, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "METFORMIN", "adverse_event": "RHABDOMYOLYSIS", "case_count_a": 5, "drug_total_reports": 23, "event_total_reports": 41, "PRR": 1.069, "ROR": 1.088, "ROR_95CI_low": 0.378, "ROR_95CI_high": 3.129, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "RASH", "case_count_a": 6, "drug_total_reports": 38, "event_total_reports": 30, "PRR": 1.066, "ROR": 1.078, "ROR_95CI_low": 0.407, "ROR_95CI_high": 2.855, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "LISINOPRIL", "adverse_event": "RHABDOMYOLYSIS", "case_count_a": 7, "drug_total_reports": 33, "event_total_reports": 41, "PRR": 1.042, "ROR": 1.053, "ROR_95CI_low": 0.422, "ROR_95CI_high": 2.631, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "SIMVASTATIN", "adverse_event": "ANAPHYLACTIC REACTION", "case_count_a": 6, "drug_total_reports": 29, "event_total_reports": 40, "PRR": 1.041, "ROR": 1.051, "ROR_95CI_low": 0.397, "ROR_95CI_high": 2.783, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "HEPATIC FAILURE", "case_count_a": 9, "drug_total_reports": 38, "event_total_reports": 46, "PRR": 1.037, "ROR": 1.048, "ROR_95CI_low": 0.456, "ROR_95CI_high": 2.412, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "CLOPIDOGREL", "adverse_event": "ANAPHYLACTIC REACTION", "case_count_a": 5, "drug_total_reports": 25, "event_total_reports": 40, "PRR": 1.0, "ROR": 1.0, "ROR_95CI_low": 0.351, "ROR_95CI_high": 2.851, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "AMOXICILLIN", "adverse_event": "GASTROINTESTINAL HAEMORRHAGE", "case_count_a": 6, "drug_total_reports": 27, "event_total_reports": 45, "PRR": 0.986, "ROR": 0.982, "ROR_95CI_low": 0.37, "ROR_95CI_high": 2.602, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "PREDNISONE", "adverse_event": "ANGIOEDEMA", "case_count_a": 5, "drug_total_reports": 35, "event_total_reports": 29, "PRR": 0.982, "ROR": 0.979, "ROR_95CI_low": 0.346, "ROR_95CI_high": 2.773, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "OMEPRAZOLE", "adverse_event": "HEADACHE", "case_count_a": 6, "drug_total_reports": 37, "event_total_reports": 33, "PRR": 0.979, "ROR": 0.975, "ROR_95CI_low": 0.371, "ROR_95CI_high": 2.564, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "LISINOPRIL", "adverse_event": "GASTROINTESTINAL HAEMORRHAGE", "case_count_a": 7, "drug_total_reports": 33, "event_total_reports": 45, "PRR": 0.932, "ROR": 0.914, "ROR_95CI_low": 0.368, "ROR_95CI_high": 2.27, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "ATORVASTATIN", "adverse_event": "MYALGIA", "case_count_a": 4, "drug_total_reports": 39, "event_total_reports": 22, "PRR": 0.917, "ROR": 0.908, "ROR_95CI_low": 0.289, "ROR_95CI_high": 2.852, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "SIMVASTATIN", "adverse_event": "RASH", "case_count_a": 4, "drug_total_reports": 29, "event_total_reports": 30, "PRR": 0.907, "ROR": 0.892, "ROR_95CI_low": 0.287, "ROR_95CI_high": 2.776, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "ANAPHYLACTIC REACTION", "case_count_a": 7, "drug_total_reports": 38, "event_total_reports": 40, "PRR": 0.904, "ROR": 0.883, "ROR_95CI_low": 0.357, "ROR_95CI_high": 2.182, "chi_square": 0.002, "p_value": 0.964058, "signal_detected": false}, {"drug": "AMOXICILLIN", "adverse_event": "RHABDOMYOLYSIS", "case_count_a": 5, "drug_total_reports": 27, "event_total_reports": 41, "PRR": 0.89, "ROR": 0.865, "ROR_95CI_low": 0.306, "ROR_95CI_high": 2.442, "chi_square": 0.0, "p_value": 0.985687, "signal_detected": false}, {"drug": "METFORMIN", "adverse_event": "ANGIOEDEMA", "case_count_a": 3, "drug_total_reports": 23, "event_total_reports": 29, "PRR": 0.888, "ROR": 0.871, "ROR_95CI_low": 0.242, "ROR_95CI_high": 3.142, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "LISINOPRIL", "adverse_event": "FATIGUE", "case_count_a": 5, "drug_total_reports": 33, "event_total_reports": 34, "PRR": 0.873, "ROR": 0.85, "ROR_95CI_low": 0.303, "ROR_95CI_high": 2.386, "chi_square": 0.003, "p_value": 0.955512, "signal_detected": false}, {"drug": "ATORVASTATIN", "adverse_event": "ANGIOEDEMA", "case_count_a": 5, "drug_total_reports": 39, "event_total_reports": 29, "PRR": 0.86, "ROR": 0.839, "ROR_95CI_low": 0.298, "ROR_95CI_high": 2.361, "chi_square": 0.006, "p_value": 0.937378, "signal_detected": false}, {"drug": "PREDNISONE", "adverse_event": "PRURITUS", "case_count_a": 3, "drug_total_reports": 35, "event_total_reports": 20, "PRR": 0.832, "ROR": 0.816, "ROR_95CI_low": 0.226, "ROR_95CI_high": 2.952, "chi_square": 0.0, "p_value": 1.0, "signal_detected": false}, {"drug": "ATORVASTATIN", "adverse_event": "RASH", "case_count_a": 5, "drug_total_reports": 39, "event_total_reports": 30, "PRR": 0.826, "ROR": 0.8, "ROR_95CI_low": 0.285, "ROR_95CI_high": 2.243, "chi_square": 0.031, "p_value": 0.861129, "signal_detected": false}, {"drug": "LISINOPRIL", "adverse_event": "ANGIOEDEMA", "case_count_a": 4, "drug_total_reports": 33, "event_total_reports": 29, "PRR": 0.81, "ROR": 0.783, "ROR_95CI_low": 0.253, "ROR_95CI_high": 2.422, "chi_square": 0.024, "p_value": 0.877454, "signal_detected": false}, {"drug": "AMOXICILLIN", "adverse_event": "DIZZINESS", "case_count_a": 3, "drug_total_reports": 27, "event_total_reports": 27, "PRR": 0.801, "ROR": 0.776, "ROR_95CI_low": 0.217, "ROR_95CI_high": 2.778, "chi_square": 0.008, "p_value": 0.930034, "signal_detected": false}, {"drug": "ATORVASTATIN", "adverse_event": "VOMITING", "case_count_a": 4, "drug_total_reports": 39, "event_total_reports": 25, "PRR": 0.786, "ROR": 0.762, "ROR_95CI_low": 0.246, "ROR_95CI_high": 2.362, "chi_square": 0.041, "p_value": 0.839629, "signal_detected": false}, {"drug": "AMOXICILLIN", "adverse_event": "HEPATIC FAILURE", "case_count_a": 5, "drug_total_reports": 27, "event_total_reports": 46, "PRR": 0.781, "ROR": 0.732, "ROR_95CI_low": 0.261, "ROR_95CI_high": 2.054, "chi_square": 0.122, "p_value": 0.727009, "signal_detected": false}, {"drug": "LISINOPRIL", "adverse_event": "RASH", "case_count_a": 4, "drug_total_reports": 33, "event_total_reports": 30, "PRR": 0.779, "ROR": 0.748, "ROR_95CI_low": 0.243, "ROR_95CI_high": 2.306, "chi_square": 0.058, "p_value": 0.810268, "signal_detected": false}, {"drug": "OMEPRAZOLE", "adverse_event": "ANAPHYLACTIC REACTION", "case_count_a": 6, "drug_total_reports": 37, "event_total_reports": 40, "PRR": 0.777, "ROR": 0.734, "ROR_95CI_low": 0.283, "ROR_95CI_high": 1.903, "chi_square": 0.168, "p_value": 0.682, "signal_detected": false}, {"drug": "METFORMIN", "adverse_event": "GASTROINTESTINAL HAEMORRHAGE", "case_count_a": 4, "drug_total_reports": 23, "event_total_reports": 45, "PRR": 0.751, "ROR": 0.698, "ROR_95CI_low": 0.225, "ROR_95CI_high": 2.169, "chi_square": 0.128, "p_value": 0.720132, "signal_detected": false}, {"drug": "AMOXICILLIN", "adverse_event": "DYSPNOEA", "case_count_a": 3, "drug_total_reports": 27, "event_total_reports": 29, "PRR": 0.739, "ROR": 0.707, "ROR_95CI_low": 0.198, "ROR_95CI_high": 2.518, "chi_square": 0.059, "p_value": 0.807317, "signal_detected": false}, {"drug": "SIMVASTATIN", "adverse_event": "DIZZINESS", "case_count_a": 3, "drug_total_reports": 29, "event_total_reports": 27, "PRR": 0.737, "ROR": 0.707, "ROR_95CI_low": 0.198, "ROR_95CI_high": 2.518, "chi_square": 0.059, "p_value": 0.807317, "signal_detected": false}, {"drug": "ATORVASTATIN", "adverse_event": "ANAPHYLACTIC REACTION", "case_count_a": 6, "drug_total_reports": 39, "event_total_reports": 40, "PRR": 0.729, "ROR": 0.679, "ROR_95CI_low": 0.263, "ROR_95CI_high": 1.754, "chi_square": 0.336, "p_value": 0.561892, "signal_detected": false}, {"drug": "ATORVASTATIN", "adverse_event": "PRURITUS", "case_count_a": 3, "drug_total_reports": 39, "event_total_reports": 20, "PRR": 0.729, "ROR": 0.706, "ROR_95CI_low": 0.196, "ROR_95CI_high": 2.54, "chi_square": 0.057, "p_value": 0.81191, "signal_detected": false}, {"drug": "SIMVASTATIN", "adverse_event": "HEPATIC FAILURE", "case_count_a": 5, "drug_total_reports": 29, "event_total_reports": 46, "PRR": 0.719, "ROR": 0.661, "ROR_95CI_low": 0.237, "ROR_95CI_high": 1.842, "chi_square": 0.312, "p_value": 0.576616, "signal_detected": false}, {"drug": "OMEPRAZOLE", "adverse_event": "MYALGIA", "case_count_a": 3, "drug_total_reports": 37, "event_total_reports": 22, "PRR": 0.696, "ROR": 0.669, "ROR_95CI_low": 0.187, "ROR_95CI_high": 2.39, "chi_square": 0.11, "p_value": 0.740082, "signal_detected": false}, {"drug": "OMEPRAZOLE", "adverse_event": "RASH", "case_count_a": 4, "drug_total_reports": 37, "event_total_reports": 30, "PRR": 0.678, "ROR": 0.639, "ROR_95CI_low": 0.209, "ROR_95CI_high": 1.956, "chi_square": 0.287, "p_value": 0.592308, "signal_detected": false}, {"drug": "PREDNISONE", "adverse_event": "ANAPHYLACTIC REACTION", "case_count_a": 5, "drug_total_reports": 35, "event_total_reports": 40, "PRR": 0.673, "ROR": 0.619, "ROR_95CI_low": 0.224, "ROR_95CI_high": 1.713, "chi_square": 0.487, "p_value": 0.485263, "signal_detected": false}, {"drug": "ATORVASTATIN", "adverse_event": "GASTROINTESTINAL HAEMORRHAGE", "case_count_a": 6, "drug_total_reports": 39, "event_total_reports": 45, "PRR": 0.635, "ROR": 0.569, "ROR_95CI_low": 0.222, "ROR_95CI_high": 1.458, "chi_square": 0.945, "p_value": 0.330892, "signal_detected": false}, {"drug": "LISINOPRIL", "adverse_event": "NAUSEA", "case_count_a": 3, "drug_total_reports": 33, "event_total_reports": 27, "PRR": 0.633, "ROR": 0.596, "ROR_95CI_low": 0.168, "ROR_95CI_high": 2.107, "chi_square": 0.283, "p_value": 0.594457, "signal_detected": false}, {"drug": "LISINOPRIL", "adverse_event": "HEPATIC FAILURE", "case_count_a": 5, "drug_total_reports": 33, "event_total_reports": 46, "PRR": 0.617, "ROR": 0.549, "ROR_95CI_low": 0.199, "ROR_95CI_high": 1.514, "chi_square": 0.895, "p_value": 0.344098, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "RHABDOMYOLYSIS", "case_count_a": 5, "drug_total_reports": 38, "event_total_reports": 41, "PRR": 0.592, "ROR": 0.53, "ROR_95CI_low": 0.193, "ROR_95CI_high": 1.457, "chi_square": 1.045, "p_value": 0.30657, "signal_detected": false}, {"drug": "SIMVASTATIN", "adverse_event": "HEADACHE", "case_count_a": 3, "drug_total_reports": 29, "event_total_reports": 33, "PRR": 0.59, "ROR": 0.542, "ROR_95CI_low": 0.154, "ROR_95CI_high": 1.909, "chi_square": 0.483, "p_value": 0.486904, "signal_detected": false}, {"drug": "PREDNISONE", "adverse_event": "GASTROINTESTINAL HAEMORRHAGE", "case_count_a": 5, "drug_total_reports": 35, "event_total_reports": 45, "PRR": 0.589, "ROR": 0.521, "ROR_95CI_low": 0.189, "ROR_95CI_high": 1.432, "chi_square": 1.12, "p_value": 0.289861, "signal_detected": false}, {"drug": "OMEPRAZOLE", "adverse_event": "FATIGUE", "case_count_a": 4, "drug_total_reports": 37, "event_total_reports": 34, "PRR": 0.587, "ROR": 0.537, "ROR_95CI_low": 0.177, "ROR_95CI_high": 1.632, "chi_square": 0.753, "p_value": 0.385515, "signal_detected": false}, {"drug": "ATORVASTATIN", "adverse_event": "RHABDOMYOLYSIS", "case_count_a": 5, "drug_total_reports": 39, "event_total_reports": 41, "PRR": 0.573, "ROR": 0.511, "ROR_95CI_low": 0.186, "ROR_95CI_high": 1.401, "chi_square": 1.217, "p_value": 0.270022, "signal_detected": false}, {"drug": "ATORVASTATIN", "adverse_event": "HEADACHE", "case_count_a": 4, "drug_total_reports": 39, "event_total_reports": 33, "PRR": 0.569, "ROR": 0.52, "ROR_95CI_low": 0.171, "ROR_95CI_high": 1.578, "chi_square": 0.866, "p_value": 0.352169, "signal_detected": false}, {"drug": "OMEPRAZOLE", "adverse_event": "GASTROINTESTINAL HAEMORRHAGE", "case_count_a": 5, "drug_total_reports": 37, "event_total_reports": 45, "PRR": 0.551, "ROR": 0.48, "ROR_95CI_low": 0.175, "ROR_95CI_high": 1.316, "chi_square": 1.518, "p_value": 0.217964, "signal_detected": false}, {"drug": "OMEPRAZOLE", "adverse_event": "NAUSEA", "case_count_a": 3, "drug_total_reports": 37, "event_total_reports": 27, "PRR": 0.551, "ROR": 0.511, "ROR_95CI_low": 0.145, "ROR_95CI_high": 1.797, "chi_square": 0.635, "p_value": 0.425634, "signal_detected": false}, {"drug": "OMEPRAZOLE", "adverse_event": "HEPATIC FAILURE", "case_count_a": 5, "drug_total_reports": 37, "event_total_reports": 46, "PRR": 0.537, "ROR": 0.465, "ROR_95CI_low": 0.17, "ROR_95CI_high": 1.272, "chi_square": 1.697, "p_value": 0.192746, "signal_detected": false}, {"drug": "METFORMIN", "adverse_event": "HEPATIC FAILURE", "case_count_a": 3, "drug_total_reports": 23, "event_total_reports": 46, "PRR": 0.537, "ROR": 0.467, "ROR_95CI_low": 0.132, "ROR_95CI_high": 1.65, "chi_square": 0.889, "p_value": 0.345796, "signal_detected": false}, {"drug": "WARFARIN", "adverse_event": "NAUSEA", "case_count_a": 3, "drug_total_reports": 38, "event_total_reports": 27, "PRR": 0.533, "ROR": 0.493, "ROR_95CI_low": 0.14, "ROR_95CI_high": 1.731, "chi_square": 0.739, "p_value": 0.38992, "signal_detected": false}, {"drug": "PREDNISONE", "adverse_event": "RHABDOMYOLYSIS", "case_count_a": 4, "drug_total_reports": 35, "event_total_reports": 41, "PRR": 0.51, "ROR": 0.446, "ROR_95CI_low": 0.148, "ROR_95CI_high": 1.346, "chi_square": 1.521, "p_value": 0.217534, "signal_detected": false}]};
+window.SEMINAR_DEMO_DATA = {
+  "dataset": {
+    "source": "sample_data",
+    "case_count": 200,
+    "demo_rows": 200,
+    "drug_rows": 305,
+    "reac_rows": 448,
+    "pair_count": 696,
+    "drug_count": 10
+  },
+  "demo_drug": "WARFARIN",
+  "warfarin_adrs": [
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+      "case_count_a": 18,
+      "drug_total_reports": 38,
+      "event_total_reports": 45,
+      "PRR": 2.842,
+      "ROR": 4.5,
+      "ROR_95CI_low": 2.106,
+      "ROR_95CI_high": 9.614,
+      "chi_square": 14.924,
+      "p_value": 0.000112,
+      "IC": 1.0443,
+      "IC025": -0.0382,
+      "IC975": 2.1269,
+      "signal_bcpnn": false,
+      "EBGM": 1.2731,
+      "EB05": 1.0303,
+      "EB95": 1.5373,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": true,
+      "priority_score": 0.9999,
+      "priority_rank": 2,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 14.924,
+          "contribution": 2.9671
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 4.5,
+          "contribution": 0.6215
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 1.0303,
+          "contribution": 0.2852
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "HEADACHE",
+      "case_count_a": 10,
+      "drug_total_reports": 38,
+      "event_total_reports": 33,
+      "PRR": 1.854,
+      "ROR": 2.158,
+      "ROR_95CI_low": 0.926,
+      "ROR_95CI_high": 5.031,
+      "chi_square": 2.46,
+      "p_value": 0.116766,
+      "IC": 0.6633,
+      "IC025": -0.5365,
+      "IC975": 1.8632,
+      "signal_bcpnn": false,
+      "EBGM": 1.1735,
+      "EB05": 0.9359,
+      "EB95": 1.4333,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 103,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 2.46,
+          "contribution": 0.4891
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 2.158,
+          "contribution": 0.298
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9359,
+          "contribution": 0.2591
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "VOMITING",
+      "case_count_a": 7,
+      "drug_total_reports": 38,
+      "event_total_reports": 25,
+      "PRR": 1.658,
+      "ROR": 1.806,
+      "ROR_95CI_low": 0.695,
+      "ROR_95CI_high": 4.696,
+      "chi_square": 0.91,
+      "p_value": 0.340199,
+      "IC": 0.5649,
+      "IC025": -0.7795,
+      "IC975": 1.9093,
+      "signal_bcpnn": false,
+      "EBGM": 1.1489,
+      "EB05": 0.9106,
+      "EB95": 1.4102,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 110,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9106,
+          "contribution": 0.2521
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.806,
+          "contribution": 0.2494
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1489,
+          "contribution": 0.2098
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "ANGIOEDEMA",
+      "case_count_a": 8,
+      "drug_total_reports": 38,
+      "event_total_reports": 29,
+      "PRR": 1.624,
+      "ROR": 1.79,
+      "ROR_95CI_low": 0.725,
+      "ROR_95CI_high": 4.424,
+      "chi_square": 1.038,
+      "p_value": 0.308339,
+      "IC": 0.539,
+      "IC025": -0.7382,
+      "IC975": 1.8162,
+      "signal_bcpnn": false,
+      "EBGM": 1.1515,
+      "EB05": 0.9146,
+      "EB95": 1.4109,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 100,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9146,
+          "contribution": 0.2532
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.79,
+          "contribution": 0.2472
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1515,
+          "contribution": 0.2103
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "PRURITUS",
+      "case_count_a": 5,
+      "drug_total_reports": 38,
+      "event_total_reports": 20,
+      "PRR": 1.421,
+      "ROR": 1.485,
+      "ROR_95CI_low": 0.504,
+      "ROR_95CI_high": 4.374,
+      "chi_square": 0.177,
+      "p_value": 0.674066,
+      "IC": 0.4256,
+      "IC025": -1.0786,
+      "IC975": 1.9297,
+      "signal_bcpnn": false,
+      "EBGM": 1.1303,
+      "EB05": 0.8918,
+      "EB95": 1.3921,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 107,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8918,
+          "contribution": 0.2469
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1303,
+          "contribution": 0.2064
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.485,
+          "contribution": 0.2051
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "MYALGIA",
+      "case_count_a": 5,
+      "drug_total_reports": 38,
+      "event_total_reports": 22,
+      "PRR": 1.254,
+      "ROR": 1.292,
+      "ROR_95CI_low": 0.445,
+      "ROR_95CI_high": 3.754,
+      "chi_square": 0.034,
+      "p_value": 0.853745,
+      "IC": 0.2943,
+      "IC025": -1.1904,
+      "IC975": 1.779,
+      "signal_bcpnn": false,
+      "EBGM": 1.1215,
+      "EB05": 0.8849,
+      "EB95": 1.3813,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 105,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8849,
+          "contribution": 0.2449
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1215,
+          "contribution": 0.2048
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.292,
+          "contribution": 0.1784
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "DYSPNOEA",
+      "case_count_a": 6,
+      "drug_total_reports": 38,
+      "event_total_reports": 29,
+      "PRR": 1.112,
+      "ROR": 1.133,
+      "ROR_95CI_low": 0.426,
+      "ROR_95CI_high": 3.011,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.152,
+      "IC025": -1.2168,
+      "IC975": 1.5208,
+      "signal_bcpnn": false,
+      "EBGM": 1.1118,
+      "EB05": 0.8792,
+      "EB95": 1.3669,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 101,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8792,
+          "contribution": 0.2434
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1118,
+          "contribution": 0.203
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.133,
+          "contribution": 0.1565
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "FATIGUE",
+      "case_count_a": 7,
+      "drug_total_reports": 38,
+      "event_total_reports": 34,
+      "PRR": 1.105,
+      "ROR": 1.129,
+      "ROR_95CI_low": 0.451,
+      "ROR_95CI_high": 2.829,
+      "chi_square": 0.0,
+      "p_value": 0.984686,
+      "IC": 0.1361,
+      "IC025": -1.1561,
+      "IC975": 1.4282,
+      "signal_bcpnn": false,
+      "EBGM": 1.1107,
+      "EB05": 0.8803,
+      "EB95": 1.3632,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 102,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8803,
+          "contribution": 0.2437
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1107,
+          "contribution": 0.2028
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.129,
+          "contribution": 0.1559
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "RASH",
+      "case_count_a": 6,
+      "drug_total_reports": 38,
+      "event_total_reports": 30,
+      "PRR": 1.066,
+      "ROR": 1.078,
+      "ROR_95CI_low": 0.407,
+      "ROR_95CI_high": 2.855,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.1047,
+      "IC025": -1.2592,
+      "IC975": 1.4686,
+      "signal_bcpnn": false,
+      "EBGM": 1.1076,
+      "EB05": 0.8759,
+      "EB95": 1.3617,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 108,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8759,
+          "contribution": 0.2425
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1076,
+          "contribution": 0.2023
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.078,
+          "contribution": 0.1489
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "HEPATIC FAILURE",
+      "case_count_a": 9,
+      "drug_total_reports": 38,
+      "event_total_reports": 46,
+      "PRR": 1.037,
+      "ROR": 1.048,
+      "ROR_95CI_low": 0.456,
+      "ROR_95CI_high": 2.412,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.0518,
+      "IC025": -1.127,
+      "IC975": 1.2306,
+      "signal_bcpnn": false,
+      "EBGM": 1.1007,
+      "EB05": 0.8761,
+      "EB95": 1.3466,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 104,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8761,
+          "contribution": 0.2425
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1007,
+          "contribution": 0.201
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.048,
+          "contribution": 0.1447
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "ANAPHYLACTIC REACTION",
+      "case_count_a": 7,
+      "drug_total_reports": 38,
+      "event_total_reports": 40,
+      "PRR": 0.904,
+      "ROR": 0.883,
+      "ROR_95CI_low": 0.357,
+      "ROR_95CI_high": 2.182,
+      "chi_square": 0.002,
+      "p_value": 0.964058,
+      "IC": -0.0922,
+      "IC025": -1.3651,
+      "IC975": 1.1807,
+      "signal_bcpnn": false,
+      "EBGM": 1.0865,
+      "EB05": 0.8611,
+      "EB95": 1.3336,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 99,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8611,
+          "contribution": 0.2384
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0865,
+          "contribution": 0.1984
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.883,
+          "contribution": 0.122
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "RHABDOMYOLYSIS",
+      "case_count_a": 5,
+      "drug_total_reports": 38,
+      "event_total_reports": 41,
+      "PRR": 0.592,
+      "ROR": 0.53,
+      "ROR_95CI_low": 0.193,
+      "ROR_95CI_high": 1.457,
+      "chi_square": 1.045,
+      "p_value": 0.30657,
+      "IC": -0.5744,
+      "IC025": -1.9797,
+      "IC975": 0.8308,
+      "signal_bcpnn": false,
+      "EBGM": 1.0446,
+      "EB05": 0.8242,
+      "EB95": 1.2866,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 109,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8242,
+          "contribution": 0.2281
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 1.045,
+          "contribution": 0.2078
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0446,
+          "contribution": 0.1908
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "NAUSEA",
+      "case_count_a": 3,
+      "drug_total_reports": 38,
+      "event_total_reports": 27,
+      "PRR": 0.533,
+      "ROR": 0.493,
+      "ROR_95CI_low": 0.14,
+      "ROR_95CI_high": 1.731,
+      "chi_square": 0.739,
+      "p_value": 0.38992,
+      "IC": -0.6415,
+      "IC025": -2.3427,
+      "IC975": 1.0596,
+      "signal_bcpnn": false,
+      "EBGM": 1.0602,
+      "EB05": 0.8326,
+      "EB95": 1.3106,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 106,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8326,
+          "contribution": 0.2305
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0602,
+          "contribution": 0.1936
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 0.739,
+          "contribution": 0.1469
+        }
+      ]
+    }
+  ],
+  "featured_contingency": {
+    "a": 18,
+    "b": 20,
+    "c": 27,
+    "d": 135,
+    "total_reports": 200
+  },
+  "featured_pair": {
+    "drug": "WARFARIN",
+    "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+    "case_count_a": 18,
+    "drug_total_reports": 38,
+    "event_total_reports": 45,
+    "PRR": 2.842,
+    "ROR": 4.5,
+    "ROR_95CI_low": 2.106,
+    "ROR_95CI_high": 9.614,
+    "chi_square": 14.924,
+    "p_value": 0.000112,
+    "IC": 1.0443,
+    "IC025": -0.0382,
+    "IC975": 2.1269,
+    "signal_bcpnn": false,
+    "EBGM": 1.2731,
+    "EB05": 1.0303,
+    "EB95": 1.5373,
+    "signal_ebgm": false,
+    "serious_event": true,
+    "signal_detected": true,
+    "priority_score": 0.9999,
+    "priority_rank": 2,
+    "priority_explain": [
+      {
+        "feature": "chi_square",
+        "label": "\u03c7\u00b2",
+        "value": 14.924,
+        "contribution": 2.9671
+      },
+      {
+        "feature": "ROR",
+        "label": "ROR",
+        "value": 4.5,
+        "contribution": 0.6215
+      },
+      {
+        "feature": "EB05",
+        "label": "EB05",
+        "value": 1.0303,
+        "contribution": 0.2852
+      }
+    ]
+  },
+  "all_flagged_signals": [
+    {
+      "drug": "PREDNISONE",
+      "adverse_event": "HEPATIC FAILURE",
+      "case_count_a": 15,
+      "drug_total_reports": 35,
+      "event_total_reports": 46,
+      "PRR": 2.281,
+      "ROR": 3.242,
+      "ROR_95CI_low": 1.493,
+      "ROR_95CI_high": 7.038,
+      "chi_square": 8.135,
+      "p_value": 0.004341,
+      "IC": 0.8735,
+      "IC025": -0.2306,
+      "IC975": 1.9777,
+      "signal_bcpnn": false,
+      "EBGM": 1.2285,
+      "EB05": 0.989,
+      "EB95": 1.4894,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": true,
+      "priority_score": 0.9999,
+      "priority_rank": 1,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 8.135,
+          "contribution": 1.6174
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 3.242,
+          "contribution": 0.4478
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.989,
+          "contribution": 0.2738
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+      "case_count_a": 18,
+      "drug_total_reports": 38,
+      "event_total_reports": 45,
+      "PRR": 2.842,
+      "ROR": 4.5,
+      "ROR_95CI_low": 2.106,
+      "ROR_95CI_high": 9.614,
+      "chi_square": 14.924,
+      "p_value": 0.000112,
+      "IC": 1.0443,
+      "IC025": -0.0382,
+      "IC975": 2.1269,
+      "signal_bcpnn": false,
+      "EBGM": 1.2731,
+      "EB05": 1.0303,
+      "EB95": 1.5373,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": true,
+      "priority_score": 0.9999,
+      "priority_rank": 2,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 14.924,
+          "contribution": 2.9671
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 4.5,
+          "contribution": 0.6215
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 1.0303,
+          "contribution": 0.2852
+        }
+      ]
+    },
+    {
+      "drug": "SIMVASTATIN",
+      "adverse_event": "RHABDOMYOLYSIS",
+      "case_count_a": 13,
+      "drug_total_reports": 29,
+      "event_total_reports": 41,
+      "PRR": 2.738,
+      "ROR": 4.15,
+      "ROR_95CI_low": 1.798,
+      "ROR_95CI_high": 9.578,
+      "chi_square": 10.633,
+      "p_value": 0.001111,
+      "IC": 1.0995,
+      "IC025": -0.0892,
+      "IC975": 2.2883,
+      "signal_bcpnn": false,
+      "EBGM": 1.24,
+      "EB05": 0.9947,
+      "EB95": 1.5077,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": true,
+      "priority_score": 0.9997,
+      "priority_rank": 3,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 10.633,
+          "contribution": 2.114
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 4.15,
+          "contribution": 0.5732
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9947,
+          "contribution": 0.2753
+        }
+      ]
+    },
+    {
+      "drug": "AMOXICILLIN",
+      "adverse_event": "ANAPHYLACTIC REACTION",
+      "case_count_a": 10,
+      "drug_total_reports": 27,
+      "event_total_reports": 40,
+      "PRR": 2.136,
+      "ROR": 2.804,
+      "ROR_95CI_low": 1.169,
+      "ROR_95CI_high": 6.724,
+      "chi_square": 4.499,
+      "p_value": 0.033925,
+      "IC": 0.8713,
+      "IC025": -0.3682,
+      "IC975": 2.1107,
+      "signal_bcpnn": false,
+      "EBGM": 1.1938,
+      "EB05": 0.9521,
+      "EB95": 1.4581,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": true,
+      "priority_score": 0.9996,
+      "priority_rank": 4,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 4.499,
+          "contribution": 0.8945
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 2.804,
+          "contribution": 0.3873
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9521,
+          "contribution": 0.2635
+        }
+      ]
+    },
+    {
+      "drug": "AMOXICILLIN",
+      "adverse_event": "FATIGUE",
+      "case_count_a": 10,
+      "drug_total_reports": 27,
+      "event_total_reports": 34,
+      "PRR": 2.67,
+      "ROR": 3.652,
+      "ROR_95CI_low": 1.496,
+      "ROR_95CI_high": 8.912,
+      "chi_square": 7.316,
+      "p_value": 0.006835,
+      "IC": 1.0995,
+      "IC025": -0.1647,
+      "IC975": 2.3638,
+      "signal_bcpnn": false,
+      "EBGM": 1.2133,
+      "EB05": 0.9677,
+      "EB95": 1.4819,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": true,
+      "priority_score": 0.0007,
+      "priority_rank": 9,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 7.316,
+          "contribution": 1.4545
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 3.652,
+          "contribution": 0.5044
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9677,
+          "contribution": 0.2679
+        }
+      ]
+    }
+  ],
+  "all_results": [
+    {
+      "drug": "PREDNISONE",
+      "adverse_event": "HEPATIC FAILURE",
+      "case_count_a": 15,
+      "drug_total_reports": 35,
+      "event_total_reports": 46,
+      "PRR": 2.281,
+      "ROR": 3.242,
+      "ROR_95CI_low": 1.493,
+      "ROR_95CI_high": 7.038,
+      "chi_square": 8.135,
+      "p_value": 0.004341,
+      "IC": 0.8735,
+      "IC025": -0.2306,
+      "IC975": 1.9777,
+      "signal_bcpnn": false,
+      "EBGM": 1.2285,
+      "EB05": 0.989,
+      "EB95": 1.4894,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": true,
+      "priority_score": 0.9999,
+      "priority_rank": 1,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 8.135,
+          "contribution": 1.6174
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 3.242,
+          "contribution": 0.4478
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.989,
+          "contribution": 0.2738
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+      "case_count_a": 18,
+      "drug_total_reports": 38,
+      "event_total_reports": 45,
+      "PRR": 2.842,
+      "ROR": 4.5,
+      "ROR_95CI_low": 2.106,
+      "ROR_95CI_high": 9.614,
+      "chi_square": 14.924,
+      "p_value": 0.000112,
+      "IC": 1.0443,
+      "IC025": -0.0382,
+      "IC975": 2.1269,
+      "signal_bcpnn": false,
+      "EBGM": 1.2731,
+      "EB05": 1.0303,
+      "EB95": 1.5373,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": true,
+      "priority_score": 0.9999,
+      "priority_rank": 2,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 14.924,
+          "contribution": 2.9671
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 4.5,
+          "contribution": 0.6215
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 1.0303,
+          "contribution": 0.2852
+        }
+      ]
+    },
+    {
+      "drug": "SIMVASTATIN",
+      "adverse_event": "RHABDOMYOLYSIS",
+      "case_count_a": 13,
+      "drug_total_reports": 29,
+      "event_total_reports": 41,
+      "PRR": 2.738,
+      "ROR": 4.15,
+      "ROR_95CI_low": 1.798,
+      "ROR_95CI_high": 9.578,
+      "chi_square": 10.633,
+      "p_value": 0.001111,
+      "IC": 1.0995,
+      "IC025": -0.0892,
+      "IC975": 2.2883,
+      "signal_bcpnn": false,
+      "EBGM": 1.24,
+      "EB05": 0.9947,
+      "EB95": 1.5077,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": true,
+      "priority_score": 0.9997,
+      "priority_rank": 3,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 10.633,
+          "contribution": 2.114
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 4.15,
+          "contribution": 0.5732
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9947,
+          "contribution": 0.2753
+        }
+      ]
+    },
+    {
+      "drug": "AMOXICILLIN",
+      "adverse_event": "ANAPHYLACTIC REACTION",
+      "case_count_a": 10,
+      "drug_total_reports": 27,
+      "event_total_reports": 40,
+      "PRR": 2.136,
+      "ROR": 2.804,
+      "ROR_95CI_low": 1.169,
+      "ROR_95CI_high": 6.724,
+      "chi_square": 4.499,
+      "p_value": 0.033925,
+      "IC": 0.8713,
+      "IC025": -0.3682,
+      "IC975": 2.1107,
+      "signal_bcpnn": false,
+      "EBGM": 1.1938,
+      "EB05": 0.9521,
+      "EB95": 1.4581,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": true,
+      "priority_score": 0.9996,
+      "priority_rank": 4,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 4.499,
+          "contribution": 0.8945
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 2.804,
+          "contribution": 0.3873
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9521,
+          "contribution": 0.2635
+        }
+      ]
+    },
+    {
+      "drug": "CLOPIDOGREL",
+      "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+      "case_count_a": 10,
+      "drug_total_reports": 25,
+      "event_total_reports": 45,
+      "PRR": 2.0,
+      "ROR": 2.667,
+      "ROR_95CI_low": 1.104,
+      "ROR_95CI_high": 6.44,
+      "chi_square": 3.937,
+      "p_value": 0.047249,
+      "IC": 0.8122,
+      "IC025": -0.4366,
+      "IC975": 2.061,
+      "signal_bcpnn": false,
+      "EBGM": 1.1884,
+      "EB05": 0.9478,
+      "EB95": 1.4516,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.999,
+      "priority_rank": 5,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 3.937,
+          "contribution": 0.7827
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 2.667,
+          "contribution": 0.3683
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9478,
+          "contribution": 0.2624
+        }
+      ]
+    },
+    {
+      "drug": "ATORVASTATIN",
+      "adverse_event": "MYALGIA",
+      "case_count_a": 4,
+      "drug_total_reports": 39,
+      "event_total_reports": 22,
+      "PRR": 0.917,
+      "ROR": 0.908,
+      "ROR_95CI_low": 0.289,
+      "ROR_95CI_high": 2.852,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": -0.0317,
+      "IC025": -1.6097,
+      "IC975": 1.5463,
+      "signal_bcpnn": false,
+      "EBGM": 1.0987,
+      "EB05": 0.8648,
+      "EB95": 1.3556,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.9971,
+      "priority_rank": 6,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8648,
+          "contribution": 0.2394
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0987,
+          "contribution": 0.2006
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.908,
+          "contribution": 0.1254
+        }
+      ]
+    },
+    {
+      "drug": "LISINOPRIL",
+      "adverse_event": "ANGIOEDEMA",
+      "case_count_a": 4,
+      "drug_total_reports": 33,
+      "event_total_reports": 29,
+      "PRR": 0.81,
+      "ROR": 0.783,
+      "ROR_95CI_low": 0.253,
+      "ROR_95CI_high": 2.422,
+      "chi_square": 0.024,
+      "p_value": 0.877454,
+      "IC": -0.1806,
+      "IC025": -1.7354,
+      "IC975": 1.3743,
+      "signal_bcpnn": false,
+      "EBGM": 1.0877,
+      "EB05": 0.8562,
+      "EB95": 1.3421,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.9945,
+      "priority_rank": 7,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8562,
+          "contribution": 0.237
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0877,
+          "contribution": 0.1986
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.783,
+          "contribution": 0.1081
+        }
+      ]
+    },
+    {
+      "drug": "PREDNISONE",
+      "adverse_event": "PRURITUS",
+      "case_count_a": 3,
+      "drug_total_reports": 35,
+      "event_total_reports": 20,
+      "PRR": 0.832,
+      "ROR": 0.816,
+      "ROR_95CI_low": 0.226,
+      "ROR_95CI_high": 2.952,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": -0.111,
+      "IC025": -1.855,
+      "IC975": 1.6329,
+      "signal_bcpnn": false,
+      "EBGM": 1.0959,
+      "EB05": 0.8606,
+      "EB95": 1.3547,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0013,
+      "priority_rank": 8,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8606,
+          "contribution": 0.2382
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0959,
+          "contribution": 0.2001
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.816,
+          "contribution": 0.1127
+        }
+      ]
+    },
+    {
+      "drug": "AMOXICILLIN",
+      "adverse_event": "FATIGUE",
+      "case_count_a": 10,
+      "drug_total_reports": 27,
+      "event_total_reports": 34,
+      "PRR": 2.67,
+      "ROR": 3.652,
+      "ROR_95CI_low": 1.496,
+      "ROR_95CI_high": 8.912,
+      "chi_square": 7.316,
+      "p_value": 0.006835,
+      "IC": 1.0995,
+      "IC025": -0.1647,
+      "IC975": 2.3638,
+      "signal_bcpnn": false,
+      "EBGM": 1.2133,
+      "EB05": 0.9677,
+      "EB95": 1.4819,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": true,
+      "priority_score": 0.0007,
+      "priority_rank": 9,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 7.316,
+          "contribution": 1.4545
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 3.652,
+          "contribution": 0.5044
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9677,
+          "contribution": 0.2679
+        }
+      ]
+    },
+    {
+      "drug": "SIMVASTATIN",
+      "adverse_event": "RASH",
+      "case_count_a": 4,
+      "drug_total_reports": 29,
+      "event_total_reports": 30,
+      "PRR": 0.907,
+      "ROR": 0.892,
+      "ROR_95CI_low": 0.287,
+      "ROR_95CI_high": 2.776,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": -0.0473,
+      "IC025": -1.6116,
+      "IC975": 1.517,
+      "signal_bcpnn": false,
+      "EBGM": 1.0973,
+      "EB05": 0.8638,
+      "EB95": 1.3539,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0006,
+      "priority_rank": 10,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8638,
+          "contribution": 0.2391
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0973,
+          "contribution": 0.2004
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.892,
+          "contribution": 0.1232
+        }
+      ]
+    },
+    {
+      "drug": "CLOPIDOGREL",
+      "adverse_event": "RASH",
+      "case_count_a": 4,
+      "drug_total_reports": 25,
+      "event_total_reports": 30,
+      "PRR": 1.077,
+      "ROR": 1.092,
+      "ROR_95CI_low": 0.346,
+      "ROR_95CI_high": 3.439,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.1591,
+      "IC025": -1.4232,
+      "IC975": 1.7415,
+      "signal_bcpnn": false,
+      "EBGM": 1.1109,
+      "EB05": 0.8744,
+      "EB95": 1.3706,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0006,
+      "priority_rank": 11,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8744,
+          "contribution": 0.242
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1109,
+          "contribution": 0.2029
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.092,
+          "contribution": 0.1508
+        }
+      ]
+    },
+    {
+      "drug": "ATORVASTATIN",
+      "adverse_event": "ANGIOEDEMA",
+      "case_count_a": 5,
+      "drug_total_reports": 39,
+      "event_total_reports": 29,
+      "PRR": 0.86,
+      "ROR": 0.839,
+      "ROR_95CI_low": 0.298,
+      "ROR_95CI_high": 2.361,
+      "chi_square": 0.006,
+      "p_value": 0.937378,
+      "IC": -0.1255,
+      "IC025": -1.5643,
+      "IC975": 1.3132,
+      "signal_bcpnn": false,
+      "EBGM": 1.0888,
+      "EB05": 0.8591,
+      "EB95": 1.341,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0004,
+      "priority_rank": 12,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8591,
+          "contribution": 0.2378
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0888,
+          "contribution": 0.1988
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.839,
+          "contribution": 0.1159
+        }
+      ]
+    },
+    {
+      "drug": "PREDNISONE",
+      "adverse_event": "RHABDOMYOLYSIS",
+      "case_count_a": 4,
+      "drug_total_reports": 35,
+      "event_total_reports": 41,
+      "PRR": 0.51,
+      "ROR": 0.446,
+      "ROR_95CI_low": 0.148,
+      "ROR_95CI_high": 1.346,
+      "chi_square": 1.521,
+      "p_value": 0.217534,
+      "IC": -0.7485,
+      "IC025": -2.2671,
+      "IC975": 0.7701,
+      "signal_bcpnn": false,
+      "EBGM": 1.0377,
+      "EB05": 0.8169,
+      "EB95": 1.2804,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0004,
+      "priority_rank": 13,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 1.521,
+          "contribution": 0.3024
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8169,
+          "contribution": 0.2261
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0377,
+          "contribution": 0.1895
+        }
+      ]
+    },
+    {
+      "drug": "METFORMIN",
+      "adverse_event": "ANGIOEDEMA",
+      "case_count_a": 3,
+      "drug_total_reports": 23,
+      "event_total_reports": 29,
+      "PRR": 0.888,
+      "ROR": 0.871,
+      "ROR_95CI_low": 0.242,
+      "ROR_95CI_high": 3.142,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": -0.0406,
+      "IC025": -1.7811,
+      "IC975": 1.6998,
+      "signal_bcpnn": false,
+      "EBGM": 1.0997,
+      "EB05": 0.8636,
+      "EB95": 1.3594,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0003,
+      "priority_rank": 14,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8636,
+          "contribution": 0.239
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0997,
+          "contribution": 0.2008
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.871,
+          "contribution": 0.1203
+        }
+      ]
+    },
+    {
+      "drug": "METFORMIN",
+      "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+      "case_count_a": 4,
+      "drug_total_reports": 23,
+      "event_total_reports": 45,
+      "PRR": 0.751,
+      "ROR": 0.698,
+      "ROR_95CI_low": 0.225,
+      "ROR_95CI_high": 2.169,
+      "chi_square": 0.128,
+      "p_value": 0.720132,
+      "IC": -0.2947,
+      "IC025": -1.8562,
+      "IC975": 1.2667,
+      "signal_bcpnn": false,
+      "EBGM": 1.0792,
+      "EB05": 0.8495,
+      "EB95": 1.3316,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0002,
+      "priority_rank": 15,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8495,
+          "contribution": 0.2351
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0792,
+          "contribution": 0.1971
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.698,
+          "contribution": 0.0964
+        }
+      ]
+    },
+    {
+      "drug": "CLOPIDOGREL",
+      "adverse_event": "MYALGIA",
+      "case_count_a": 4,
+      "drug_total_reports": 25,
+      "event_total_reports": 22,
+      "PRR": 1.556,
+      "ROR": 1.661,
+      "ROR_95CI_low": 0.513,
+      "ROR_95CI_high": 5.381,
+      "chi_square": 0.263,
+      "p_value": 0.608299,
+      "IC": 0.5898,
+      "IC025": -1.0325,
+      "IC975": 2.212,
+      "signal_bcpnn": false,
+      "EBGM": 1.1342,
+      "EB05": 0.8928,
+      "EB95": 1.3994,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0001,
+      "priority_rank": 16,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8928,
+          "contribution": 0.2471
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.661,
+          "contribution": 0.2294
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1342,
+          "contribution": 0.2071
+        }
+      ]
+    },
+    {
+      "drug": "IBUPROFEN",
+      "adverse_event": "NAUSEA",
+      "case_count_a": 4,
+      "drug_total_reports": 19,
+      "event_total_reports": 27,
+      "PRR": 1.657,
+      "ROR": 1.832,
+      "ROR_95CI_low": 0.559,
+      "ROR_95CI_high": 6.001,
+      "chi_square": 0.435,
+      "p_value": 0.509359,
+      "IC": 0.6845,
+      "IC025": -0.9536,
+      "IC975": 2.3226,
+      "signal_bcpnn": false,
+      "EBGM": 1.1386,
+      "EB05": 0.8963,
+      "EB95": 1.4049,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0001,
+      "priority_rank": 17,
+      "priority_explain": [
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.832,
+          "contribution": 0.253
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8963,
+          "contribution": 0.2481
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1386,
+          "contribution": 0.2079
+        }
+      ]
+    },
+    {
+      "drug": "ATORVASTATIN",
+      "adverse_event": "VOMITING",
+      "case_count_a": 4,
+      "drug_total_reports": 39,
+      "event_total_reports": 25,
+      "PRR": 0.786,
+      "ROR": 0.762,
+      "ROR_95CI_low": 0.246,
+      "ROR_95CI_high": 2.362,
+      "chi_square": 0.041,
+      "p_value": 0.839629,
+      "IC": -0.2086,
+      "IC025": -1.7677,
+      "IC975": 1.3505,
+      "signal_bcpnn": false,
+      "EBGM": 1.0857,
+      "EB05": 0.8547,
+      "EB95": 1.3396,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0001,
+      "priority_rank": 18,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8547,
+          "contribution": 0.2366
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0857,
+          "contribution": 0.1983
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.762,
+          "contribution": 0.1052
+        }
+      ]
+    },
+    {
+      "drug": "AMOXICILLIN",
+      "adverse_event": "DIZZINESS",
+      "case_count_a": 3,
+      "drug_total_reports": 27,
+      "event_total_reports": 27,
+      "PRR": 0.801,
+      "ROR": 0.776,
+      "ROR_95CI_low": 0.217,
+      "ROR_95CI_high": 2.778,
+      "chi_square": 0.008,
+      "p_value": 0.930034,
+      "IC": -0.1635,
+      "IC025": -1.8929,
+      "IC975": 1.5659,
+      "signal_bcpnn": false,
+      "EBGM": 1.0926,
+      "EB05": 0.858,
+      "EB95": 1.3507,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0001,
+      "priority_rank": 19,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.858,
+          "contribution": 0.2375
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0926,
+          "contribution": 0.1995
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.776,
+          "contribution": 0.1072
+        }
+      ]
+    },
+    {
+      "drug": "METFORMIN",
+      "adverse_event": "NAUSEA",
+      "case_count_a": 4,
+      "drug_total_reports": 23,
+      "event_total_reports": 27,
+      "PRR": 1.338,
+      "ROR": 1.41,
+      "ROR_95CI_low": 0.44,
+      "ROR_95CI_high": 4.514,
+      "chi_square": 0.066,
+      "p_value": 0.797793,
+      "IC": 0.4215,
+      "IC025": -1.1844,
+      "IC975": 2.0274,
+      "signal_bcpnn": false,
+      "EBGM": 1.1258,
+      "EB05": 0.8862,
+      "EB95": 1.3891,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0001,
+      "priority_rank": 20,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8862,
+          "contribution": 0.2453
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1258,
+          "contribution": 0.2056
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.41,
+          "contribution": 0.1947
+        }
+      ]
+    },
+    {
+      "drug": "AMOXICILLIN",
+      "adverse_event": "HEADACHE",
+      "case_count_a": 5,
+      "drug_total_reports": 27,
+      "event_total_reports": 33,
+      "PRR": 1.144,
+      "ROR": 1.177,
+      "ROR_95CI_low": 0.411,
+      "ROR_95CI_high": 3.37,
+      "chi_square": 0.001,
+      "p_value": 0.979986,
+      "IC": 0.2085,
+      "IC025": -1.256,
+      "IC975": 1.6729,
+      "signal_bcpnn": false,
+      "EBGM": 1.1153,
+      "EB05": 0.88,
+      "EB95": 1.3736,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 21,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.88,
+          "contribution": 0.2436
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1153,
+          "contribution": 0.2037
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.177,
+          "contribution": 0.1626
+        }
+      ]
+    },
+    {
+      "drug": "AMOXICILLIN",
+      "adverse_event": "MYALGIA",
+      "case_count_a": 5,
+      "drug_total_reports": 27,
+      "event_total_reports": 22,
+      "PRR": 1.885,
+      "ROR": 2.086,
+      "ROR_95CI_low": 0.699,
+      "ROR_95CI_high": 6.219,
+      "chi_square": 1.024,
+      "p_value": 0.311616,
+      "IC": 0.7724,
+      "IC025": -0.7498,
+      "IC975": 2.2946,
+      "signal_bcpnn": false,
+      "EBGM": 1.1499,
+      "EB05": 0.9073,
+      "EB95": 1.4162,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 22,
+      "priority_explain": [
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 2.086,
+          "contribution": 0.2881
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9073,
+          "contribution": 0.2511
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1499,
+          "contribution": 0.21
+        }
+      ]
+    },
+    {
+      "drug": "ATORVASTATIN",
+      "adverse_event": "DIZZINESS",
+      "case_count_a": 8,
+      "drug_total_reports": 39,
+      "event_total_reports": 27,
+      "PRR": 1.738,
+      "ROR": 1.929,
+      "ROR_95CI_low": 0.774,
+      "ROR_95CI_high": 4.805,
+      "chi_square": 1.363,
+      "p_value": 0.2431,
+      "IC": 0.602,
+      "IC025": -0.6866,
+      "IC975": 1.8907,
+      "signal_bcpnn": false,
+      "EBGM": 1.1571,
+      "EB05": 0.919,
+      "EB95": 1.4178,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 23,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 1.363,
+          "contribution": 0.271
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.929,
+          "contribution": 0.2664
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.919,
+          "contribution": 0.2544
+        }
+      ]
+    },
+    {
+      "drug": "ATORVASTATIN",
+      "adverse_event": "ANAPHYLACTIC REACTION",
+      "case_count_a": 6,
+      "drug_total_reports": 39,
+      "event_total_reports": 40,
+      "PRR": 0.729,
+      "ROR": 0.679,
+      "ROR_95CI_low": 0.263,
+      "ROR_95CI_high": 1.754,
+      "chi_square": 0.336,
+      "p_value": 0.561892,
+      "IC": -0.3352,
+      "IC025": -1.6631,
+      "IC975": 0.9927,
+      "signal_bcpnn": false,
+      "EBGM": 1.0634,
+      "EB05": 0.8409,
+      "EB95": 1.3074,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 24,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8409,
+          "contribution": 0.2328
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0634,
+          "contribution": 0.1942
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.679,
+          "contribution": 0.0938
+        }
+      ]
+    },
+    {
+      "drug": "AMOXICILLIN",
+      "adverse_event": "RHABDOMYOLYSIS",
+      "case_count_a": 5,
+      "drug_total_reports": 27,
+      "event_total_reports": 41,
+      "PRR": 0.89,
+      "ROR": 0.865,
+      "ROR_95CI_low": 0.306,
+      "ROR_95CI_high": 2.442,
+      "chi_square": 0.0,
+      "p_value": 0.985687,
+      "IC": -0.0964,
+      "IC025": -1.5408,
+      "IC975": 1.348,
+      "signal_bcpnn": false,
+      "EBGM": 1.0914,
+      "EB05": 0.8611,
+      "EB95": 1.3442,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 25,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8611,
+          "contribution": 0.2384
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0914,
+          "contribution": 0.1993
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.865,
+          "contribution": 0.1195
+        }
+      ]
+    },
+    {
+      "drug": "AMOXICILLIN",
+      "adverse_event": "NAUSEA",
+      "case_count_a": 5,
+      "drug_total_reports": 27,
+      "event_total_reports": 27,
+      "PRR": 1.456,
+      "ROR": 1.56,
+      "ROR_95CI_low": 0.536,
+      "ROR_95CI_high": 4.544,
+      "chi_square": 0.268,
+      "p_value": 0.604648,
+      "IC": 0.4886,
+      "IC025": -1.0005,
+      "IC975": 1.9776,
+      "signal_bcpnn": false,
+      "EBGM": 1.1339,
+      "EB05": 0.8946,
+      "EB95": 1.3965,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 26,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8946,
+          "contribution": 0.2476
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.56,
+          "contribution": 0.2155
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1339,
+          "contribution": 0.2071
+        }
+      ]
+    },
+    {
+      "drug": "AMOXICILLIN",
+      "adverse_event": "HEPATIC FAILURE",
+      "case_count_a": 5,
+      "drug_total_reports": 27,
+      "event_total_reports": 46,
+      "PRR": 0.781,
+      "ROR": 0.732,
+      "ROR_95CI_low": 0.261,
+      "ROR_95CI_high": 2.054,
+      "chi_square": 0.122,
+      "p_value": 0.727009,
+      "IC": -0.2587,
+      "IC025": -1.6947,
+      "IC975": 1.1774,
+      "signal_bcpnn": false,
+      "EBGM": 1.0769,
+      "EB05": 0.8497,
+      "EB95": 1.3264,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 27,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8497,
+          "contribution": 0.2352
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0769,
+          "contribution": 0.1967
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.732,
+          "contribution": 0.1011
+        }
+      ]
+    },
+    {
+      "drug": "ATORVASTATIN",
+      "adverse_event": "DYSPNOEA",
+      "case_count_a": 7,
+      "drug_total_reports": 39,
+      "event_total_reports": 29,
+      "PRR": 1.314,
+      "ROR": 1.382,
+      "ROR_95CI_low": 0.544,
+      "ROR_95CI_high": 3.515,
+      "chi_square": 0.183,
+      "p_value": 0.668425,
+      "IC": 0.3219,
+      "IC025": -0.9914,
+      "IC975": 1.6353,
+      "signal_bcpnn": false,
+      "EBGM": 1.1284,
+      "EB05": 0.8943,
+      "EB95": 1.3849,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 28,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8943,
+          "contribution": 0.2475
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1284,
+          "contribution": 0.2061
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.382,
+          "contribution": 0.1909
+        }
+      ]
+    },
+    {
+      "drug": "ATORVASTATIN",
+      "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+      "case_count_a": 6,
+      "drug_total_reports": 39,
+      "event_total_reports": 45,
+      "PRR": 0.635,
+      "ROR": 0.569,
+      "ROR_95CI_low": 0.222,
+      "ROR_95CI_high": 1.458,
+      "chi_square": 0.945,
+      "p_value": 0.330892,
+      "IC": -0.5012,
+      "IC025": -1.819,
+      "IC975": 0.8166,
+      "signal_bcpnn": false,
+      "EBGM": 1.0441,
+      "EB05": 0.8257,
+      "EB95": 1.2837,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 29,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8257,
+          "contribution": 0.2286
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0441,
+          "contribution": 0.1907
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 0.945,
+          "contribution": 0.1879
+        }
+      ]
+    },
+    {
+      "drug": "ATORVASTATIN",
+      "adverse_event": "FATIGUE",
+      "case_count_a": 11,
+      "drug_total_reports": 39,
+      "event_total_reports": 34,
+      "PRR": 1.974,
+      "ROR": 2.357,
+      "ROR_95CI_low": 1.033,
+      "ROR_95CI_high": 5.381,
+      "chi_square": 3.381,
+      "p_value": 0.065955,
+      "IC": 0.7162,
+      "IC025": -0.4559,
+      "IC975": 1.8883,
+      "signal_bcpnn": false,
+      "EBGM": 1.1847,
+      "EB05": 0.9467,
+      "EB95": 1.4447,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 30,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 3.381,
+          "contribution": 0.6722
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 2.357,
+          "contribution": 0.3255
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9467,
+          "contribution": 0.2621
+        }
+      ]
+    },
+    {
+      "drug": "CLOPIDOGREL",
+      "adverse_event": "HEPATIC FAILURE",
+      "case_count_a": 7,
+      "drug_total_reports": 25,
+      "event_total_reports": 46,
+      "PRR": 1.256,
+      "ROR": 1.356,
+      "ROR_95CI_low": 0.528,
+      "ROR_95CI_high": 3.482,
+      "chi_square": 0.145,
+      "p_value": 0.703169,
+      "IC": 0.2957,
+      "IC025": -1.0307,
+      "IC975": 1.6221,
+      "signal_bcpnn": false,
+      "EBGM": 1.1262,
+      "EB05": 0.8926,
+      "EB95": 1.3823,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 31,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8926,
+          "contribution": 0.2471
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1262,
+          "contribution": 0.2057
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.356,
+          "contribution": 0.1873
+        }
+      ]
+    },
+    {
+      "drug": "CLOPIDOGREL",
+      "adverse_event": "DIZZINESS",
+      "case_count_a": 5,
+      "drug_total_reports": 25,
+      "event_total_reports": 27,
+      "PRR": 1.591,
+      "ROR": 1.739,
+      "ROR_95CI_low": 0.592,
+      "ROR_95CI_high": 5.105,
+      "chi_square": 0.495,
+      "p_value": 0.481503,
+      "IC": 0.5955,
+      "IC025": -0.9049,
+      "IC975": 2.0959,
+      "signal_bcpnn": false,
+      "EBGM": 1.1402,
+      "EB05": 0.8997,
+      "EB95": 1.4043,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 32,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8997,
+          "contribution": 0.249
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.739,
+          "contribution": 0.2402
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1402,
+          "contribution": 0.2082
+        }
+      ]
+    },
+    {
+      "drug": "ATORVASTATIN",
+      "adverse_event": "RHABDOMYOLYSIS",
+      "case_count_a": 5,
+      "drug_total_reports": 39,
+      "event_total_reports": 41,
+      "PRR": 0.573,
+      "ROR": 0.511,
+      "ROR_95CI_low": 0.186,
+      "ROR_95CI_high": 1.401,
+      "chi_square": 1.217,
+      "p_value": 0.270022,
+      "IC": -0.611,
+      "IC025": -2.0139,
+      "IC975": 0.792,
+      "signal_bcpnn": false,
+      "EBGM": 1.0406,
+      "EB05": 0.821,
+      "EB95": 1.2816,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 33,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 1.217,
+          "contribution": 0.242
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.821,
+          "contribution": 0.2273
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0406,
+          "contribution": 0.19
+        }
+      ]
+    },
+    {
+      "drug": "CLOPIDOGREL",
+      "adverse_event": "RHABDOMYOLYSIS",
+      "case_count_a": 7,
+      "drug_total_reports": 25,
+      "event_total_reports": 41,
+      "PRR": 1.441,
+      "ROR": 1.613,
+      "ROR_95CI_low": 0.624,
+      "ROR_95CI_high": 4.17,
+      "chi_square": 0.53,
+      "p_value": 0.466473,
+      "IC": 0.458,
+      "IC025": -0.8786,
+      "IC975": 1.7946,
+      "signal_bcpnn": false,
+      "EBGM": 1.1403,
+      "EB05": 0.9038,
+      "EB95": 1.3996,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 34,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9038,
+          "contribution": 0.2502
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.613,
+          "contribution": 0.2228
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1403,
+          "contribution": 0.2082
+        }
+      ]
+    },
+    {
+      "drug": "IBUPROFEN",
+      "adverse_event": "ANAPHYLACTIC REACTION",
+      "case_count_a": 5,
+      "drug_total_reports": 19,
+      "event_total_reports": 40,
+      "PRR": 1.361,
+      "ROR": 1.49,
+      "ROR_95CI_low": 0.503,
+      "ROR_95CI_high": 4.412,
+      "chi_square": 0.178,
+      "p_value": 0.673008,
+      "IC": 0.4238,
+      "IC025": -1.0878,
+      "IC975": 1.9354,
+      "signal_bcpnn": false,
+      "EBGM": 1.1303,
+      "EB05": 0.8918,
+      "EB95": 1.3921,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 35,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8918,
+          "contribution": 0.2469
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1303,
+          "contribution": 0.2064
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.49,
+          "contribution": 0.2058
+        }
+      ]
+    },
+    {
+      "drug": "IBUPROFEN",
+      "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+      "case_count_a": 5,
+      "drug_total_reports": 19,
+      "event_total_reports": 45,
+      "PRR": 1.191,
+      "ROR": 1.259,
+      "ROR_95CI_low": 0.428,
+      "ROR_95CI_high": 3.706,
+      "chi_square": 0.017,
+      "p_value": 0.896615,
+      "IC": 0.2578,
+      "IC025": -1.2452,
+      "IC975": 1.7608,
+      "signal_bcpnn": false,
+      "EBGM": 1.1193,
+      "EB05": 0.8832,
+      "EB95": 1.3786,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 36,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8832,
+          "contribution": 0.2445
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1193,
+          "contribution": 0.2044
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.259,
+          "contribution": 0.1739
+        }
+      ]
+    },
+    {
+      "drug": "IBUPROFEN",
+      "adverse_event": "HEPATIC FAILURE",
+      "case_count_a": 5,
+      "drug_total_reports": 19,
+      "event_total_reports": 46,
+      "PRR": 1.162,
+      "ROR": 1.22,
+      "ROR_95CI_low": 0.415,
+      "ROR_95CI_high": 3.587,
+      "chi_square": 0.006,
+      "p_value": 0.940616,
+      "IC": 0.2268,
+      "IC025": -1.2748,
+      "IC975": 1.7284,
+      "signal_bcpnn": false,
+      "EBGM": 1.1172,
+      "EB05": 0.8815,
+      "EB95": 1.376,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 37,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8815,
+          "contribution": 0.244
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1172,
+          "contribution": 0.204
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.22,
+          "contribution": 0.1685
+        }
+      ]
+    },
+    {
+      "drug": "ATORVASTATIN",
+      "adverse_event": "HEADACHE",
+      "case_count_a": 4,
+      "drug_total_reports": 39,
+      "event_total_reports": 33,
+      "PRR": 0.569,
+      "ROR": 0.52,
+      "ROR_95CI_low": 0.171,
+      "ROR_95CI_high": 1.578,
+      "chi_square": 0.866,
+      "p_value": 0.352169,
+      "IC": -0.5956,
+      "IC025": -2.1232,
+      "IC975": 0.932,
+      "signal_bcpnn": false,
+      "EBGM": 1.0527,
+      "EB05": 0.8287,
+      "EB95": 1.2989,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 38,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8287,
+          "contribution": 0.2294
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0527,
+          "contribution": 0.1922
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 0.866,
+          "contribution": 0.1722
+        }
+      ]
+    },
+    {
+      "drug": "ATORVASTATIN",
+      "adverse_event": "PRURITUS",
+      "case_count_a": 3,
+      "drug_total_reports": 39,
+      "event_total_reports": 20,
+      "PRR": 0.729,
+      "ROR": 0.706,
+      "ROR_95CI_low": 0.196,
+      "ROR_95CI_high": 2.54,
+      "chi_square": 0.057,
+      "p_value": 0.81191,
+      "IC": -0.263,
+      "IC025": -1.9996,
+      "IC975": 1.4736,
+      "signal_bcpnn": false,
+      "EBGM": 1.0869,
+      "EB05": 0.8536,
+      "EB95": 1.3436,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 39,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8536,
+          "contribution": 0.2363
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0869,
+          "contribution": 0.1985
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.706,
+          "contribution": 0.0975
+        }
+      ]
+    },
+    {
+      "drug": "ATORVASTATIN",
+      "adverse_event": "NAUSEA",
+      "case_count_a": 7,
+      "drug_total_reports": 39,
+      "event_total_reports": 27,
+      "PRR": 1.445,
+      "ROR": 1.542,
+      "ROR_95CI_low": 0.601,
+      "ROR_95CI_high": 3.958,
+      "chi_square": 0.416,
+      "p_value": 0.518925,
+      "IC": 0.4215,
+      "IC025": -0.9047,
+      "IC975": 1.7476,
+      "signal_bcpnn": false,
+      "EBGM": 1.1371,
+      "EB05": 0.9012,
+      "EB95": 1.3957,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 40,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9012,
+          "contribution": 0.2495
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.542,
+          "contribution": 0.213
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1371,
+          "contribution": 0.2077
+        }
+      ]
+    },
+    {
+      "drug": "ATORVASTATIN",
+      "adverse_event": "HEPATIC FAILURE",
+      "case_count_a": 12,
+      "drug_total_reports": 39,
+      "event_total_reports": 46,
+      "PRR": 1.457,
+      "ROR": 1.66,
+      "ROR_95CI_low": 0.762,
+      "ROR_95CI_high": 3.615,
+      "chi_square": 1.151,
+      "p_value": 0.283292,
+      "IC": 0.4112,
+      "IC025": -0.6956,
+      "IC975": 1.5179,
+      "signal_bcpnn": false,
+      "EBGM": 1.1518,
+      "EB05": 0.9222,
+      "EB95": 1.4024,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 41,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9222,
+          "contribution": 0.2553
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.66,
+          "contribution": 0.2293
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 1.151,
+          "contribution": 0.2288
+        }
+      ]
+    },
+    {
+      "drug": "ATORVASTATIN",
+      "adverse_event": "RASH",
+      "case_count_a": 5,
+      "drug_total_reports": 39,
+      "event_total_reports": 30,
+      "PRR": 0.826,
+      "ROR": 0.8,
+      "ROR_95CI_low": 0.285,
+      "ROR_95CI_high": 2.243,
+      "chi_square": 0.031,
+      "p_value": 0.861129,
+      "IC": -0.1728,
+      "IC025": -1.6073,
+      "IC975": 1.2616,
+      "signal_bcpnn": false,
+      "EBGM": 1.0846,
+      "EB05": 0.8557,
+      "EB95": 1.3358,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 42,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8557,
+          "contribution": 0.2369
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0846,
+          "contribution": 0.1981
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.8,
+          "contribution": 0.1105
+        }
+      ]
+    },
+    {
+      "drug": "CLOPIDOGREL",
+      "adverse_event": "ANAPHYLACTIC REACTION",
+      "case_count_a": 5,
+      "drug_total_reports": 25,
+      "event_total_reports": 40,
+      "PRR": 1.0,
+      "ROR": 1.0,
+      "ROR_95CI_low": 0.351,
+      "ROR_95CI_high": 2.851,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.0453,
+      "IC025": -1.4128,
+      "IC975": 1.5034,
+      "signal_bcpnn": false,
+      "EBGM": 1.1031,
+      "EB05": 0.8703,
+      "EB95": 1.3586,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 43,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8703,
+          "contribution": 0.2409
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1031,
+          "contribution": 0.2014
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.0,
+          "contribution": 0.1381
+        }
+      ]
+    },
+    {
+      "drug": "AMOXICILLIN",
+      "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+      "case_count_a": 6,
+      "drug_total_reports": 27,
+      "event_total_reports": 45,
+      "PRR": 0.986,
+      "ROR": 0.982,
+      "ROR_95CI_low": 0.37,
+      "ROR_95CI_high": 2.602,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.0134,
+      "IC025": -1.3519,
+      "IC975": 1.3786,
+      "signal_bcpnn": false,
+      "EBGM": 1.0994,
+      "EB05": 0.8694,
+      "EB95": 1.3517,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 44,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8694,
+          "contribution": 0.2407
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0994,
+          "contribution": 0.2008
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.982,
+          "contribution": 0.1356
+        }
+      ]
+    },
+    {
+      "drug": "AMOXICILLIN",
+      "adverse_event": "DYSPNOEA",
+      "case_count_a": 3,
+      "drug_total_reports": 27,
+      "event_total_reports": 29,
+      "PRR": 0.739,
+      "ROR": 0.707,
+      "ROR_95CI_low": 0.198,
+      "ROR_95CI_high": 2.518,
+      "chi_square": 0.059,
+      "p_value": 0.807317,
+      "IC": -0.263,
+      "IC025": -1.9855,
+      "IC975": 1.4594,
+      "signal_bcpnn": false,
+      "EBGM": 1.0866,
+      "EB05": 0.8533,
+      "EB95": 1.3432,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 45,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8533,
+          "contribution": 0.2362
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0866,
+          "contribution": 0.1984
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.707,
+          "contribution": 0.0976
+        }
+      ]
+    },
+    {
+      "drug": "AMOXICILLIN",
+      "adverse_event": "ANGIOEDEMA",
+      "case_count_a": 5,
+      "drug_total_reports": 27,
+      "event_total_reports": 29,
+      "PRR": 1.335,
+      "ROR": 1.411,
+      "ROR_95CI_low": 0.488,
+      "ROR_95CI_high": 4.083,
+      "chi_square": 0.118,
+      "p_value": 0.731001,
+      "IC": 0.389,
+      "IC025": -1.0905,
+      "IC975": 1.8686,
+      "signal_bcpnn": false,
+      "EBGM": 1.1276,
+      "EB05": 0.8897,
+      "EB95": 1.3888,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 46,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8897,
+          "contribution": 0.2463
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1276,
+          "contribution": 0.2059
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.411,
+          "contribution": 0.1949
+        }
+      ]
+    },
+    {
+      "drug": "LISINOPRIL",
+      "adverse_event": "HEPATIC FAILURE",
+      "case_count_a": 5,
+      "drug_total_reports": 33,
+      "event_total_reports": 46,
+      "PRR": 0.617,
+      "ROR": 0.549,
+      "ROR_95CI_low": 0.199,
+      "ROR_95CI_high": 1.514,
+      "chi_square": 0.895,
+      "p_value": 0.344098,
+      "IC": -0.5388,
+      "IC025": -1.9495,
+      "IC975": 0.872,
+      "signal_bcpnn": false,
+      "EBGM": 1.0486,
+      "EB05": 0.8274,
+      "EB95": 1.2915,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 47,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8274,
+          "contribution": 0.229
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0486,
+          "contribution": 0.1915
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 0.895,
+          "contribution": 0.1779
+        }
+      ]
+    },
+    {
+      "drug": "LISINOPRIL",
+      "adverse_event": "HEADACHE",
+      "case_count_a": 6,
+      "drug_total_reports": 33,
+      "event_total_reports": 33,
+      "PRR": 1.125,
+      "ROR": 1.152,
+      "ROR_95CI_low": 0.434,
+      "ROR_95CI_high": 3.057,
+      "chi_square": 0.001,
+      "p_value": 0.97748,
+      "IC": 0.1694,
+      "IC025": -1.1976,
+      "IC975": 1.5363,
+      "signal_bcpnn": false,
+      "EBGM": 1.1132,
+      "EB05": 0.8803,
+      "EB95": 1.3686,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 48,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8803,
+          "contribution": 0.2437
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1132,
+          "contribution": 0.2033
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.152,
+          "contribution": 0.1591
+        }
+      ]
+    },
+    {
+      "drug": "LISINOPRIL",
+      "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+      "case_count_a": 7,
+      "drug_total_reports": 33,
+      "event_total_reports": 45,
+      "PRR": 0.932,
+      "ROR": 0.914,
+      "ROR_95CI_low": 0.368,
+      "ROR_95CI_high": 2.27,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": -0.0603,
+      "IC025": -1.3398,
+      "IC975": 1.2193,
+      "signal_bcpnn": false,
+      "EBGM": 1.0902,
+      "EB05": 0.864,
+      "EB95": 1.338,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 49,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.864,
+          "contribution": 0.2392
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0902,
+          "contribution": 0.1991
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.914,
+          "contribution": 0.1262
+        }
+      ]
+    },
+    {
+      "drug": "LISINOPRIL",
+      "adverse_event": "FATIGUE",
+      "case_count_a": 5,
+      "drug_total_reports": 33,
+      "event_total_reports": 34,
+      "PRR": 0.873,
+      "ROR": 0.85,
+      "ROR_95CI_low": 0.303,
+      "ROR_95CI_high": 2.386,
+      "chi_square": 0.003,
+      "p_value": 0.955512,
+      "IC": -0.1135,
+      "IC025": -1.5498,
+      "IC975": 1.3229,
+      "signal_bcpnn": false,
+      "EBGM": 1.0897,
+      "EB05": 0.8598,
+      "EB95": 1.3422,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 50,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8598,
+          "contribution": 0.238
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0897,
+          "contribution": 0.199
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.85,
+          "contribution": 0.1174
+        }
+      ]
+    },
+    {
+      "drug": "LISINOPRIL",
+      "adverse_event": "DYSPNOEA",
+      "case_count_a": 6,
+      "drug_total_reports": 33,
+      "event_total_reports": 29,
+      "PRR": 1.32,
+      "ROR": 1.391,
+      "ROR_95CI_low": 0.518,
+      "ROR_95CI_high": 3.737,
+      "chi_square": 0.15,
+      "p_value": 0.69887,
+      "IC": 0.3499,
+      "IC025": -1.0344,
+      "IC975": 1.7343,
+      "signal_bcpnn": false,
+      "EBGM": 1.128,
+      "EB05": 0.892,
+      "EB95": 1.3868,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 51,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.892,
+          "contribution": 0.2469
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.128,
+          "contribution": 0.206
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.391,
+          "contribution": 0.1921
+        }
+      ]
+    },
+    {
+      "drug": "LISINOPRIL",
+      "adverse_event": "DIZZINESS",
+      "case_count_a": 5,
+      "drug_total_reports": 33,
+      "event_total_reports": 27,
+      "PRR": 1.15,
+      "ROR": 1.177,
+      "ROR_95CI_low": 0.411,
+      "ROR_95CI_high": 3.37,
+      "chi_square": 0.001,
+      "p_value": 0.979986,
+      "IC": 0.2085,
+      "IC025": -1.256,
+      "IC975": 1.6729,
+      "signal_bcpnn": false,
+      "EBGM": 1.1153,
+      "EB05": 0.88,
+      "EB95": 1.3736,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 52,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.88,
+          "contribution": 0.2436
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1153,
+          "contribution": 0.2037
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.177,
+          "contribution": 0.1626
+        }
+      ]
+    },
+    {
+      "drug": "LISINOPRIL",
+      "adverse_event": "ANAPHYLACTIC REACTION",
+      "case_count_a": 7,
+      "drug_total_reports": 33,
+      "event_total_reports": 40,
+      "PRR": 1.073,
+      "ROR": 1.093,
+      "ROR_95CI_low": 0.437,
+      "ROR_95CI_high": 2.736,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.1057,
+      "IC025": -1.185,
+      "IC975": 1.3965,
+      "signal_bcpnn": false,
+      "EBGM": 1.1076,
+      "EB05": 0.8779,
+      "EB95": 1.3595,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 53,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8779,
+          "contribution": 0.243
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1076,
+          "contribution": 0.2023
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.093,
+          "contribution": 0.151
+        }
+      ]
+    },
+    {
+      "drug": "IBUPROFEN",
+      "adverse_event": "RHABDOMYOLYSIS",
+      "case_count_a": 6,
+      "drug_total_reports": 19,
+      "event_total_reports": 41,
+      "PRR": 1.633,
+      "ROR": 1.925,
+      "ROR_95CI_low": 0.684,
+      "ROR_95CI_high": 5.421,
+      "chi_square": 0.919,
+      "p_value": 0.337676,
+      "IC": 0.6301,
+      "IC025": -0.8199,
+      "IC975": 2.08,
+      "signal_bcpnn": false,
+      "EBGM": 1.1486,
+      "EB05": 0.9083,
+      "EB95": 1.4121,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 54,
+      "priority_explain": [
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.925,
+          "contribution": 0.2659
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9083,
+          "contribution": 0.2514
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1486,
+          "contribution": 0.2098
+        }
+      ]
+    },
+    {
+      "drug": "CLOPIDOGREL",
+      "adverse_event": "NAUSEA",
+      "case_count_a": 6,
+      "drug_total_reports": 25,
+      "event_total_reports": 27,
+      "PRR": 2.0,
+      "ROR": 2.316,
+      "ROR_95CI_low": 0.831,
+      "ROR_95CI_high": 6.453,
+      "chi_square": 1.768,
+      "p_value": 0.183661,
+      "IC": 0.8365,
+      "IC025": -0.6001,
+      "IC975": 2.2731,
+      "signal_bcpnn": false,
+      "EBGM": 1.161,
+      "EB05": 0.9181,
+      "EB95": 1.4274,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 55,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 1.768,
+          "contribution": 0.3515
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 2.316,
+          "contribution": 0.3199
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9181,
+          "contribution": 0.2541
+        }
+      ]
+    },
+    {
+      "drug": "METFORMIN",
+      "adverse_event": "HEPATIC FAILURE",
+      "case_count_a": 3,
+      "drug_total_reports": 23,
+      "event_total_reports": 46,
+      "PRR": 0.537,
+      "ROR": 0.467,
+      "ROR_95CI_low": 0.132,
+      "ROR_95CI_high": 1.65,
+      "chi_square": 0.889,
+      "p_value": 0.345796,
+      "IC": -0.6883,
+      "IC025": -2.3965,
+      "IC975": 1.0198,
+      "signal_bcpnn": false,
+      "EBGM": 1.0568,
+      "EB05": 0.8299,
+      "EB95": 1.3064,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 56,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8299,
+          "contribution": 0.2297
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0568,
+          "contribution": 0.193
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 0.889,
+          "contribution": 0.1767
+        }
+      ]
+    },
+    {
+      "drug": "METFORMIN",
+      "adverse_event": "HEADACHE",
+      "case_count_a": 7,
+      "drug_total_reports": 23,
+      "event_total_reports": 33,
+      "PRR": 2.072,
+      "ROR": 2.541,
+      "ROR_95CI_low": 0.953,
+      "ROR_95CI_high": 6.776,
+      "chi_square": 2.609,
+      "p_value": 0.106251,
+      "IC": 0.8783,
+      "IC025": -0.502,
+      "IC975": 2.2586,
+      "signal_bcpnn": false,
+      "EBGM": 1.1715,
+      "EB05": 0.9285,
+      "EB95": 1.4379,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 57,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 2.609,
+          "contribution": 0.5187
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 2.541,
+          "contribution": 0.3509
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9285,
+          "contribution": 0.257
+        }
+      ]
+    },
+    {
+      "drug": "LISINOPRIL",
+      "adverse_event": "NAUSEA",
+      "case_count_a": 3,
+      "drug_total_reports": 33,
+      "event_total_reports": 27,
+      "PRR": 0.633,
+      "ROR": 0.596,
+      "ROR_95CI_low": 0.168,
+      "ROR_95CI_high": 2.107,
+      "chi_square": 0.283,
+      "p_value": 0.594457,
+      "IC": -0.4436,
+      "IC025": -2.155,
+      "IC975": 1.2678,
+      "signal_bcpnn": false,
+      "EBGM": 1.0747,
+      "EB05": 0.8439,
+      "EB95": 1.3285,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 58,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8439,
+          "contribution": 0.2336
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0747,
+          "contribution": 0.1963
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.596,
+          "contribution": 0.0823
+        }
+      ]
+    },
+    {
+      "drug": "LISINOPRIL",
+      "adverse_event": "VOMITING",
+      "case_count_a": 7,
+      "drug_total_reports": 33,
+      "event_total_reports": 25,
+      "PRR": 1.968,
+      "ROR": 2.229,
+      "ROR_95CI_low": 0.847,
+      "ROR_95CI_high": 5.863,
+      "chi_square": 1.872,
+      "p_value": 0.171294,
+      "IC": 0.7628,
+      "IC025": -0.5986,
+      "IC975": 2.1243,
+      "signal_bcpnn": false,
+      "EBGM": 1.1636,
+      "EB05": 0.9222,
+      "EB95": 1.4282,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 59,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 1.872,
+          "contribution": 0.3722
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 2.229,
+          "contribution": 0.3078
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9222,
+          "contribution": 0.2553
+        }
+      ]
+    },
+    {
+      "drug": "LISINOPRIL",
+      "adverse_event": "RHABDOMYOLYSIS",
+      "case_count_a": 7,
+      "drug_total_reports": 33,
+      "event_total_reports": 41,
+      "PRR": 1.042,
+      "ROR": 1.053,
+      "ROR_95CI_low": 0.422,
+      "ROR_95CI_high": 2.631,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.071,
+      "IC025": -1.2172,
+      "IC975": 1.3592,
+      "signal_bcpnn": false,
+      "EBGM": 1.1041,
+      "EB05": 0.8751,
+      "EB95": 1.3551,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 60,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8751,
+          "contribution": 0.2422
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1041,
+          "contribution": 0.2016
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.053,
+          "contribution": 0.1454
+        }
+      ]
+    },
+    {
+      "drug": "METFORMIN",
+      "adverse_event": "ANAPHYLACTIC REACTION",
+      "case_count_a": 6,
+      "drug_total_reports": 23,
+      "event_total_reports": 40,
+      "PRR": 1.358,
+      "ROR": 1.484,
+      "ROR_95CI_low": 0.544,
+      "ROR_95CI_high": 4.047,
+      "chi_square": 0.249,
+      "p_value": 0.617985,
+      "IC": 0.4018,
+      "IC025": -1.0034,
+      "IC975": 1.807,
+      "signal_bcpnn": false,
+      "EBGM": 1.1322,
+      "EB05": 0.8954,
+      "EB95": 1.392,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 61,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8954,
+          "contribution": 0.2479
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1322,
+          "contribution": 0.2068
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.484,
+          "contribution": 0.205
+        }
+      ]
+    },
+    {
+      "drug": "LISINOPRIL",
+      "adverse_event": "RASH",
+      "case_count_a": 4,
+      "drug_total_reports": 33,
+      "event_total_reports": 30,
+      "PRR": 0.779,
+      "ROR": 0.748,
+      "ROR_95CI_low": 0.243,
+      "ROR_95CI_high": 2.306,
+      "chi_square": 0.058,
+      "p_value": 0.810268,
+      "IC": -0.2279,
+      "IC025": -1.779,
+      "IC975": 1.3233,
+      "signal_bcpnn": false,
+      "EBGM": 1.0841,
+      "EB05": 0.8534,
+      "EB95": 1.3376,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 62,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8534,
+          "contribution": 0.2362
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0841,
+          "contribution": 0.198
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.748,
+          "contribution": 0.1033
+        }
+      ]
+    },
+    {
+      "drug": "OMEPRAZOLE",
+      "adverse_event": "FATIGUE",
+      "case_count_a": 4,
+      "drug_total_reports": 37,
+      "event_total_reports": 34,
+      "PRR": 0.587,
+      "ROR": 0.537,
+      "ROR_95CI_low": 0.177,
+      "ROR_95CI_high": 1.632,
+      "chi_square": 0.753,
+      "p_value": 0.385515,
+      "IC": -0.5634,
+      "IC025": -2.0923,
+      "IC975": 0.9655,
+      "signal_bcpnn": false,
+      "EBGM": 1.0557,
+      "EB05": 0.831,
+      "EB95": 1.3026,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 63,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.831,
+          "contribution": 0.23
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0557,
+          "contribution": 0.1928
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 0.753,
+          "contribution": 0.1497
+        }
+      ]
+    },
+    {
+      "drug": "OMEPRAZOLE",
+      "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+      "case_count_a": 5,
+      "drug_total_reports": 37,
+      "event_total_reports": 45,
+      "PRR": 0.551,
+      "ROR": 0.48,
+      "ROR_95CI_low": 0.175,
+      "ROR_95CI_high": 1.316,
+      "chi_square": 1.518,
+      "p_value": 0.217964,
+      "IC": -0.6682,
+      "IC025": -2.0689,
+      "IC975": 0.7325,
+      "signal_bcpnn": false,
+      "EBGM": 1.0341,
+      "EB05": 0.8159,
+      "EB95": 1.2736,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 64,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 1.518,
+          "contribution": 0.3018
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8159,
+          "contribution": 0.2258
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0341,
+          "contribution": 0.1888
+        }
+      ]
+    },
+    {
+      "drug": "OMEPRAZOLE",
+      "adverse_event": "HEADACHE",
+      "case_count_a": 6,
+      "drug_total_reports": 37,
+      "event_total_reports": 33,
+      "PRR": 0.979,
+      "ROR": 0.975,
+      "ROR_95CI_low": 0.371,
+      "ROR_95CI_high": 2.564,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.0089,
+      "IC025": -1.3451,
+      "IC975": 1.3629,
+      "signal_bcpnn": false,
+      "EBGM": 1.0988,
+      "EB05": 0.8689,
+      "EB95": 1.3509,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 65,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8689,
+          "contribution": 0.2405
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0988,
+          "contribution": 0.2007
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.975,
+          "contribution": 0.1347
+        }
+      ]
+    },
+    {
+      "drug": "OMEPRAZOLE",
+      "adverse_event": "HEPATIC FAILURE",
+      "case_count_a": 5,
+      "drug_total_reports": 37,
+      "event_total_reports": 46,
+      "PRR": 0.537,
+      "ROR": 0.465,
+      "ROR_95CI_low": 0.17,
+      "ROR_95CI_high": 1.272,
+      "chi_square": 1.697,
+      "p_value": 0.192746,
+      "IC": -0.6992,
+      "IC025": -2.0984,
+      "IC975": 0.7,
+      "signal_bcpnn": false,
+      "EBGM": 1.0305,
+      "EB05": 0.8131,
+      "EB95": 1.2692,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 66,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 1.697,
+          "contribution": 0.3374
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8131,
+          "contribution": 0.2251
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0305,
+          "contribution": 0.1882
+        }
+      ]
+    },
+    {
+      "drug": "OMEPRAZOLE",
+      "adverse_event": "MYALGIA",
+      "case_count_a": 3,
+      "drug_total_reports": 37,
+      "event_total_reports": 22,
+      "PRR": 0.696,
+      "ROR": 0.669,
+      "ROR_95CI_low": 0.187,
+      "ROR_95CI_high": 2.39,
+      "chi_square": 0.11,
+      "p_value": 0.740082,
+      "IC": -0.3203,
+      "IC025": -2.047,
+      "IC975": 1.4065,
+      "signal_bcpnn": false,
+      "EBGM": 1.0832,
+      "EB05": 0.8506,
+      "EB95": 1.3389,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 67,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8506,
+          "contribution": 0.2355
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0832,
+          "contribution": 0.1978
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.669,
+          "contribution": 0.0924
+        }
+      ]
+    },
+    {
+      "drug": "OMEPRAZOLE",
+      "adverse_event": "NAUSEA",
+      "case_count_a": 3,
+      "drug_total_reports": 37,
+      "event_total_reports": 27,
+      "PRR": 0.551,
+      "ROR": 0.511,
+      "ROR_95CI_low": 0.145,
+      "ROR_95CI_high": 1.797,
+      "chi_square": 0.635,
+      "p_value": 0.425634,
+      "IC": -0.6041,
+      "IC025": -2.307,
+      "IC975": 1.0989,
+      "signal_bcpnn": false,
+      "EBGM": 1.0631,
+      "EB05": 0.8348,
+      "EB95": 1.3141,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 68,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8348,
+          "contribution": 0.2311
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0631,
+          "contribution": 0.1941
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 0.635,
+          "contribution": 0.1262
+        }
+      ]
+    },
+    {
+      "drug": "OMEPRAZOLE",
+      "adverse_event": "PRURITUS",
+      "case_count_a": 6,
+      "drug_total_reports": 37,
+      "event_total_reports": 20,
+      "PRR": 1.888,
+      "ROR": 2.06,
+      "ROR_95CI_low": 0.734,
+      "ROR_95CI_high": 5.78,
+      "chi_square": 1.194,
+      "p_value": 0.274558,
+      "IC": 0.7041,
+      "IC025": -0.7412,
+      "IC975": 2.1493,
+      "signal_bcpnn": false,
+      "EBGM": 1.1532,
+      "EB05": 0.912,
+      "EB95": 1.4178,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 69,
+      "priority_explain": [
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 2.06,
+          "contribution": 0.2845
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.912,
+          "contribution": 0.2524
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 1.194,
+          "contribution": 0.2374
+        }
+      ]
+    },
+    {
+      "drug": "OMEPRAZOLE",
+      "adverse_event": "RASH",
+      "case_count_a": 4,
+      "drug_total_reports": 37,
+      "event_total_reports": 30,
+      "PRR": 0.678,
+      "ROR": 0.639,
+      "ROR_95CI_low": 0.209,
+      "ROR_95CI_high": 1.956,
+      "chi_square": 0.287,
+      "p_value": 0.592308,
+      "IC": -0.3883,
+      "IC025": -1.9296,
+      "IC975": 1.1529,
+      "signal_bcpnn": false,
+      "EBGM": 1.0712,
+      "EB05": 0.8432,
+      "EB95": 1.3217,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 70,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8432,
+          "contribution": 0.2334
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0712,
+          "contribution": 0.1956
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.639,
+          "contribution": 0.0883
+        }
+      ]
+    },
+    {
+      "drug": "OMEPRAZOLE",
+      "adverse_event": "RHABDOMYOLYSIS",
+      "case_count_a": 9,
+      "drug_total_reports": 37,
+      "event_total_reports": 41,
+      "PRR": 1.239,
+      "ROR": 1.316,
+      "ROR_95CI_low": 0.565,
+      "ROR_95CI_high": 3.062,
+      "chi_square": 0.17,
+      "p_value": 0.679794,
+      "IC": 0.2515,
+      "IC025": -0.9439,
+      "IC975": 1.447,
+      "signal_bcpnn": false,
+      "EBGM": 1.125,
+      "EB05": 0.8954,
+      "EB95": 1.3762,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 71,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8954,
+          "contribution": 0.2479
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.125,
+          "contribution": 0.2054
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.316,
+          "contribution": 0.1818
+        }
+      ]
+    },
+    {
+      "drug": "OMEPRAZOLE",
+      "adverse_event": "VOMITING",
+      "case_count_a": 5,
+      "drug_total_reports": 37,
+      "event_total_reports": 25,
+      "PRR": 1.101,
+      "ROR": 1.117,
+      "ROR_95CI_low": 0.39,
+      "ROR_95CI_high": 3.2,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.1549,
+      "IC025": -1.3099,
+      "IC975": 1.6197,
+      "signal_bcpnn": false,
+      "EBGM": 1.1114,
+      "EB05": 0.8769,
+      "EB95": 1.3689,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 72,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8769,
+          "contribution": 0.2427
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1114,
+          "contribution": 0.203
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.117,
+          "contribution": 0.1543
+        }
+      ]
+    },
+    {
+      "drug": "METFORMIN",
+      "adverse_event": "RASH",
+      "case_count_a": 5,
+      "drug_total_reports": 23,
+      "event_total_reports": 30,
+      "PRR": 1.539,
+      "ROR": 1.689,
+      "ROR_95CI_low": 0.575,
+      "ROR_95CI_high": 4.96,
+      "chi_square": 0.425,
+      "p_value": 0.514545,
+      "IC": 0.5641,
+      "IC025": -0.9365,
+      "IC975": 2.0648,
+      "signal_bcpnn": false,
+      "EBGM": 1.1385,
+      "EB05": 0.8983,
+      "EB95": 1.4022,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 73,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8983,
+          "contribution": 0.2487
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.689,
+          "contribution": 0.2333
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1385,
+          "contribution": 0.2079
+        }
+      ]
+    },
+    {
+      "drug": "METFORMIN",
+      "adverse_event": "RHABDOMYOLYSIS",
+      "case_count_a": 5,
+      "drug_total_reports": 23,
+      "event_total_reports": 41,
+      "PRR": 1.069,
+      "ROR": 1.088,
+      "ROR_95CI_low": 0.378,
+      "ROR_95CI_high": 3.129,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.126,
+      "IC025": -1.3442,
+      "IC975": 1.5962,
+      "signal_bcpnn": false,
+      "EBGM": 1.1094,
+      "EB05": 0.8753,
+      "EB95": 1.3664,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 74,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8753,
+          "contribution": 0.2423
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1094,
+          "contribution": 0.2026
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.088,
+          "contribution": 0.1503
+        }
+      ]
+    },
+    {
+      "drug": "OMEPRAZOLE",
+      "adverse_event": "ANAPHYLACTIC REACTION",
+      "case_count_a": 6,
+      "drug_total_reports": 37,
+      "event_total_reports": 40,
+      "PRR": 0.777,
+      "ROR": 0.734,
+      "ROR_95CI_low": 0.283,
+      "ROR_95CI_high": 1.903,
+      "chi_square": 0.168,
+      "p_value": 0.682,
+      "IC": -0.2612,
+      "IC025": -1.5944,
+      "IC975": 1.072,
+      "signal_bcpnn": false,
+      "EBGM": 1.0715,
+      "EB05": 0.8474,
+      "EB95": 1.3174,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 75,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8474,
+          "contribution": 0.2346
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0715,
+          "contribution": 0.1957
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.734,
+          "contribution": 0.1014
+        }
+      ]
+    },
+    {
+      "drug": "OMEPRAZOLE",
+      "adverse_event": "ANGIOEDEMA",
+      "case_count_a": 8,
+      "drug_total_reports": 37,
+      "event_total_reports": 29,
+      "PRR": 1.678,
+      "ROR": 1.865,
+      "ROR_95CI_low": 0.753,
+      "ROR_95CI_high": 4.62,
+      "chi_square": 1.219,
+      "p_value": 0.269503,
+      "IC": 0.5765,
+      "IC025": -0.704,
+      "IC975": 1.857,
+      "signal_bcpnn": false,
+      "EBGM": 1.1548,
+      "EB05": 0.9172,
+      "EB95": 1.415,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 76,
+      "priority_explain": [
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.865,
+          "contribution": 0.2576
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9172,
+          "contribution": 0.2539
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 1.219,
+          "contribution": 0.2424
+        }
+      ]
+    },
+    {
+      "drug": "OMEPRAZOLE",
+      "adverse_event": "DIZZINESS",
+      "case_count_a": 7,
+      "drug_total_reports": 37,
+      "event_total_reports": 27,
+      "PRR": 1.542,
+      "ROR": 1.668,
+      "ROR_95CI_low": 0.647,
+      "ROR_95CI_high": 4.299,
+      "chi_square": 0.643,
+      "p_value": 0.422545,
+      "IC": 0.4955,
+      "IC025": -0.8365,
+      "IC975": 1.8274,
+      "signal_bcpnn": false,
+      "EBGM": 1.1433,
+      "EB05": 0.9061,
+      "EB95": 1.4033,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 77,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9061,
+          "contribution": 0.2508
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.668,
+          "contribution": 0.2304
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1433,
+          "contribution": 0.2088
+        }
+      ]
+    },
+    {
+      "drug": "OMEPRAZOLE",
+      "adverse_event": "DYSPNOEA",
+      "case_count_a": 6,
+      "drug_total_reports": 37,
+      "event_total_reports": 29,
+      "PRR": 1.149,
+      "ROR": 1.178,
+      "ROR_95CI_low": 0.443,
+      "ROR_95CI_high": 3.136,
+      "chi_square": 0.005,
+      "p_value": 0.944336,
+      "IC": 0.1895,
+      "IC025": -1.1821,
+      "IC975": 1.561,
+      "signal_bcpnn": false,
+      "EBGM": 1.115,
+      "EB05": 0.8817,
+      "EB95": 1.3708,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 78,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8817,
+          "contribution": 0.2441
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.115,
+          "contribution": 0.2036
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.178,
+          "contribution": 0.1627
+        }
+      ]
+    },
+    {
+      "drug": "PREDNISONE",
+      "adverse_event": "HEADACHE",
+      "case_count_a": 7,
+      "drug_total_reports": 35,
+      "event_total_reports": 33,
+      "PRR": 1.269,
+      "ROR": 1.337,
+      "ROR_95CI_low": 0.528,
+      "ROR_95CI_high": 3.381,
+      "chi_square": 0.132,
+      "p_value": 0.716239,
+      "IC": 0.2934,
+      "IC025": -1.0127,
+      "IC975": 1.5994,
+      "signal_bcpnn": false,
+      "EBGM": 1.1257,
+      "EB05": 0.8922,
+      "EB95": 1.3816,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 79,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8922,
+          "contribution": 0.247
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1257,
+          "contribution": 0.2056
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.337,
+          "contribution": 0.1847
+        }
+      ]
+    },
+    {
+      "drug": "PREDNISONE",
+      "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+      "case_count_a": 5,
+      "drug_total_reports": 35,
+      "event_total_reports": 45,
+      "PRR": 0.589,
+      "ROR": 0.521,
+      "ROR_95CI_low": 0.189,
+      "ROR_95CI_high": 1.432,
+      "chi_square": 1.12,
+      "p_value": 0.289861,
+      "IC": -0.5902,
+      "IC025": -1.9963,
+      "IC975": 0.8159,
+      "signal_bcpnn": false,
+      "EBGM": 1.0429,
+      "EB05": 0.8229,
+      "EB95": 1.2845,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 80,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8229,
+          "contribution": 0.2278
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 1.12,
+          "contribution": 0.2227
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0429,
+          "contribution": 0.1905
+        }
+      ]
+    },
+    {
+      "drug": "PREDNISONE",
+      "adverse_event": "DYSPNOEA",
+      "case_count_a": 7,
+      "drug_total_reports": 35,
+      "event_total_reports": 29,
+      "PRR": 1.5,
+      "ROR": 1.625,
+      "ROR_95CI_low": 0.633,
+      "ROR_95CI_high": 4.169,
+      "chi_square": 0.567,
+      "p_value": 0.451354,
+      "IC": 0.4739,
+      "IC025": -0.8519,
+      "IC975": 1.7997,
+      "signal_bcpnn": false,
+      "EBGM": 1.1415,
+      "EB05": 0.9047,
+      "EB95": 1.401,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 81,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9047,
+          "contribution": 0.2504
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.625,
+          "contribution": 0.2244
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1415,
+          "contribution": 0.2085
+        }
+      ]
+    },
+    {
+      "drug": "PREDNISONE",
+      "adverse_event": "DIZZINESS",
+      "case_count_a": 5,
+      "drug_total_reports": 35,
+      "event_total_reports": 27,
+      "PRR": 1.071,
+      "ROR": 1.083,
+      "ROR_95CI_low": 0.38,
+      "ROR_95CI_high": 3.089,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.126,
+      "IC025": -1.3324,
+      "IC975": 1.5844,
+      "signal_bcpnn": false,
+      "EBGM": 1.1092,
+      "EB05": 0.8752,
+      "EB95": 1.3661,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 82,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8752,
+          "contribution": 0.2423
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1092,
+          "contribution": 0.2026
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.083,
+          "contribution": 0.1496
+        }
+      ]
+    },
+    {
+      "drug": "PREDNISONE",
+      "adverse_event": "ANGIOEDEMA",
+      "case_count_a": 5,
+      "drug_total_reports": 35,
+      "event_total_reports": 29,
+      "PRR": 0.982,
+      "ROR": 0.979,
+      "ROR_95CI_low": 0.346,
+      "ROR_95CI_high": 2.773,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.0265,
+      "IC025": -1.4223,
+      "IC975": 1.4752,
+      "signal_bcpnn": false,
+      "EBGM": 1.1014,
+      "EB05": 0.869,
+      "EB95": 1.3565,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 83,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.869,
+          "contribution": 0.2405
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1014,
+          "contribution": 0.2011
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.979,
+          "contribution": 0.1352
+        }
+      ]
+    },
+    {
+      "drug": "PREDNISONE",
+      "adverse_event": "ANAPHYLACTIC REACTION",
+      "case_count_a": 5,
+      "drug_total_reports": 35,
+      "event_total_reports": 40,
+      "PRR": 0.673,
+      "ROR": 0.619,
+      "ROR_95CI_low": 0.224,
+      "ROR_95CI_high": 1.713,
+      "chi_square": 0.487,
+      "p_value": 0.485263,
+      "IC": -0.4242,
+      "IC025": -1.8393,
+      "IC975": 0.9909,
+      "signal_bcpnn": false,
+      "EBGM": 1.0605,
+      "EB05": 0.8368,
+      "EB95": 1.3062,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 84,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8368,
+          "contribution": 0.2316
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0605,
+          "contribution": 0.1937
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 0.487,
+          "contribution": 0.0968
+        }
+      ]
+    },
+    {
+      "drug": "PREDNISONE",
+      "adverse_event": "NAUSEA",
+      "case_count_a": 7,
+      "drug_total_reports": 35,
+      "event_total_reports": 27,
+      "PRR": 1.65,
+      "ROR": 1.812,
+      "ROR_95CI_low": 0.7,
+      "ROR_95CI_high": 4.692,
+      "chi_square": 0.934,
+      "p_value": 0.333727,
+      "IC": 0.5735,
+      "IC025": -0.7651,
+      "IC975": 1.912,
+      "signal_bcpnn": false,
+      "EBGM": 1.1495,
+      "EB05": 0.9111,
+      "EB95": 1.4109,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 85,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9111,
+          "contribution": 0.2522
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.812,
+          "contribution": 0.2503
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1495,
+          "contribution": 0.2099
+        }
+      ]
+    },
+    {
+      "drug": "PREDNISONE",
+      "adverse_event": "MYALGIA",
+      "case_count_a": 5,
+      "drug_total_reports": 35,
+      "event_total_reports": 22,
+      "PRR": 1.387,
+      "ROR": 1.451,
+      "ROR_95CI_low": 0.497,
+      "ROR_95CI_high": 4.237,
+      "chi_square": 0.149,
+      "p_value": 0.699053,
+      "IC": 0.4098,
+      "IC025": -1.0824,
+      "IC975": 1.902,
+      "signal_bcpnn": false,
+      "EBGM": 1.1291,
+      "EB05": 0.8909,
+      "EB95": 1.3907,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 86,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8909,
+          "contribution": 0.2466
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1291,
+          "contribution": 0.2062
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.451,
+          "contribution": 0.2004
+        }
+      ]
+    },
+    {
+      "drug": "SIMVASTATIN",
+      "adverse_event": "DIZZINESS",
+      "case_count_a": 3,
+      "drug_total_reports": 29,
+      "event_total_reports": 27,
+      "PRR": 0.737,
+      "ROR": 0.707,
+      "ROR_95CI_low": 0.198,
+      "ROR_95CI_high": 2.518,
+      "chi_square": 0.059,
+      "p_value": 0.807317,
+      "IC": -0.263,
+      "IC025": -1.9855,
+      "IC975": 1.4594,
+      "signal_bcpnn": false,
+      "EBGM": 1.0866,
+      "EB05": 0.8533,
+      "EB95": 1.3432,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 87,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8533,
+          "contribution": 0.2362
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0866,
+          "contribution": 0.1984
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.707,
+          "contribution": 0.0976
+        }
+      ]
+    },
+    {
+      "drug": "SIMVASTATIN",
+      "adverse_event": "DYSPNOEA",
+      "case_count_a": 5,
+      "drug_total_reports": 29,
+      "event_total_reports": 29,
+      "PRR": 1.228,
+      "ROR": 1.276,
+      "ROR_95CI_low": 0.444,
+      "ROR_95CI_high": 3.667,
+      "chi_square": 0.028,
+      "p_value": 0.866381,
+      "IC": 0.2895,
+      "IC025": -1.1804,
+      "IC975": 1.7594,
+      "signal_bcpnn": false,
+      "EBGM": 1.1209,
+      "EB05": 0.8844,
+      "EB95": 1.3806,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 88,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8844,
+          "contribution": 0.2448
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1209,
+          "contribution": 0.2047
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.276,
+          "contribution": 0.1762
+        }
+      ]
+    },
+    {
+      "drug": "SIMVASTATIN",
+      "adverse_event": "FATIGUE",
+      "case_count_a": 7,
+      "drug_total_reports": 29,
+      "event_total_reports": 34,
+      "PRR": 1.529,
+      "ROR": 1.697,
+      "ROR_95CI_low": 0.66,
+      "ROR_95CI_high": 4.364,
+      "chi_square": 0.705,
+      "p_value": 0.401261,
+      "IC": 0.5146,
+      "IC025": -0.8149,
+      "IC975": 1.8441,
+      "signal_bcpnn": false,
+      "EBGM": 1.1448,
+      "EB05": 0.9073,
+      "EB95": 1.4051,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 89,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9073,
+          "contribution": 0.2511
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.697,
+          "contribution": 0.2344
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1448,
+          "contribution": 0.2091
+        }
+      ]
+    },
+    {
+      "drug": "SIMVASTATIN",
+      "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+      "case_count_a": 8,
+      "drug_total_reports": 29,
+      "event_total_reports": 45,
+      "PRR": 1.275,
+      "ROR": 1.38,
+      "ROR_95CI_low": 0.565,
+      "ROR_95CI_high": 3.366,
+      "chi_square": 0.22,
+      "p_value": 0.639141,
+      "IC": 0.3009,
+      "IC025": -0.9582,
+      "IC975": 1.5599,
+      "signal_bcpnn": false,
+      "EBGM": 1.1287,
+      "EB05": 0.8965,
+      "EB95": 1.383,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 90,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8965,
+          "contribution": 0.2482
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1287,
+          "contribution": 0.2061
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.38,
+          "contribution": 0.1906
+        }
+      ]
+    },
+    {
+      "drug": "SIMVASTATIN",
+      "adverse_event": "HEADACHE",
+      "case_count_a": 3,
+      "drug_total_reports": 29,
+      "event_total_reports": 33,
+      "PRR": 0.59,
+      "ROR": 0.542,
+      "ROR_95CI_low": 0.154,
+      "ROR_95CI_high": 1.909,
+      "chi_square": 0.483,
+      "p_value": 0.486904,
+      "IC": -0.5431,
+      "IC025": -2.2475,
+      "IC975": 1.1612,
+      "signal_bcpnn": false,
+      "EBGM": 1.0676,
+      "EB05": 0.8383,
+      "EB95": 1.3197,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 91,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8383,
+          "contribution": 0.232
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0676,
+          "contribution": 0.195
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 0.483,
+          "contribution": 0.096
+        }
+      ]
+    },
+    {
+      "drug": "PREDNISONE",
+      "adverse_event": "RASH",
+      "case_count_a": 8,
+      "drug_total_reports": 35,
+      "event_total_reports": 30,
+      "PRR": 1.714,
+      "ROR": 1.926,
+      "ROR_95CI_low": 0.777,
+      "ROR_95CI_high": 4.774,
+      "chi_square": 1.375,
+      "p_value": 0.240938,
+      "IC": 0.6072,
+      "IC025": -0.6744,
+      "IC975": 1.8888,
+      "signal_bcpnn": false,
+      "EBGM": 1.1574,
+      "EB05": 0.9193,
+      "EB95": 1.4182,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 92,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 1.375,
+          "contribution": 0.2734
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.926,
+          "contribution": 0.266
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9193,
+          "contribution": 0.2545
+        }
+      ]
+    },
+    {
+      "drug": "PREDNISONE",
+      "adverse_event": "VOMITING",
+      "case_count_a": 5,
+      "drug_total_reports": 35,
+      "event_total_reports": 25,
+      "PRR": 1.179,
+      "ROR": 1.208,
+      "ROR_95CI_low": 0.42,
+      "ROR_95CI_high": 3.473,
+      "chi_square": 0.005,
+      "p_value": 0.943925,
+      "IC": 0.2329,
+      "IC025": -1.2371,
+      "IC975": 1.7029,
+      "signal_bcpnn": false,
+      "EBGM": 1.1171,
+      "EB05": 0.8814,
+      "EB95": 1.3758,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 93,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8814,
+          "contribution": 0.244
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1171,
+          "contribution": 0.204
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.208,
+          "contribution": 0.1668
+        }
+      ]
+    },
+    {
+      "drug": "SIMVASTATIN",
+      "adverse_event": "ANAPHYLACTIC REACTION",
+      "case_count_a": 6,
+      "drug_total_reports": 29,
+      "event_total_reports": 40,
+      "PRR": 1.041,
+      "ROR": 1.051,
+      "ROR_95CI_low": 0.397,
+      "ROR_95CI_high": 2.783,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.0799,
+      "IC025": -1.2841,
+      "IC975": 1.4438,
+      "signal_bcpnn": false,
+      "EBGM": 1.1054,
+      "EB05": 0.8741,
+      "EB95": 1.359,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 94,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8741,
+          "contribution": 0.242
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1054,
+          "contribution": 0.2019
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.051,
+          "contribution": 0.1452
+        }
+      ]
+    },
+    {
+      "drug": "SIMVASTATIN",
+      "adverse_event": "PRURITUS",
+      "case_count_a": 5,
+      "drug_total_reports": 29,
+      "event_total_reports": 20,
+      "PRR": 1.966,
+      "ROR": 2.167,
+      "ROR_95CI_low": 0.722,
+      "ROR_95CI_high": 6.506,
+      "chi_square": 1.147,
+      "p_value": 0.284139,
+      "IC": 0.8041,
+      "IC025": -0.7279,
+      "IC975": 2.3361,
+      "signal_bcpnn": false,
+      "EBGM": 1.1516,
+      "EB05": 0.9086,
+      "EB95": 1.4183,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 95,
+      "priority_explain": [
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 2.167,
+          "contribution": 0.2993
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9086,
+          "contribution": 0.2515
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 1.147,
+          "contribution": 0.228
+        }
+      ]
+    },
+    {
+      "drug": "SIMVASTATIN",
+      "adverse_event": "MYALGIA",
+      "case_count_a": 5,
+      "drug_total_reports": 29,
+      "event_total_reports": 22,
+      "PRR": 1.734,
+      "ROR": 1.887,
+      "ROR_95CI_low": 0.637,
+      "ROR_95CI_high": 5.591,
+      "chi_square": 0.707,
+      "p_value": 0.400454,
+      "IC": 0.6728,
+      "IC025": -0.84,
+      "IC975": 2.1857,
+      "signal_bcpnn": false,
+      "EBGM": 1.1446,
+      "EB05": 0.9031,
+      "EB95": 1.4098,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 96,
+      "priority_explain": [
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.887,
+          "contribution": 0.2606
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9031,
+          "contribution": 0.25
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1446,
+          "contribution": 0.209
+        }
+      ]
+    },
+    {
+      "drug": "SIMVASTATIN",
+      "adverse_event": "HEPATIC FAILURE",
+      "case_count_a": 5,
+      "drug_total_reports": 29,
+      "event_total_reports": 46,
+      "PRR": 0.719,
+      "ROR": 0.661,
+      "ROR_95CI_low": 0.237,
+      "ROR_95CI_high": 1.842,
+      "chi_square": 0.312,
+      "p_value": 0.576616,
+      "IC": -0.3582,
+      "IC025": -1.7844,
+      "IC975": 1.068,
+      "signal_bcpnn": false,
+      "EBGM": 1.0673,
+      "EB05": 0.8421,
+      "EB95": 1.3146,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 97,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8421,
+          "contribution": 0.2331
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0673,
+          "contribution": 0.1949
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.661,
+          "contribution": 0.0913
+        }
+      ]
+    },
+    {
+      "drug": "SIMVASTATIN",
+      "adverse_event": "VOMITING",
+      "case_count_a": 6,
+      "drug_total_reports": 29,
+      "event_total_reports": 25,
+      "PRR": 1.862,
+      "ROR": 2.087,
+      "ROR_95CI_low": 0.755,
+      "ROR_95CI_high": 5.772,
+      "chi_square": 1.296,
+      "p_value": 0.254882,
+      "IC": 0.737,
+      "IC025": -0.6888,
+      "IC975": 2.1627,
+      "signal_bcpnn": false,
+      "EBGM": 1.155,
+      "EB05": 0.9134,
+      "EB95": 1.42,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 98,
+      "priority_explain": [
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 2.087,
+          "contribution": 0.2882
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 1.296,
+          "contribution": 0.2577
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9134,
+          "contribution": 0.2528
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "ANAPHYLACTIC REACTION",
+      "case_count_a": 7,
+      "drug_total_reports": 38,
+      "event_total_reports": 40,
+      "PRR": 0.904,
+      "ROR": 0.883,
+      "ROR_95CI_low": 0.357,
+      "ROR_95CI_high": 2.182,
+      "chi_square": 0.002,
+      "p_value": 0.964058,
+      "IC": -0.0922,
+      "IC025": -1.3651,
+      "IC975": 1.1807,
+      "signal_bcpnn": false,
+      "EBGM": 1.0865,
+      "EB05": 0.8611,
+      "EB95": 1.3336,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 99,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8611,
+          "contribution": 0.2384
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0865,
+          "contribution": 0.1984
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.883,
+          "contribution": 0.122
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "ANGIOEDEMA",
+      "case_count_a": 8,
+      "drug_total_reports": 38,
+      "event_total_reports": 29,
+      "PRR": 1.624,
+      "ROR": 1.79,
+      "ROR_95CI_low": 0.725,
+      "ROR_95CI_high": 4.424,
+      "chi_square": 1.038,
+      "p_value": 0.308339,
+      "IC": 0.539,
+      "IC025": -0.7382,
+      "IC975": 1.8162,
+      "signal_bcpnn": false,
+      "EBGM": 1.1515,
+      "EB05": 0.9146,
+      "EB95": 1.4109,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 100,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9146,
+          "contribution": 0.2532
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.79,
+          "contribution": 0.2472
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1515,
+          "contribution": 0.2103
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "DYSPNOEA",
+      "case_count_a": 6,
+      "drug_total_reports": 38,
+      "event_total_reports": 29,
+      "PRR": 1.112,
+      "ROR": 1.133,
+      "ROR_95CI_low": 0.426,
+      "ROR_95CI_high": 3.011,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.152,
+      "IC025": -1.2168,
+      "IC975": 1.5208,
+      "signal_bcpnn": false,
+      "EBGM": 1.1118,
+      "EB05": 0.8792,
+      "EB95": 1.3669,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 101,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8792,
+          "contribution": 0.2434
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1118,
+          "contribution": 0.203
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.133,
+          "contribution": 0.1565
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "FATIGUE",
+      "case_count_a": 7,
+      "drug_total_reports": 38,
+      "event_total_reports": 34,
+      "PRR": 1.105,
+      "ROR": 1.129,
+      "ROR_95CI_low": 0.451,
+      "ROR_95CI_high": 2.829,
+      "chi_square": 0.0,
+      "p_value": 0.984686,
+      "IC": 0.1361,
+      "IC025": -1.1561,
+      "IC975": 1.4282,
+      "signal_bcpnn": false,
+      "EBGM": 1.1107,
+      "EB05": 0.8803,
+      "EB95": 1.3632,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 102,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8803,
+          "contribution": 0.2437
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1107,
+          "contribution": 0.2028
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.129,
+          "contribution": 0.1559
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "HEADACHE",
+      "case_count_a": 10,
+      "drug_total_reports": 38,
+      "event_total_reports": 33,
+      "PRR": 1.854,
+      "ROR": 2.158,
+      "ROR_95CI_low": 0.926,
+      "ROR_95CI_high": 5.031,
+      "chi_square": 2.46,
+      "p_value": 0.116766,
+      "IC": 0.6633,
+      "IC025": -0.5365,
+      "IC975": 1.8632,
+      "signal_bcpnn": false,
+      "EBGM": 1.1735,
+      "EB05": 0.9359,
+      "EB95": 1.4333,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 103,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 2.46,
+          "contribution": 0.4891
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 2.158,
+          "contribution": 0.298
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9359,
+          "contribution": 0.2591
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "HEPATIC FAILURE",
+      "case_count_a": 9,
+      "drug_total_reports": 38,
+      "event_total_reports": 46,
+      "PRR": 1.037,
+      "ROR": 1.048,
+      "ROR_95CI_low": 0.456,
+      "ROR_95CI_high": 2.412,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.0518,
+      "IC025": -1.127,
+      "IC975": 1.2306,
+      "signal_bcpnn": false,
+      "EBGM": 1.1007,
+      "EB05": 0.8761,
+      "EB95": 1.3466,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 104,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8761,
+          "contribution": 0.2425
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1007,
+          "contribution": 0.201
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.048,
+          "contribution": 0.1447
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "MYALGIA",
+      "case_count_a": 5,
+      "drug_total_reports": 38,
+      "event_total_reports": 22,
+      "PRR": 1.254,
+      "ROR": 1.292,
+      "ROR_95CI_low": 0.445,
+      "ROR_95CI_high": 3.754,
+      "chi_square": 0.034,
+      "p_value": 0.853745,
+      "IC": 0.2943,
+      "IC025": -1.1904,
+      "IC975": 1.779,
+      "signal_bcpnn": false,
+      "EBGM": 1.1215,
+      "EB05": 0.8849,
+      "EB95": 1.3813,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 105,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8849,
+          "contribution": 0.2449
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1215,
+          "contribution": 0.2048
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.292,
+          "contribution": 0.1784
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "NAUSEA",
+      "case_count_a": 3,
+      "drug_total_reports": 38,
+      "event_total_reports": 27,
+      "PRR": 0.533,
+      "ROR": 0.493,
+      "ROR_95CI_low": 0.14,
+      "ROR_95CI_high": 1.731,
+      "chi_square": 0.739,
+      "p_value": 0.38992,
+      "IC": -0.6415,
+      "IC025": -2.3427,
+      "IC975": 1.0596,
+      "signal_bcpnn": false,
+      "EBGM": 1.0602,
+      "EB05": 0.8326,
+      "EB95": 1.3106,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 106,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8326,
+          "contribution": 0.2305
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0602,
+          "contribution": 0.1936
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 0.739,
+          "contribution": 0.1469
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "PRURITUS",
+      "case_count_a": 5,
+      "drug_total_reports": 38,
+      "event_total_reports": 20,
+      "PRR": 1.421,
+      "ROR": 1.485,
+      "ROR_95CI_low": 0.504,
+      "ROR_95CI_high": 4.374,
+      "chi_square": 0.177,
+      "p_value": 0.674066,
+      "IC": 0.4256,
+      "IC025": -1.0786,
+      "IC975": 1.9297,
+      "signal_bcpnn": false,
+      "EBGM": 1.1303,
+      "EB05": 0.8918,
+      "EB95": 1.3921,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 107,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8918,
+          "contribution": 0.2469
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1303,
+          "contribution": 0.2064
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.485,
+          "contribution": 0.2051
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "RASH",
+      "case_count_a": 6,
+      "drug_total_reports": 38,
+      "event_total_reports": 30,
+      "PRR": 1.066,
+      "ROR": 1.078,
+      "ROR_95CI_low": 0.407,
+      "ROR_95CI_high": 2.855,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": 0.1047,
+      "IC025": -1.2592,
+      "IC975": 1.4686,
+      "signal_bcpnn": false,
+      "EBGM": 1.1076,
+      "EB05": 0.8759,
+      "EB95": 1.3617,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 108,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8759,
+          "contribution": 0.2425
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1076,
+          "contribution": 0.2023
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.078,
+          "contribution": 0.1489
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "RHABDOMYOLYSIS",
+      "case_count_a": 5,
+      "drug_total_reports": 38,
+      "event_total_reports": 41,
+      "PRR": 0.592,
+      "ROR": 0.53,
+      "ROR_95CI_low": 0.193,
+      "ROR_95CI_high": 1.457,
+      "chi_square": 1.045,
+      "p_value": 0.30657,
+      "IC": -0.5744,
+      "IC025": -1.9797,
+      "IC975": 0.8308,
+      "signal_bcpnn": false,
+      "EBGM": 1.0446,
+      "EB05": 0.8242,
+      "EB95": 1.2866,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 109,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8242,
+          "contribution": 0.2281
+        },
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 1.045,
+          "contribution": 0.2078
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0446,
+          "contribution": 0.1908
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "VOMITING",
+      "case_count_a": 7,
+      "drug_total_reports": 38,
+      "event_total_reports": 25,
+      "PRR": 1.658,
+      "ROR": 1.806,
+      "ROR_95CI_low": 0.695,
+      "ROR_95CI_high": 4.696,
+      "chi_square": 0.91,
+      "p_value": 0.340199,
+      "IC": 0.5649,
+      "IC025": -0.7795,
+      "IC975": 1.9093,
+      "signal_bcpnn": false,
+      "EBGM": 1.1489,
+      "EB05": 0.9106,
+      "EB95": 1.4102,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0,
+      "priority_rank": 110,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9106,
+          "contribution": 0.2521
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 1.806,
+          "contribution": 0.2494
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.1489,
+          "contribution": 0.2098
+        }
+      ]
+    }
+  ],
+  "priority_top": [
+    {
+      "drug": "PREDNISONE",
+      "adverse_event": "HEPATIC FAILURE",
+      "case_count_a": 15,
+      "drug_total_reports": 35,
+      "event_total_reports": 46,
+      "PRR": 2.281,
+      "ROR": 3.242,
+      "ROR_95CI_low": 1.493,
+      "ROR_95CI_high": 7.038,
+      "chi_square": 8.135,
+      "p_value": 0.004341,
+      "IC": 0.8735,
+      "IC025": -0.2306,
+      "IC975": 1.9777,
+      "signal_bcpnn": false,
+      "EBGM": 1.2285,
+      "EB05": 0.989,
+      "EB95": 1.4894,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": true,
+      "priority_score": 0.9999,
+      "priority_rank": 1,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 8.135,
+          "contribution": 1.6174
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 3.242,
+          "contribution": 0.4478
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.989,
+          "contribution": 0.2738
+        }
+      ]
+    },
+    {
+      "drug": "WARFARIN",
+      "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+      "case_count_a": 18,
+      "drug_total_reports": 38,
+      "event_total_reports": 45,
+      "PRR": 2.842,
+      "ROR": 4.5,
+      "ROR_95CI_low": 2.106,
+      "ROR_95CI_high": 9.614,
+      "chi_square": 14.924,
+      "p_value": 0.000112,
+      "IC": 1.0443,
+      "IC025": -0.0382,
+      "IC975": 2.1269,
+      "signal_bcpnn": false,
+      "EBGM": 1.2731,
+      "EB05": 1.0303,
+      "EB95": 1.5373,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": true,
+      "priority_score": 0.9999,
+      "priority_rank": 2,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 14.924,
+          "contribution": 2.9671
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 4.5,
+          "contribution": 0.6215
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 1.0303,
+          "contribution": 0.2852
+        }
+      ]
+    },
+    {
+      "drug": "SIMVASTATIN",
+      "adverse_event": "RHABDOMYOLYSIS",
+      "case_count_a": 13,
+      "drug_total_reports": 29,
+      "event_total_reports": 41,
+      "PRR": 2.738,
+      "ROR": 4.15,
+      "ROR_95CI_low": 1.798,
+      "ROR_95CI_high": 9.578,
+      "chi_square": 10.633,
+      "p_value": 0.001111,
+      "IC": 1.0995,
+      "IC025": -0.0892,
+      "IC975": 2.2883,
+      "signal_bcpnn": false,
+      "EBGM": 1.24,
+      "EB05": 0.9947,
+      "EB95": 1.5077,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": true,
+      "priority_score": 0.9997,
+      "priority_rank": 3,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 10.633,
+          "contribution": 2.114
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 4.15,
+          "contribution": 0.5732
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9947,
+          "contribution": 0.2753
+        }
+      ]
+    },
+    {
+      "drug": "AMOXICILLIN",
+      "adverse_event": "ANAPHYLACTIC REACTION",
+      "case_count_a": 10,
+      "drug_total_reports": 27,
+      "event_total_reports": 40,
+      "PRR": 2.136,
+      "ROR": 2.804,
+      "ROR_95CI_low": 1.169,
+      "ROR_95CI_high": 6.724,
+      "chi_square": 4.499,
+      "p_value": 0.033925,
+      "IC": 0.8713,
+      "IC025": -0.3682,
+      "IC975": 2.1107,
+      "signal_bcpnn": false,
+      "EBGM": 1.1938,
+      "EB05": 0.9521,
+      "EB95": 1.4581,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": true,
+      "priority_score": 0.9996,
+      "priority_rank": 4,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 4.499,
+          "contribution": 0.8945
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 2.804,
+          "contribution": 0.3873
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9521,
+          "contribution": 0.2635
+        }
+      ]
+    },
+    {
+      "drug": "CLOPIDOGREL",
+      "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+      "case_count_a": 10,
+      "drug_total_reports": 25,
+      "event_total_reports": 45,
+      "PRR": 2.0,
+      "ROR": 2.667,
+      "ROR_95CI_low": 1.104,
+      "ROR_95CI_high": 6.44,
+      "chi_square": 3.937,
+      "p_value": 0.047249,
+      "IC": 0.8122,
+      "IC025": -0.4366,
+      "IC975": 2.061,
+      "signal_bcpnn": false,
+      "EBGM": 1.1884,
+      "EB05": 0.9478,
+      "EB95": 1.4516,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.999,
+      "priority_rank": 5,
+      "priority_explain": [
+        {
+          "feature": "chi_square",
+          "label": "\u03c7\u00b2",
+          "value": 3.937,
+          "contribution": 0.7827
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 2.667,
+          "contribution": 0.3683
+        },
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.9478,
+          "contribution": 0.2624
+        }
+      ]
+    },
+    {
+      "drug": "ATORVASTATIN",
+      "adverse_event": "MYALGIA",
+      "case_count_a": 4,
+      "drug_total_reports": 39,
+      "event_total_reports": 22,
+      "PRR": 0.917,
+      "ROR": 0.908,
+      "ROR_95CI_low": 0.289,
+      "ROR_95CI_high": 2.852,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": -0.0317,
+      "IC025": -1.6097,
+      "IC975": 1.5463,
+      "signal_bcpnn": false,
+      "EBGM": 1.0987,
+      "EB05": 0.8648,
+      "EB95": 1.3556,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.9971,
+      "priority_rank": 6,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8648,
+          "contribution": 0.2394
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0987,
+          "contribution": 0.2006
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.908,
+          "contribution": 0.1254
+        }
+      ]
+    },
+    {
+      "drug": "LISINOPRIL",
+      "adverse_event": "ANGIOEDEMA",
+      "case_count_a": 4,
+      "drug_total_reports": 33,
+      "event_total_reports": 29,
+      "PRR": 0.81,
+      "ROR": 0.783,
+      "ROR_95CI_low": 0.253,
+      "ROR_95CI_high": 2.422,
+      "chi_square": 0.024,
+      "p_value": 0.877454,
+      "IC": -0.1806,
+      "IC025": -1.7354,
+      "IC975": 1.3743,
+      "signal_bcpnn": false,
+      "EBGM": 1.0877,
+      "EB05": 0.8562,
+      "EB95": 1.3421,
+      "signal_ebgm": false,
+      "serious_event": true,
+      "signal_detected": false,
+      "priority_score": 0.9945,
+      "priority_rank": 7,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8562,
+          "contribution": 0.237
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0877,
+          "contribution": 0.1986
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.783,
+          "contribution": 0.1081
+        }
+      ]
+    },
+    {
+      "drug": "PREDNISONE",
+      "adverse_event": "PRURITUS",
+      "case_count_a": 3,
+      "drug_total_reports": 35,
+      "event_total_reports": 20,
+      "PRR": 0.832,
+      "ROR": 0.816,
+      "ROR_95CI_low": 0.226,
+      "ROR_95CI_high": 2.952,
+      "chi_square": 0.0,
+      "p_value": 1.0,
+      "IC": -0.111,
+      "IC025": -1.855,
+      "IC975": 1.6329,
+      "signal_bcpnn": false,
+      "EBGM": 1.0959,
+      "EB05": 0.8606,
+      "EB95": 1.3547,
+      "signal_ebgm": false,
+      "serious_event": false,
+      "signal_detected": false,
+      "priority_score": 0.0013,
+      "priority_rank": 8,
+      "priority_explain": [
+        {
+          "feature": "EB05",
+          "label": "EB05",
+          "value": 0.8606,
+          "contribution": 0.2382
+        },
+        {
+          "feature": "EBGM",
+          "label": "EBGM",
+          "value": 1.0959,
+          "contribution": 0.2001
+        },
+        {
+          "feature": "ROR",
+          "label": "ROR",
+          "value": 0.816,
+          "contribution": 0.1127
+        }
+      ]
+    }
+  ],
+  "ml_meta": {
+    "model": "GradientBoostingClassifier",
+    "weak_labels": "planted sample pairs + literature reference set",
+    "global_importance": [
+      {
+        "feature": "PRR",
+        "label": "PRR",
+        "importance": 0.0012
+      },
+      {
+        "feature": "ROR",
+        "label": "ROR",
+        "importance": 0.098
+      },
+      {
+        "feature": "chi_square",
+        "label": "\u03c7\u00b2",
+        "importance": 0.3172
+      },
+      {
+        "feature": "IC",
+        "label": "IC (BCPNN)",
+        "importance": 0.0438
+      },
+      {
+        "feature": "EBGM",
+        "label": "EBGM",
+        "importance": 0.106
+      },
+      {
+        "feature": "EB05",
+        "label": "EB05",
+        "importance": 0.2207
+      },
+      {
+        "feature": "case_count_a",
+        "label": "Case count",
+        "importance": 0.011
+      },
+      {
+        "feature": "log_cases",
+        "label": "log(cases)",
+        "importance": 0.0108
+      },
+      {
+        "feature": "serious_event",
+        "label": "Serious PT flag",
+        "importance": 0.0831
+      },
+      {
+        "feature": "drug_report_share",
+        "label": "Drug report share",
+        "importance": 0.0496
+      },
+      {
+        "feature": "event_report_share",
+        "label": "Event report share",
+        "importance": 0.0586
+      }
+    ]
+  }
+};

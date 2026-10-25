@@ -225,8 +225,11 @@
       <div class="grid2">
         <div class="formula">PRR = (a/(a+b)) ÷ (c/(c+d))</div>
         <div class="formula">ROR = (a×d) / (b×c)</div>
+        <div class="formula">IC = log₂((a·N)/((a+b)(a+c))) · signal if <strong>IC025 &gt; 0</strong> (BCPNN)</div>
+        <div class="formula">EBGM = posterior mean rate · signal if <strong>EB05 &gt; 2</strong> (MGPS shrinkage)</div>
       </div>
-      <p>χ² (Yates-corrected) tests association. This app flags a <strong>signal</strong> when PRR ≥ 2, χ² ≥ 4, and cases ≥ 3—the FDA/MHRA-style screen used in <code>faers_signal_detection.py</code>.</p>
+      <p>χ² (Yates-corrected) supports the frequentist screen (PRR ≥ 2, χ² ≥ 4, cases ≥ 3). <strong>BCPNN</strong> adds a Bayesian credibility interval on the information component; <strong>EBGM</strong> shrinks extreme ratios toward a dataset-level gamma–Poisson prior—both computed in this app alongside PRR/ROR.</p>
+      <p class="lead" id="methodCompare"></p>
     </section>
 
     <!-- Step 3: Live demo -->
@@ -247,7 +250,7 @@
         </div>
         <div style="max-height:220px;overflow:auto">
           <table class="data">
-            <thead><tr><th>Adverse event</th><th>PRR</th><th>ROR</th><th>χ²</th><th>Cases</th><th>Signal</th></tr></thead>
+            <thead><tr><th>Adverse event</th><th>PRR</th><th>IC025</th><th>EB05</th><th>χ²</th><th>Cases</th><th>Signals</th><th>Priority</th></tr></thead>
             <tbody id="demoTableBody"></tbody>
           </table>
         </div>
@@ -276,13 +279,14 @@
         </div>
       </div>
       <div class="illustrative">
-        <strong>Illustrative only — not for regulatory submission.</strong> Below: a simple <em>prioritisation score</em> (weighted PRR, χ², log cases) to mimic ML ranking on the same demo pairs.
+        <strong>Research / triage aid — not for regulatory submission.</strong> A gradient-boosting model is trained on <em>weak labels</em> (planted demo signals + a small literature reference set). Scores rank pairs for human review; importances explain which features drove each score.
       </div>
       <div class="chart-box">
-        <h3 style="margin-top:0">Illustrative ML-style prioritisation (top 6)</h3>
+        <h3 style="margin-top:0">ML prioritisation (trained model, top pairs)</h3>
+        <p class="lead" id="mlImportanceText" style="font-size:1rem"></p>
         <svg id="mlChart" width="100%" height="240" viewBox="0 0 800 240"></svg>
         <table class="data">
-          <thead><tr><th>Drug</th><th>Event</th><th>Priority score</th><th>Cluster</th></tr></thead>
+          <thead><tr><th>Drug</th><th>Event</th><th>Score</th><th>Rank</th><th>Top feature drivers</th></tr></thead>
           <tbody id="mlTableBody"></tbody>
         </table>
       </div>
@@ -293,9 +297,9 @@
       <h1>Summary</h1>
       <div class="card">
         <ul>
-          <li><strong>FAERS</strong> provides the real-world safety data backbone; disproportionality (PRR, ROR, χ²) scales screening across thousands of pairs.</li>
-          <li>This app implements the same formulas as the Python pipeline—with upload, drug mapping, and comparison views for hands-on exploration.</li>
-          <li><strong>AI/ML</strong> augments—not replaces—expert review: NLP for narratives, learning-to-rank for triage, Bayesian methods in production vigilance systems.</li>
+          <li><strong>FAERS</strong> plus disproportionality (PRR/ROR/χ², BCPNN IC, EBGM/EB05) scales screening; methods can disagree—analysts compare screens.</li>
+          <li>Weak-label ML prioritisation ranks pairs for triage with transparent feature contributions—not a validated classifier.</li>
+          <li><strong>AI/ML</strong> augments expert review (NLP, ranking, Bayesian shrinkage); signals still require clinical and regulatory follow-up.</li>
           <li>Always pair statistical signals with clinical context and regulatory process.</li>
         </ul>
       </div>
@@ -368,6 +372,24 @@
     $('cellD').textContent = cells.d ?? 'd';
     $('contingencyCaption').textContent =
       `Example from this demo dataset: ${pair.drug || 'WARFARIN'} · ${pair.adverse_event || ''} — PRR ${fmt(pair.PRR)}, ROR ${fmt(pair.ROR)}, χ² ${fmt(pair.chi_square)}`;
+    const cmp = $('methodCompare');
+    if (cmp) {
+      cmp.textContent =
+        `Same pair: IC ${fmt(pair.IC)} (IC025 ${fmt(pair.IC025)} → BCPNN ${pair.signal_bcpnn ? 'signal' : 'no signal'}) · EBGM ${fmt(pair.EBGM)} (EB05 ${fmt(pair.EB05)} → EBGM ${pair.signal_ebgm ? 'signal' : 'no signal'}) · frequentist PRR screen ${pair.signal_detected ? 'signal' : 'no signal'}.`;
+    }
+  }
+
+  function signalTags(r) {
+    const t = [];
+    if (r.signal_detected) t.push('PRR');
+    if (r.signal_bcpnn) t.push('BCPNN');
+    if (r.signal_ebgm) t.push('EBGM');
+    return t.length ? t.join(', ') : '—';
+  }
+
+  function explainLine(r) {
+    if (!r.priority_explain || !r.priority_explain.length) return '—';
+    return r.priority_explain.map((e) => `${e.label} (${fmt(e.contribution)})`).join(' · ');
   }
 
   function drawBars(svgId, items, valueKey, labelKey, color) {
@@ -416,26 +438,32 @@
     const top = sorted.slice(0, 8);
     drawBars('demoChart', top.map((r) => ({ label: r.adverse_event, v: r.PRR })), 'v', 'label', '#38bdf8');
     $('demoTableBody').innerHTML = sorted.slice(0, 12).map((r) =>
-      `<tr><td>${esc(r.adverse_event)}</td><td>${fmt(r.PRR)}</td><td>${fmt(r.ROR)}</td><td>${fmt(r.chi_square)}</td><td>${n(r.case_count_a)}</td><td class="${r.signal_detected ? 'sig-yes' : ''}">${r.signal_detected ? 'Signal' : '—'}</td></tr>`
+      `<tr><td>${esc(r.adverse_event)}</td><td>${fmt(r.PRR)}</td><td>${fmt(r.IC025)}</td><td>${fmt(r.EB05)}</td><td>${fmt(r.chi_square)}</td><td>${n(r.case_count_a)}</td><td class="sig-yes">${esc(signalTags(r))}</td><td>${r.priority_score != null ? fmt(r.priority_score) : '—'}</td></tr>`
     ).join('');
   }
 
-  /** Illustrative priority: z-scaled log(PRR) + chi²/10 + log(cases) — then k-means style 2 clusters on score */
-  function renderMlIllustration() {
-    const pool = (BUNDLE.all_flagged_signals && BUNDLE.all_flagged_signals.length)
-      ? BUNDLE.all_flagged_signals
-      : (BUNDLE.all_results || []).filter((r) => r.signal_detected);
-    const scored = pool.map((r) => {
-      const score = Math.log(Math.max(n(r.PRR), 0.1)) * 2 + n(r.chi_square) / 8 + Math.log(Math.max(n(r.case_count_a), 1));
-      return { ...r, priority: Math.round(score * 100) / 100 };
-    }).sort((a, b) => b.priority - a.priority);
-    const top = scored.slice(0, 6);
-    const median = scored.length ? scored[Math.floor(scored.length / 2)].priority : 0;
-    top.forEach((r) => { r.cluster = r.priority >= median ? 'High triage' : 'Routine'; });
-    drawBars('mlChart', top.map((r) => ({ label: r.adverse_event, v: r.priority })), 'v', 'label', '#34d399');
+  async function renderMlIllustration() {
+    let meta = BUNDLE.ml_meta;
+    if (API_BASE) {
+      try {
+        const r = await fetch(api('/api/prioritization/meta'));
+        const d = await r.json();
+        if (r.ok) meta = d;
+      } catch (_) { /* bundled */ }
+    }
+    const top = (BUNDLE.priority_top || BUNDLE.all_results || [])
+      .slice()
+      .sort((a, b) => n(a.priority_rank) - n(b.priority_rank))
+      .slice(0, 6);
+    drawBars('mlChart', top.map((r) => ({ label: r.adverse_event, v: r.priority_score })), 'v', 'label', '#34d399');
     $('mlTableBody').innerHTML = top.map((r) =>
-      `<tr><td>${esc(r.drug)}</td><td>${esc(r.adverse_event)}</td><td>${fmt(r.priority)}</td><td>${r.cluster}</td></tr>`
+      `<tr><td>${esc(r.drug)}</td><td>${esc(r.adverse_event)}</td><td>${fmt(r.priority_score)}</td><td>#${r.priority_rank || '—'}</td><td class="m">${esc(explainLine(r))}</td></tr>`
     ).join('');
+    const imp = (meta && meta.global_importance) ? meta.global_importance : [];
+    const impText = imp.length
+      ? 'Global feature importances: ' + imp.sort((a, b) => n(b.importance) - n(a.importance)).slice(0, 4).map((x) => `${x.label} ${fmt(x.importance)}`).join(' · ')
+      : '';
+    $('mlImportanceText').textContent = impText;
   }
 
   $('prevBtn').onclick = () => goTo(step - 1);
