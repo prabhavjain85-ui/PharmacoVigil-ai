@@ -1,0 +1,10 @@
+{
+  "case_count": 200,
+  "signal_count": 110,
+  "warfarin_gi": {
+    "PRR": 2.842,
+    "IC025": -0.0382,
+    "EB05": 1.0303,
+    "case_count_a": 18
+  }
+}

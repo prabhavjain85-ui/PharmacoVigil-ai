@@ -1,9 +1,8 @@
 """
-FastAPI backend for FAERS drug-ADR signal detection.
+Optional FastAPI service for pharmacovigilance disproportionality analysis.
 
-Committed sample data is the default. Small real FAERS extracts can be uploaded
-and are retained only in this Python process until reset or process shutdown.
-The static workflow UI is served from Vercel (public/); this app exposes the API.
+The public seminar site is a static Next.js app (`web/`) with precomputed JSON.
+This API remains available for local experimentation and uploads.
 """
 from __future__ import annotations
 
@@ -18,7 +17,7 @@ from urllib.parse import unquote
 import pandas as pd
 from fastapi import FastAPI, File, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from fastapi.responses import JSONResponse
 
 from drug_mapping import drug_map_summary
 from faers_signal_detection import (
@@ -32,14 +31,12 @@ from ml_prioritization import DISPLAY_NAMES, FEATURE_COLUMNS, train_prioritizati
 from reference_signals import REFERENCE_POSITIVE_PAIRS
 
 app = FastAPI(
-    title="FAERS ADR Signal Detection",
-    description="FAERS drug-ADR disproportionality analysis with small-file ingest.",
-    version="3.0.0",
+    title="Pharmacovigilance Signal Analysis API",
+    description="FAERS-style disproportionality analysis (PRR, BCPNN, EBGM, ML priority).",
+    version="4.0.0",
 )
 
 ROOT = Path(__file__).resolve().parent
-PUBLIC_DIR = ROOT / "public"
-CONFIG_JS = PUBLIC_DIR / "config.js"
 
 _DEFAULT_LOCAL_ORIGINS = [
     "http://127.0.0.1:8000",
@@ -223,47 +220,9 @@ async def _parse_upload(
         await upload.close()
 
 
-INDEX_HTML = (
-    (ROOT / "workflow.html").read_text(encoding="utf-8")
-    if (ROOT / "workflow.html").is_file()
-    else "<!DOCTYPE html><html><body><h1>Step 1 Dataset</h1><p>workflow.html missing from bundle.</p></body></html>"
-)
-
-
-@app.get("/", response_class=HTMLResponse)
-def index() -> str:
-    return INDEX_HTML
-
-
-@app.get("/config.js")
-def config_js() -> FileResponse:
-    """Serve frontend API base URL config for local uvicorn (Vercel serves public/ directly)."""
-    if not CONFIG_JS.is_file():
-        raise HTTPException(status_code=404, detail="config.js not found")
-    return FileResponse(CONFIG_JS, media_type="application/javascript")
-
-
-def _public_file(name: str, media_type: str) -> FileResponse:
-    path = PUBLIC_DIR / name
-    if not path.is_file():
-        raise HTTPException(status_code=404, detail=f"{name} not found")
-    return FileResponse(path, media_type=media_type)
-
-
-@app.get("/seminar.html", response_class=HTMLResponse)
-@app.get("/seminar", response_class=HTMLResponse)
-def seminar_page() -> FileResponse:
-    return _public_file("seminar.html", "text/html; charset=utf-8")
-
-
-@app.get("/seminar-demo-data.js")
-def seminar_demo_data() -> FileResponse:
-    return _public_file("seminar-demo-data.js", "application/javascript")
-
-
 @app.get("/api/health")
 def health() -> dict[str, str]:
-    return {"status": "ok"}
+    return {"status": "ok", "service": "pharmacovigilance-signal-api"}
 
 
 @app.get("/api/dataset")
