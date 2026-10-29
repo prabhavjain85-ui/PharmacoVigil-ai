@@ -1,7 +1,7 @@
 """
 Optional FastAPI service for pharmacovigilance disproportionality analysis.
 
-The public seminar site is a static Next.js app (`web/`) with precomputed JSON.
+The public site is a static Next.js app (`web/`) with in-browser analysis.
 This API remains available for local experimentation and uploads.
 """
 from __future__ import annotations
