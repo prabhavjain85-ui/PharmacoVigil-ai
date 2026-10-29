@@ -1,224 +1,65 @@
-# FAERS Drug–ADR Signal Detection
+# PharmacoVigil AI — seminar site + Python analysis pipeline
 
-A disproportionality-analysis pipeline for detecting adverse drug reaction
-(ADR) signals, built on the FDA FAERS data schema (DEMO / DRUG / REAC tables
-joined on `primaryid`). Includes a polished multi-step web workflow with a
-**static frontend** (Vercel) and a **FastAPI** computation backend (Railway,
-Render, Fly.io, or local uvicorn), with **sample FAERS CSVs committed in the repo**.
+**PharmacoVigil AI** is a live seminar demo for *AI & Machine Learning in Pharmacovigilance*: a modern Next.js site with presentation mode, precomputed signal statistics, Bayesian screens, weak-label ML prioritisation, and an interactive narrative NLP demo.
 
-## Platform upgrades (v3)
+The site runs **fully static on Vercel** (no backend required). Python code regenerates bundled JSON from synthetic FAERS-style sample data.
 
-1. **Real FAERS ingest** — upload DEMO / DRUG / REAC (CSV/TXT; comma / `$` / `|`)
-   via the UI or `POST /api/ingest`. Uploads live in **process memory** only;
-   use **Reset to sample** (`POST /api/reset`) to restore committed sample data.
-2. **RxNorm-style drug mapping** — brand aliases (COUMADIN→WARFARIN, LIPITOR→
-   ATORVASTATIN, …) collapse in `normalize_drug_name` via `drug_mapping.py`.
-3. **Drug compare + charts** — select 2–3 drugs, `GET /api/compare`, side-by-side
-   shared-ADR table, plus pure SVG bar charts (no npm).
+## Repository layout
 
-## Files
+| Path | Purpose |
+|------|---------|
+| `web/` | Next.js 14 + Tailwind seminar site (deployed to Vercel) |
+| `web/public/data/site-bundle.json` | Precomputed stats, ML scores, NLP samples |
+| `scripts/generate_site_data.py` | Regenerate `site-bundle.json` from `sample_data/` |
+| `faers_signal_detection.py` | Disproportionality pipeline (PRR, BCPNN, EBGM, ML) |
+| `main.py` | Optional FastAPI API for local uploads (not used by the static site) |
+| `tests/` | Unit/integration tests for statistics |
 
-- `faers_signal_detection.py` — main pipeline: loads FAERS-style tables,
-  normalizes drug names (salts + brand→generic) and MedDRA terms, computes
-  **PRR**, **ROR**, chi-square, and 95% CIs.
-- `drug_mapping.py` — alias → canonical generic map used by normalization.
-- `make_sample_data.py` — generates synthetic DEMO/DRUG/REAC data; intentionally
-  emits some brand-name strings so mapping is demonstrable.
-- `sample_data/` — **included in the repo**: `DEMO_sample.csv`,
-  `DRUG_sample.csv`, `REAC_sample.csv` (~200 cases).
-- `main.py` — FastAPI API backend (ingest / reset / compare / signals).
-- `workflow.html` — source for the multi-step UI (upload, single-drug, compare, SVG charts).
-- `public/index.html` — static workflow UI deployed to Vercel.
-- `public/config.js` — sets `window.FARES_API_BASE_URL` for cross-origin API calls.
-- `vercel.json` — static-only Vercel config (`outputDirectory: public`).
-- `Procfile` — process entry for Railway/Render (`uvicorn` on `0.0.0.0:$PORT`).
+## Quick start — website
 
-## Seminar guided demo
+```bash
+cd web
+npm install
+npm run dev
+```
 
-For live presentations (e.g. *AI & ML in Pharmacovigilance*), open **Seminar · Guided
-demo** from the home page or go directly to `/seminar` (Vercel) or
-http://127.0.0.1:8000/seminar locally.
+Open http://localhost:3000 — use **Present** for full-screen arrow-key slides.
 
-- **Five keyboard-navigated steps** (`←` / `→`): intro, disproportionality
-  (2×2 table + PRR/ROR/χ²), live WARFARIN analysis with charts, AI/ML context
-  with an illustrative prioritisation score, and summary.
-- **Bundled sample statistics** in `public/seminar-demo-data.js` so the demo never
-  shows an empty state without uploads; when `FARES_API_BASE_URL` points at a
-  running backend, step 3 uses the live API instead.
-- Regenerate the bundle after changing sample data:
+### Deploy (Vercel)
 
-  ```bash
-  python3 scripts/generate_seminar_bundle.py
-  ```
+Root `vercel.json` builds the Next.js app in `web/` and exports static files to `web/out/`.
 
-## Web workflow
+```bash
+cd web && npm run build
+```
 
-1. **Dataset** — sample FAERS tables load by default. Optionally upload DEMO /
-   DRUG / REAC extracts (≤ ~5 MB each) or reset to sample.
-2. **Choose drug** — single-drug cards (canonical generics) or **Compare 2–3**
-   mode; plus an **All drugs** overview.
-3. **Results** — ADR table with PRR / ROR / χ² / cases / signal badges, filters,
-   horizontal SVG bar chart of top PRR signals, and (in compare mode) shared-ADR
-   bars across selected drugs.
+## Regenerate demo data
 
-## Quick start (CLI)
+After changing `sample_data/` or the Python pipeline:
 
 ```bash
 pip install -r requirements.txt
-
-# sample_data/ CSVs are already committed; regenerate if you like:
-python make_sample_data.py
-
-python faers_signal_detection.py \
-    --demo sample_data/DEMO_sample.csv \
-    --drug sample_data/DRUG_sample.csv \
-    --reac sample_data/REAC_sample.csv \
-    --min-cases 3 \
-    --out signals.csv
+PYTHONPATH=. python3 scripts/generate_site_data.py
+pytest tests/
 ```
 
-Optional: filter to a single drug with `--drug-filter WARFARIN` (also matches
-COUMADIN rows after canonicalization).
+Commit the updated `web/public/data/site-bundle.json`.
 
-## Local web UI
+## Optional API (local)
 
 ```bash
 pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
 ```
 
-Open http://127.0.0.1:8000 — the workflow auto-loads the dataset and drug picker.
+## Methods & honesty
 
-### API
+- **Data:** synthetic ~200-case FAERS-shaped sample (`make_sample_data.py`), not real FDA feeds.
+- **Bayesian:** BCPNN (IC025 > 0), EBGM (EB05 > 2) with dataset-level gamma–Poisson prior.
+- **ML:** gradient boosting on weak reference labels (`reference_signals.py`) — triage ranking only.
 
-| Endpoint | Description |
-|----------|-------------|
-| `GET /api/health` | Liveness |
-| `GET /api/dataset` | Row counts + `source` (`sample_data` \| `generated` \| `upload`) |
-| `POST /api/ingest` | Multipart upload: fields `demo`, `drug`, `reac` (≤5 MB each) |
-| `POST /api/reset` | Clear upload cache; restore sample/default |
-| `GET /api/drug-map` | Brand/alias → canonical summary |
-| `GET /api/drugs` | All drugs with report / ADR / signal counts |
-| `GET /api/drugs/{name}/adrs` | Per-drug ADR rows (`min_cases`, `signals_only`) |
-| `GET /api/signals` | Overview of pairs (`min_cases`, `signals_only`, optional `drug`) |
-| `GET /api/compare` | `?drugs=WARFARIN,CLOPIDOGREL&min_cases=3&signals_only=false` — per-drug rows + shared-event matrix |
-
-Required columns on ingest: DEMO `primaryid`; DRUG `primaryid`, `drugname`;
-REAC `primaryid`, `pt`. `role_cod` is optional (when present, only PS/SS kept).
-
-### Upload limits & backend memory
-
-- Each uploaded file is capped at **~5 MB** (`413` if larger; `400` on parse /
-  missing columns).
-- Uploaded frames are stored in **module-level process memory** and LRU signal
-  caches are cleared after ingest/reset.
-- On a hosted Python backend, uploads persist for the lifetime of the process
-  (until reset or restart). Prefer small extracts for demos; for large quarterly
-  FAERS files use the CLI locally.
-
-## Deployment architecture
-
-The app is split into two deploy targets:
-
-| Component | Host | Serves |
-|-----------|------|--------|
-| **Frontend** | Vercel | Static files from `public/` (`index.html`, `config.js`) |
-| **Backend** | Railway / Render / Fly.io / local | `main.py` FastAPI API + sample data |
-
-```
-Browser (Vercel)  ──fetch──▶  Python host (FastAPI)
-  public/index.html              main.py + sample_data/
-  public/config.js               /api/*
-```
-
-### 1. Deploy the Python backend
-
-1. Create a service on [Railway](https://railway.app), [Render](https://render.com),
-   or [Fly.io](https://fly.io) pointing at this repo.
-2. Start command (also in `Procfile`):
-
-   ```bash
-   uvicorn main:app --host 0.0.0.0 --port $PORT
-   ```
-
-3. Set environment variable **`FRONTEND_ORIGIN`** to your Vercel URL(s), comma-separated:
-
-   ```
-   FRONTEND_ORIGIN=https://your-app.vercel.app,https://your-app-*.vercel.app
-   ```
-
-   If unset, CORS allows only local dev origins (`localhost` / `127.0.0.1` on
-   ports 8000, 3000, 5173) — not `*`.
-
-4. Note the public backend URL (e.g. `https://fares-api.up.railway.app`).
-
-### 2. Deploy the static frontend on Vercel
-
-1. Push this repo to GitHub.
-2. In [Vercel](https://vercel.com): **Add New Project** → import this GitHub repo.
-3. Framework preset: **Other** (static). `vercel.json` sets `framework: null` and
-   `outputDirectory: public`.
-4. Before deploying, edit `public/config.js` and set the backend URL:
-
-   ```js
-   window.FARES_API_BASE_URL = 'https://your-python-backend.example.com';
-   ```
-
-   Leave empty (`''`) only when frontend and API share the same origin (local uvicorn).
-
-5. Deploy. Vercel serves `public/index.html` for all routes; **no Python function**
-   is created (`main.py` is listed in `.vercelignore`).
-
-### Local full-stack (single origin)
+## Tests
 
 ```bash
-pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
+pytest tests/
 ```
-
-Open http://127.0.0.1:8000 — uvicorn serves `workflow.html` and `config.js`; API
-calls use same-origin (`FARES_API_BASE_URL` defaults to empty).
-
-## Using real FAERS data
-
-Download quarterly ASCII files from the FDA:
-https://www.fda.gov/drugs/questions-and-answers-fdas-adverse-event-reporting-system-faers/fda-adverse-event-reporting-system-faers-latest-quarterly-data-files
-
-Each quarter's zip contains `DEMOyyQq.txt`, `DRUGyyQq.txt`, `REACyyQq.txt`
-(pipe- or `$`-delimited, matching this pipeline's expected columns:
-`primaryid`, `drugname`, `role_cod`, `pt`). Point `--demo/--drug/--reac`
-at those files directly, or upload a small extract via the web UI.
-
-## Bayesian screens & ML prioritisation
-
-| Method | Signal rule (this app) | Module |
-|--------|------------------------|--------|
-| **PRR / χ²** | PRR ≥ 2, χ² ≥ 4, cases ≥ 3 | `faers_signal_detection.py` |
-| **BCPNN** | IC025 > 0 (95% credibility interval on IC) | `bayesian_stats.py` |
-| **EBGM (MGPS)** | EB05 > 2 (gamma–Poisson shrinkage prior fit on all pairs) | `bayesian_stats.py` |
-| **ML priority** | Gradient boosting probability from **weak labels** (`reference_signals.py`) | `ml_prioritization.py` |
-
-**Limitations:** FAERS is spontaneous reporting; Bayesian and frequentist screens can disagree on sparse cells. The ML model is trained on planted demo pairs plus a small literature reference set—it is for **triage ranking only**, not validated pharmacovigilance performance. See `GET /api/prioritization/meta` for feature importances and documentation.
-
-## How the statistics work
-
-For each drug–event pair, a 2×2 contingency table is built:
-
-|                    | Event of interest | All other events |
-|--------------------|-------------------|-------------------|
-| Drug of interest   | a                  | b                 |
-| All other drugs    | c                  | d                 |
-
-- **PRR** = (a/(a+b)) / (c/(c+d))
-- **ROR** = (a×d) / (b×c)
-- **Chi-square** (Yates-corrected) for significance
-- A **signal** uses the FDA/MHRA convention: PRR ≥ 2, chi-square ≥ 4,
-  and case count ≥ 3 (`--min-cases` / UI filter)
-
-## Known limitations
-
-- FAERS is spontaneous-report data — signals need clinical review.
-- Drug-name mapping is a demo alias table, not a full RxNorm service.
-- MedDRA hierarchy / SOCs are not grouped.
-- Confounding by indication is not controlled for.
-- Uploaded datasets on the backend are process-local (see above).

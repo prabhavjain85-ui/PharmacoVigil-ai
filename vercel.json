@@ -1,9 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": null,
-  "outputDirectory": "public",
-  "rewrites": [
-    { "source": "/seminar", "destination": "/seminar.html" },
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
+  "installCommand": "cd web && npm install",
+  "buildCommand": "cd web && npm run build",
+  "outputDirectory": "web/out",
+  "framework": null
 }

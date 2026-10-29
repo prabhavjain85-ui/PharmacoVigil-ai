@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 .DS_Store
 signals.csv
+web/node_modules/
+web/.next/
+web/out/
