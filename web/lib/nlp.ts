@@ -2,6 +2,7 @@ export type NlpExtraction = {
   drugs: string[];
   reactions: string[];
   onset: string | null;
+  serious: boolean;
   method: "rule-based demo";
 };
 
@@ -34,6 +35,8 @@ const ONSET_PATTERNS = [
   /(\d+\s*(?:hours?|days?|weeks?))\s+after/i,
 ];
 
+const SERIOUS = /hemorrhage|haemorrhage|anaphylact|rhabdomyolysis|hepatic failure|angioedema|death|fatal/i;
+
 export function extractFromNarrative(text: string): NlpExtraction {
   const drugs = new Set<string>();
   const reactions = new Set<string>();
@@ -55,6 +58,7 @@ export function extractFromNarrative(text: string): NlpExtraction {
     drugs: Array.from(drugs),
     reactions: Array.from(reactions),
     onset,
+    serious: SERIOUS.test(text),
     method: "rule-based demo",
   };
 }

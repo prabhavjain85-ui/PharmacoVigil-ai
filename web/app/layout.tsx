@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { DM_Sans, Fraunces } from "next/font/google";
 import "./globals.css";
-import { PresentationProvider } from "@/components/PresentationProvider";
-import { SiteHeader } from "@/components/SiteHeader";
-import { PresentationBar } from "@/components/PresentationBar";
+import { AppShell } from "@/components/AppShell";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { DataProvider } from "@/lib/context/DataContext";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -19,9 +18,9 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "PharmacoVigil AI — AI & Machine Learning in Pharmacovigilance",
+  title: "PharmacoVigil AI — AI & ML in Pharmacovigilance",
   description:
-    "Live seminar demo: FAERS-style signal detection, disproportionality, Bayesian methods, and ML prioritisation.",
+    "Browser-based FAERS-style signal detection, Bayesian screens, ML prioritisation, and narrative NLP for day-to-day pharmacovigilance workflows.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -29,11 +28,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className={`${dmSans.variable} ${fraunces.variable} font-sans`}>
         <ThemeProvider>
-          <PresentationProvider>
-            <SiteHeader />
-            <PresentationBar />
-            <main>{children}</main>
-          </PresentationProvider>
+          <DataProvider>
+            <AppShell>{children}</AppShell>
+          </DataProvider>
         </ThemeProvider>
       </body>
     </html>
