@@ -1,0 +1,1376 @@
+[
+  {
+    "id": "N01",
+    "category": "negated",
+    "text": "68-year-old male started Coumadin 5 mg PO daily for atrial fibrillation. Presented with mild epistaxis after 6 days. Endoscopy showed no evidence of gastrointestinal haemorrhage and melena was ruled out. Reported by physician. Drug was held and symptoms resolved.",
+    "gold": {
+      "suspect_drugs": [
+        "WARFARIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "EPISTAXIS"
+      ],
+      "negated_or_historical_reactions": [
+        "GASTROINTESTINAL HAEMORRHAGE"
+      ],
+      "serious": false,
+      "age": 68,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N02",
+    "category": "negated",
+    "text": "54-year-old female on Lipitor 40 mg daily complained of mild fatigue after 2 weeks. She denies myalgia and rhabdomyolysis was ruled out with normal CK. Reported by pharmacist.",
+    "gold": {
+      "suspect_drugs": [
+        "ATORVASTATIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "FATIGUE"
+      ],
+      "negated_or_historical_reactions": [
+        "MYALGIA",
+        "RHABDOMYOLYSIS"
+      ],
+      "serious": false,
+      "age": 54,
+      "sex": "F",
+      "reporter": "PH",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N03",
+    "category": "negated",
+    "text": "42-year-old woman took Amoxil 500 mg PO for sinusitis and developed a mild rash within 4 hours. Patient had no dyspnoea, no lip swelling, and negative for anaphylaxis. Reported by nurse.",
+    "gold": {
+      "suspect_drugs": [
+        "AMOXICILLIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "RASH"
+      ],
+      "negated_or_historical_reactions": [
+        "DYSPNOEA",
+        "ANGIOEDEMA",
+        "ANAPHYLACTIC REACTION"
+      ],
+      "serious": false,
+      "age": 42,
+      "sex": "F",
+      "reporter": "HP",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N04",
+    "category": "historical",
+    "text": "71-year-old male with a past medical history of gastrointestinal haemorrhage 5 years ago started Plavix 75 mg daily. He developed mild headache and nausea after 3 days. Denies melena. Reported by physician.",
+    "gold": {
+      "suspect_drugs": [
+        "CLOPIDOGREL"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEADACHE",
+        "NAUSEA"
+      ],
+      "negated_or_historical_reactions": [
+        "GASTROINTESTINAL HAEMORRHAGE"
+      ],
+      "serious": false,
+      "age": 71,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N05",
+    "category": "family_history",
+    "text": "39-year-old female with a family history of anaphylaxis and hepatic failure started Zocor 20 mg PO daily. After 10 days she reported mild dizziness. Without myalgia or jaundice. Consumer report.",
+    "gold": {
+      "suspect_drugs": [
+        "SIMVASTATIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "DIZZINESS"
+      ],
+      "negated_or_historical_reactions": [
+        "ANAPHYLACTIC REACTION",
+        "HEPATIC FAILURE",
+        "MYALGIA"
+      ],
+      "serious": false,
+      "age": 39,
+      "sex": "F",
+      "reporter": "CN",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N06",
+    "category": "uncertain",
+    "text": "62-year-old male on Lisinopril 10 mg daily presented with dry cough after 14 days. Admitted to rule out angioedema, which was excluded on exam. Drug was discontinued and symptoms resolved. Reported by doctor.",
+    "gold": {
+      "suspectDrugs": [
+        "LISINOPRIL"
+      ],
+      "suspect_drugs": [
+        "LISINOPRIL"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "COUGH"
+      ],
+      "negated_or_historical_reactions": [
+        "ANGIOEDEMA"
+      ],
+      "serious": false,
+      "age": 62,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N07",
+    "category": "negated",
+    "text": "58-year-old female taking Glucophage 1000 mg PO developed watery diarrhea and nausea after 5 days. Lab work showed no evidence of lactic acidosis and no acute kidney injury. Reported by clinician.",
+    "gold": {
+      "suspect_drugs": [
+        "METFORMIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "DIARRHOEA",
+        "NAUSEA"
+      ],
+      "negated_or_historical_reactions": [
+        "LACTIC ACIDOSIS",
+        "ACUTE KIDNEY INJURY"
+      ],
+      "serious": false,
+      "age": 58,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N08",
+    "category": "negated",
+    "text": "47-year-old man on Prednisone 20 mg daily for rheumatoid arthritis reported pruritus after 4 days. Liver panel normal with no signs of hepatic failure or hepatitis. Reported by patient.",
+    "gold": {
+      "suspect_drugs": [
+        "PREDNISONE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "PRURITUS"
+      ],
+      "negated_or_historical_reactions": [
+        "HEPATIC FAILURE"
+      ],
+      "serious": false,
+      "age": 47,
+      "sex": "M",
+      "reporter": "CN",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N09",
+    "category": "historical",
+    "text": "75-year-old woman with prior history of myocardial infarction started Prilosec 20 mg PO daily. Concomitant medication included Aspirin 81 mg. She developed headache after 1 week; no GI bleed. Physician report.",
+    "gold": {
+      "suspect_drugs": [
+        "OMEPRAZOLE"
+      ],
+      "concomitant_drugs": [
+        "ASPIRIN"
+      ],
+      "active_reactions": [
+        "HEADACHE"
+      ],
+      "negated_or_historical_reactions": [
+        "MYOCARDIAL INFARCTION",
+        "GASTROINTESTINAL HAEMORRHAGE"
+      ],
+      "serious": false,
+      "age": 75,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N10",
+    "category": "uncertain",
+    "text": "50-year-old male taking Ibuprofen 600 mg PO developed nausea and vomiting within 2 days. Differential includes pancreatitis, though lipase was normal and upper gastrointestinal haemorrhage was ruled out. Pharmacist report.",
+    "gold": {
+      "suspect_drugs": [
+        "IBUPROFEN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "NAUSEA",
+        "VOMITING"
+      ],
+      "negated_or_historical_reactions": [
+        "PANCREATITIS",
+        "GASTROINTESTINAL HAEMORRHAGE"
+      ],
+      "serious": false,
+      "age": 50,
+      "sex": "M",
+      "reporter": "PH",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N11",
+    "category": "negated",
+    "text": "64-year-old female started Eliquis 5 mg PO twice daily. Presented with minor epistaxis on day 4. No hematuria and no evidence of gastrointestinal haemorrhage. Reported by nurse.",
+    "gold": {
+      "suspect_drugs": [
+        "APIXABAN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "EPISTAXIS"
+      ],
+      "negated_or_historical_reactions": [
+        "HAEMATURIA",
+        "GASTROINTESTINAL HAEMORRHAGE"
+      ],
+      "serious": false,
+      "age": 64,
+      "sex": "F",
+      "reporter": "HP",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N12",
+    "category": "negated",
+    "text": "33-year-old man started Lamictal 50 mg PO daily and developed dizziness after 5 days. Exam confirmed absence of Stevens-Johnson syndrome and no rash. Reported by neurologist.",
+    "gold": {
+      "suspect_drugs": [
+        "LAMOTRIGINE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "DIZZINESS"
+      ],
+      "negated_or_historical_reactions": [
+        "STEVENS-JOHNSON SYNDROME",
+        "RASH"
+      ],
+      "serious": false,
+      "age": 33,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N13",
+    "category": "historical",
+    "text": "60-year-old female with history of rhabdomyolysis on statins years ago was started on Zetia 10 mg PO daily. She experienced mild fatigue after 7 days; denies muscle pain. Reported by physician.",
+    "gold": {
+      "suspect_drugs": [
+        "EZETIMIBE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "FATIGUE"
+      ],
+      "negated_or_historical_reactions": [
+        "RHABDOMYOLYSIS",
+        "MYALGIA"
+      ],
+      "serious": false,
+      "age": 60,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N14",
+    "category": "negated",
+    "text": "45-year-old female taking Clozaril 100 mg PO daily had routine CBC showing normal counts: negative for neutropenia and agranulocytosis was ruled out, but she reported orthostatic hypotension and dizziness. Physician report.",
+    "gold": {
+      "suspect_drugs": [
+        "CLOZAPINE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HYPOTENSION",
+        "DIZZINESS"
+      ],
+      "negated_or_historical_reactions": [
+        "NEUTROPENIA"
+      ],
+      "serious": false,
+      "age": 45,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N15",
+    "category": "uncertain",
+    "text": "72-year-old male on Cordarone 200 mg daily developed sinus bradycardia after 3 weeks. Chest CT done for possible interstitial lung disease, which was ruled out. Reported by cardiologist.",
+    "gold": {
+      "suspect_drugs": [
+        "AMIODARONE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "BRADYCARDIA"
+      ],
+      "negated_or_historical_reactions": [
+        "INTERSTITIAL LUNG DISEASE"
+      ],
+      "serious": false,
+      "age": 72,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N16",
+    "category": "negated",
+    "text": "29-year-old woman took Bactrim DS PO for urinary infection and developed pruritus and nausea within 2 days. Without angioedema, without dyspnoea, and no aplastic anaemia. Pharmacist report.",
+    "gold": {
+      "suspect_drugs": [
+        "TRIMETHOPRIM/SULFAMETHOXAZOLE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "PRURITUS",
+        "NAUSEA"
+      ],
+      "negated_or_historical_reactions": [
+        "ANGIOEDEMA",
+        "DYSPNOEA",
+        "APLASTIC ANAEMIA"
+      ],
+      "serious": false,
+      "age": 29,
+      "sex": "F",
+      "reporter": "PH",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N17",
+    "category": "historical",
+    "text": "55-year-old man with a past history of seizure disorder on chronic Keppra 500 mg started Cipro 500 mg PO for infection. Developed headache after 2 days; denies convulsion or tendon rupture. Physician report.",
+    "gold": {
+      "suspect_drugs": [
+        "CIPROFLOXACIN"
+      ],
+      "concomitant_drugs": [
+        "LEVETIRACETAM"
+      ],
+      "active_reactions": [
+        "HEADACHE"
+      ],
+      "negated_or_historical_reactions": [
+        "SEIZURE",
+        "TENDON RUPTURE"
+      ],
+      "serious": false,
+      "age": 55,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N18",
+    "category": "negated",
+    "text": "67-year-old female on Crestor 20 mg PO daily reported headache. She has no myalgia, no jaundice, and hepatic failure was excluded. Consumer self-report.",
+    "gold": {
+      "suspect_drugs": [
+        "ROSUVASTATIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEADACHE"
+      ],
+      "negated_or_historical_reactions": [
+        "MYALGIA",
+        "HEPATIC FAILURE"
+      ],
+      "serious": false,
+      "age": 67,
+      "sex": "F",
+      "reporter": "CN",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N19",
+    "category": "uncertain",
+    "text": "49-year-old male on Ozempic 1 mg SC weekly developed vomiting and diarrhea after 5 days. Evaluated for suspected pancreatitis; acute kidney injury was ruled out. Reported by doctor.",
+    "gold": {
+      "suspect_drugs": [
+        "SEMAGLUTIDE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "VOMITING",
+        "DIARRHOEA"
+      ],
+      "negated_or_historical_reactions": [
+        "PANCREATITIS",
+        "ACUTE KIDNEY INJURY"
+      ],
+      "serious": false,
+      "age": 49,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N20",
+    "category": "negated",
+    "text": "61-year-old woman on Tylenol 500 mg PO daily for knee pain experienced mild nausea. No evidence of hepatotoxicity or acute liver failure. Reported by nurse.",
+    "gold": {
+      "suspect_drugs": [
+        "ACETAMINOPHEN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "NAUSEA"
+      ],
+      "negated_or_historical_reactions": [
+        "HEPATIC FAILURE"
+      ],
+      "serious": false,
+      "age": 61,
+      "sex": "F",
+      "reporter": "HP",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N21",
+    "category": "standard",
+    "text": "65-year-old male on Coumadin 5 mg PO daily for atrial fibrillation. Concomitant medication included Norvasc 5 mg. Hospitalised with melena and upper gastrointestinal haemorrhage 10 days after dose increase. Drug was held and bleeding resolved. Reported by physician.",
+    "gold": {
+      "suspect_drugs": [
+        "WARFARIN"
+      ],
+      "concomitant_drugs": [
+        "AMLODIPINE"
+      ],
+      "active_reactions": [
+        "GASTROINTESTINAL HAEMORRHAGE"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 65,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N22",
+    "category": "standard",
+    "text": "59-year-old female taking Lipitor 80 mg PO daily developed severe myalgia and rhabdomyolysis with CK markedly elevated after 3 weeks. Admitted to the hospital. Resolved after stopping therapy. Reported by doctor.",
+    "gold": {
+      "suspect_drugs": [
+        "ATORVASTATIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "MYALGIA",
+        "RHABDOMYOLYSIS"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 59,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N23",
+    "category": "standard",
+    "text": "34-year-old female developed lip swelling, dyspnoea, and life-threatening anaphylactic shock within 30 minutes after taking Amoxicillin 500 mg PO. Admitted to intensive care and fully recovered. Reported by physician.",
+    "gold": {
+      "suspect_drugs": [
+        "AMOXICILLIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "ANGIOEDEMA",
+        "DYSPNOEA",
+        "ANAPHYLACTIC REACTION"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 34,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N24",
+    "category": "standard",
+    "text": "70-year-old man on Zestril 20 mg PO daily presented with severe tongue swelling and angioedema after 5 days. Concomitant therapy included Hydrochlorothiazide. Hospitalised; resolved after discontinuing Zestril. Pharmacist report.",
+    "gold": {
+      "suspect_drugs": [
+        "LISINOPRIL"
+      ],
+      "concomitant_drugs": [
+        "HYDROCHLOROTHIAZIDE"
+      ],
+      "active_reactions": [
+        "ANGIOEDEMA"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 70,
+      "sex": "M",
+      "reporter": "PH",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N25",
+    "category": "standard",
+    "text": "77-year-old female on Plavix 75 mg PO daily and concomitant Aspirin 81 mg was hospitalised with haematemesis and gastrointestinal haemorrhage after 14 days. Gradually improving. Reported by physician.",
+    "gold": {
+      "suspect_drugs": [
+        "CLOPIDOGREL"
+      ],
+      "concomitant_drugs": [
+        "ASPIRIN"
+      ],
+      "active_reactions": [
+        "GASTROINTESTINAL HAEMORRHAGE"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 77,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": "recovering"
+    }
+  },
+  {
+    "id": "N26",
+    "category": "standard",
+    "text": "63-year-old male taking Zocor 40 mg PO daily developed rhabdomyolysis and acute kidney injury after 4 weeks. Hospitalised and recovering. Reported by nephrologist.",
+    "gold": {
+      "suspect_drugs": [
+        "SIMVASTATIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "RHABDOMYOLYSIS",
+        "ACUTE KIDNEY INJURY"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 63,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": "recovering"
+    }
+  },
+  {
+    "id": "N27",
+    "category": "standard",
+    "text": "52-year-old woman taking Tylenol 1000 mg PO developed acute hepatic failure and jaundice after 6 days. Admitted to intensive care; fatal outcome. Reported by hepatologist.",
+    "gold": {
+      "suspect_drugs": [
+        "ACETAMINOPHEN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 52,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": "fatal"
+    }
+  },
+  {
+    "id": "N28",
+    "category": "standard",
+    "text": "41-year-old female started Tegretol 200 mg PO twice daily and developed Stevens-Johnson syndrome and rash after 12 days. Hospitalised; resolved after stopping drug. Reported by physician.",
+    "gold": {
+      "suspect_drugs": [
+        "CARBAMAZEPINE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "STEVENS-JOHNSON SYNDROME",
+        "RASH"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 41,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N29",
+    "category": "standard",
+    "text": "38-year-old male on Clozapine 300 mg PO daily developed severe neutropenia and agranulocytosis after 3 weeks. Drug was stopped and counts normalized. Reported by clinician.",
+    "gold": {
+      "suspect_drugs": [
+        "CLOZAPINE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "NEUTROPENIA"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 38,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N30",
+    "category": "standard",
+    "text": "69-year-old female on Xarelto 20 mg PO daily presented with melena and epistaxis after 8 days. Concomitant medication included Synthroid. Hospitalised and recovered. Reported by pharmacist.",
+    "gold": {
+      "suspect_drugs": [
+        "RIVAROXABAN"
+      ],
+      "concomitant_drugs": [
+        "LEVOTHYROXINE"
+      ],
+      "active_reactions": [
+        "GASTROINTESTINAL HAEMORRHAGE",
+        "EPISTAXIS"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 69,
+      "sex": "F",
+      "reporter": "PH",
+      "dechallenge": null,
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N31",
+    "category": "standard",
+    "text": "74-year-old male taking Pradaxa 150 mg PO twice daily was hospitalised with upper gastrointestinal haemorrhage after 2 weeks. Improved after stopping Pradaxa. Reported by physician.",
+    "gold": {
+      "suspect_drugs": [
+        "DABIGATRAN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "GASTROINTESTINAL HAEMORRHAGE"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 74,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": "positive",
+      "outcome": "recovering"
+    }
+  },
+  {
+    "id": "N32",
+    "category": "standard",
+    "text": "66-year-old woman on Glucophage 850 mg PO twice daily developed life-threatening lactic acidosis and vomiting during dehydration. Admitted to ICU; recovered without sequelae. Reported by doctor.",
+    "gold": {
+      "suspect_drugs": [
+        "METFORMIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "LACTIC ACIDOSIS",
+        "VOMITING"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 66,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N33",
+    "category": "standard",
+    "text": "57-year-old male started Levaquin 500 mg PO daily and experienced tendon rupture after 7 days. Symptoms persisted despite stopping therapy. Consumer report.",
+    "gold": {
+      "suspect_drugs": [
+        "LEVOFLOXACIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "TENDON RUPTURE"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": false,
+      "age": 57,
+      "sex": "M",
+      "reporter": "CN",
+      "dechallenge": "negative",
+      "outcome": "not_recovered"
+    }
+  },
+  {
+    "id": "N34",
+    "category": "standard",
+    "text": "48-year-old female on Depakote 500 mg PO twice daily developed drug-induced liver injury and thrombocytopenia after 1 month. Hospitalised and recovering. Reported by neurologist.",
+    "gold": {
+      "suspect_drugs": [
+        "VALPROATE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE",
+        "THROMBOCYTOPENIA"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 48,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": "recovering"
+    }
+  },
+  {
+    "id": "N35",
+    "category": "standard",
+    "text": "61-year-old man on Vancocin 1000 mg IV developed acute kidney injury and rash after 5 days. Resolved after discontinuing Vancocin. Reported by clinical pharmacist.",
+    "gold": {
+      "suspect_drugs": [
+        "VANCOMYCIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "ACUTE KIDNEY INJURY",
+        "RASH"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 61,
+      "sex": "M",
+      "reporter": "PH",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N36",
+    "category": "standard",
+    "text": "53-year-old female taking Advil 400 mg PO three times daily presented with gastric hemorrhage and melena after 10 days. Hospitalised and recovered. Reported by physician.",
+    "gold": {
+      "suspect_drugs": [
+        "IBUPROFEN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "GASTROINTESTINAL HAEMORRHAGE"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 53,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N37",
+    "category": "standard",
+    "text": "44-year-old man on Aleve 500 mg PO twice daily developed acute kidney injury and hypertension after 2 weeks. Improved after stopping Aleve. Reported by doctor.",
+    "gold": {
+      "suspect_drugs": [
+        "NAPROXEN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "ACUTE KIDNEY INJURY",
+        "HYPERTENSION"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 44,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": "positive",
+      "outcome": "recovering"
+    }
+  },
+  {
+    "id": "N38",
+    "category": "standard",
+    "text": "79-year-old male on Lanoxin 0.25 mg PO daily and concomitant Lasix 40 mg developed bradycardia, nausea, and confusional state after 6 days. Hospitalised and recovered. Reported by physician.",
+    "gold": {
+      "suspect_drugs": [
+        "DIGOXIN"
+      ],
+      "concomitant_drugs": [
+        "FUROSEMIDE"
+      ],
+      "active_reactions": [
+        "BRADYCARDIA",
+        "NAUSEA",
+        "CONFUSIONAL STATE"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 79,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N39",
+    "category": "standard",
+    "text": "64-year-old female on Aldactone 50 mg PO daily and concomitant Cozaar 50 mg developed hyperkalaemia after 10 days. Resolved after stopping Aldactone. Reported by pharmacist.",
+    "gold": {
+      "suspect_drugs": [
+        "SPIRONOLACTONE"
+      ],
+      "concomitant_drugs": [
+        "LOSARTAN"
+      ],
+      "active_reactions": [
+        "HYPERKALAEMIA"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": false,
+      "age": 64,
+      "sex": "F",
+      "reporter": "PH",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N40",
+    "category": "standard",
+    "text": "36-year-old woman started Zoloft 100 mg PO daily and developed hyponatraemia, headache, and dizziness after 9 days. Subsided upon discontinuing Zoloft. Reported by nurse.",
+    "gold": {
+      "suspect_drugs": [
+        "SERTRALINE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HYPONATRAEMIA",
+        "HEADACHE",
+        "DIZZINESS"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": false,
+      "age": 36,
+      "sex": "F",
+      "reporter": "HP",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N41",
+    "category": "standard",
+    "text": "51-year-old male taking Zyloprim 300 mg PO daily developed Stevens-Johnson syndrome and mucocutaneous blistering after 18 days. Admitted to the hospital. Reported by physician.",
+    "gold": {
+      "suspect_drugs": [
+        "ALLOPURINOL"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "STEVENS-JOHNSON SYNDROME"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 51,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N42",
+    "category": "standard",
+    "text": "46-year-old female on Zithromax 500 mg PO daily developed QT prolongation and dizziness within 3 days. Resolved after stopping therapy. Reported by cardiologist.",
+    "gold": {
+      "suspect_drugs": [
+        "AZITHROMYCIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "QT PROLONGATION",
+        "DIZZINESS"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 46,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N43",
+    "category": "standard",
+    "text": "68-year-old man on Trexall 15 mg PO weekly developed pancytopenia and interstitial lung disease after 2 months. Hospitalised. Reported by oncologist.",
+    "gold": {
+      "suspect_drugs": [
+        "METHOTREXATE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "APLASTIC ANAEMIA",
+        "INTERSTITIAL LUNG DISEASE"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 68,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N44",
+    "category": "standard",
+    "text": "56-year-old female started Victoza 1.2 mg SC daily and developed acute pancreatitis and vomiting after 2 weeks. Admitted to the hospital; resolved after discontinuing drug. Reported by physician.",
+    "gold": {
+      "suspect_drugs": [
+        "LIRAGLUTIDE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "PANCREATITIS",
+        "VOMITING"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 56,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N45",
+    "category": "standard",
+    "text": "73-year-old woman on Lantus 20 units SC daily presented with severe hypoglycaemia and confusional state within 4 hours. Resolved in emergency department. Reported by nurse.",
+    "gold": {
+      "suspect_drugs": [
+        "INSULIN GLARGINE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HYPOGLYCAEMIA",
+        "CONFUSIONAL STATE"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": false,
+      "age": 73,
+      "sex": "F",
+      "reporter": "HP",
+      "dechallenge": null,
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N46",
+    "category": "standard",
+    "text": "43-year-old male taking Ultram 100 mg PO and concomitant Prozac 20 mg developed generalized tonic-clonic seizure within 24 hours. Hospitalised and recovered. Reported by physician.",
+    "gold": {
+      "suspect_drugs": [
+        "TRAMADOL"
+      ],
+      "concomitant_drugs": [
+        "FLUOXETINE"
+      ],
+      "active_reactions": [
+        "SEIZURE"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 43,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N47",
+    "category": "standard",
+    "text": "60-year-old female on Neurontin 300 mg PO three times daily reported dizziness and fatigue after 4 days. Symptoms recurred upon restarting Neurontin. Consumer report.",
+    "gold": {
+      "suspect_drugs": [
+        "GABAPENTIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "DIZZINESS",
+        "FATIGUE"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": false,
+      "age": 60,
+      "sex": "F",
+      "reporter": "CN",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N48",
+    "category": "standard",
+    "text": "58-year-old man on Lopressor 50 mg PO twice daily developed bradycardia and hypotension after 5 days. Improved after stopping Lopressor. Reported by pharmacist.",
+    "gold": {
+      "suspect_drugs": [
+        "METOPROLOL"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "BRADYCARDIA",
+        "HYPOTENSION"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": false,
+      "age": 58,
+      "sex": "M",
+      "reporter": "PH",
+      "dechallenge": "positive",
+      "outcome": "recovering"
+    }
+  },
+  {
+    "id": "N49",
+    "category": "standard",
+    "text": "49-year-old female taking Augmentin 875 mg PO twice daily developed cholestatic hepatitis and jaundice after 10 days; mapped to hepatic failure. Resolved after stopping drug. Reported by physician.",
+    "gold": {
+      "suspect_drugs": [
+        "AMOXICILLIN/CLAVULANATE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 49,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N50",
+    "category": "standard",
+    "text": "62-year-old male on Protonix 40 mg PO daily for 3 weeks developed acute tubulointerstitial nephritis and acute kidney injury. Hospitalised. Reported by nephrologist.",
+    "gold": {
+      "suspect_drugs": [
+        "PANTOPRAZOLE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "ACUTE KIDNEY INJURY"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 62,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N51",
+    "category": "standard",
+    "text": "31-year-old female taking Cleocin 300 mg PO three times daily developed severe watery diarrhea and vomiting after 6 days. Resolved after discontinuing Cleocin. Nurse report.",
+    "gold": {
+      "suspect_drugs": [
+        "CLINDAMYCIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "DIARRHOEA",
+        "VOMITING"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": false,
+      "age": 31,
+      "sex": "F",
+      "reporter": "HP",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N52",
+    "category": "standard",
+    "text": "55-year-old man on Flagyl 500 mg PO twice daily developed peripheral neuropathy and numbness and tingling after 3 weeks. Ongoing despite stopping therapy. Reported by physician.",
+    "gold": {
+      "suspect_drugs": [
+        "METRONIDAZOLE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "PERIPHERAL NEUROPATHY"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": false,
+      "age": 55,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": "negative",
+      "outcome": "not_recovered"
+    }
+  },
+  {
+    "id": "N53",
+    "category": "standard",
+    "text": "67-year-old female on Celebrex 200 mg PO daily suffered an acute myocardial infarction after 2 months. Hospitalised in ICU and stabilizing. Reported by cardiologist.",
+    "gold": {
+      "suspect_drugs": [
+        "CELECOXIB"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "MYOCARDIAL INFARCTION"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 67,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": "recovering"
+    }
+  },
+  {
+    "id": "N54",
+    "category": "standard",
+    "text": "76-year-old man on Lovenox 80 mg SC twice daily developed gross hematuria and epistaxis on day 5. Resolved after holding Lovenox. Reported by pharmacist.",
+    "gold": {
+      "suspect_drugs": [
+        "ENOXAPARIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HAEMATURIA",
+        "EPISTAXIS"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": false,
+      "age": 76,
+      "sex": "M",
+      "reporter": "PH",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N55",
+    "category": "standard",
+    "text": "40-year-old female taking Dilantin 300 mg PO daily presented with maculopapular rash and hepatotoxicity after 14 days. Hospitalised; resolved after stopping Dilantin. Reported by doctor.",
+    "gold": {
+      "suspect_drugs": [
+        "PHENYTOIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "RASH",
+        "HEPATIC FAILURE"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 40,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N56",
+    "category": "standard",
+    "text": "52-year-old male on Keytruda IV developed pneumonitis and interstitial lung disease after 4 weeks. Concomitant medication included Prednisone. Hospitalised. Reported by oncologist.",
+    "gold": {
+      "suspect_drugs": [
+        "PEMBROLIZUMAB"
+      ],
+      "concomitant_drugs": [
+        "PREDNISONE"
+      ],
+      "active_reactions": [
+        "INTERSTITIAL LUNG DISEASE"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 52,
+      "sex": "M",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "N57",
+    "category": "standard",
+    "text": "65-year-old woman on Prograf 2 mg PO twice daily developed acute kidney injury and hyperkalaemia after 10 days. Improved after dose reduction. Reported by physician.",
+    "gold": {
+      "suspect_drugs": [
+        "TACROLIMUS"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "ACUTE KIDNEY INJURY",
+        "HYPERKALAEMIA"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 65,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": "recovering"
+    }
+  },
+  {
+    "id": "N58",
+    "category": "standard",
+    "text": "37-year-old female on Rifadin 600 mg PO daily developed drug-induced liver injury and nausea after 2 weeks. Drug was stopped and symptoms resolved. Reported by clinician.",
+    "gold": {
+      "suspect_drugs": [
+        "RIFAMPIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE",
+        "NAUSEA"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 37,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N59",
+    "category": "standard",
+    "text": "71-year-old male on Colcrys 0.6 mg PO twice daily and concomitant Crestor 20 mg developed myalgia and diarrhea after 6 days. Resolved after stopping Colcrys. Consumer report.",
+    "gold": {
+      "suspect_drugs": [
+        "COLCHICINE"
+      ],
+      "concomitant_drugs": [
+        "ROSUVASTATIN"
+      ],
+      "active_reactions": [
+        "MYALGIA",
+        "DIARRHOEA"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": false,
+      "age": 71,
+      "sex": "M",
+      "reporter": "CN",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "N60",
+    "category": "standard",
+    "text": "45-year-old woman taking Voltaren 50 mg PO twice daily developed angioedema and urticaria within 3 hours. Resolved after stopping Voltaren; recurred upon rechallenge. Reported by physician.",
+    "gold": {
+      "suspect_drugs": [
+        "DICLOFENAC"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "ANGIOEDEMA",
+        "RASH"
+      ],
+      "negated_or_historical_reactions": [],
+      "serious": true,
+      "age": 45,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  }
+]
