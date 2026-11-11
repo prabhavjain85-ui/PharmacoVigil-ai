@@ -14,7 +14,7 @@ from scipy import stats
 from bayesian_stats import bcpnn, ebgm_pair, expected_count, fit_gamma_poisson_prior
 from drug_mapping import canonicalize_drug
 
-# MedDRA PTs treated as clinically serious for demo feature engineering
+# MedDRA PTs flagged as clinically serious in the signals table (display only; not a model feature)
 SERIOUS_ADVERSE_EVENTS = frozenset({
     "GASTROINTESTINAL HAEMORRHAGE",
     "ANAPHYLACTIC REACTION",
@@ -127,8 +127,23 @@ def build_case_level_table(
     return merged.drop_duplicates(subset=["primaryid", "drugname", "pt"])
 
 
-def compute_disproportionality(pairs: pd.DataFrame, min_cases: int = 3) -> pd.DataFrame:
-    """Compute PRR, ROR, chi-square, confidence intervals, and signal flags."""
+def compute_disproportionality(
+    pairs: pd.DataFrame,
+    min_cases: int = 3,
+    *,
+    case_context: "CaseContext | None" = None,
+    restrict_to: "set[tuple[str, str]] | None" = None,
+    score: bool = True,
+) -> pd.DataFrame:
+    """
+    Compute PRR, ROR, chi-square, BCPNN, EBGM, signal flags and ML priority.
+
+    ``case_context`` supplies the optional report-level tables used by the ML
+    model's case features.  ``restrict_to`` limits the output to the given
+    (drug, event) pairs while still using every report for the 2x2 margins and
+    the EBGM prior; the training script uses it so that a full FAERS extract
+    does not need a row per pair.  ``score=False`` skips ML prioritisation.
+    """
     if min_cases < 1:
         raise ValueError("min_cases must be at least 1")
     if pairs.empty:
@@ -142,37 +157,47 @@ def compute_disproportionality(pairs: pd.DataFrame, min_cases: int = 3) -> pd.Da
         .nunique()
         .reset_index(name="a")
     )
-    pair_counts = pair_counts[pair_counts["a"] >= min_cases]
-
-    strata: list[dict] = []
-    for _, row in pair_counts.iterrows():
-        drug_name, pt, a = row["drugname"], row["pt"], int(row["a"])
-        drug_total = int(drug_totals[drug_name])
-        event_total = int(event_totals[pt])
-        b = drug_total - a
-        c = event_total - a
-        d = total_reports - drug_total - event_total + a
-        if b <= 0 or c <= 0 or d <= 0:
-            continue
-        strata.append({
-            "drug": drug_name,
-            "adverse_event": pt,
-            "a": a,
-            "b": b,
-            "c": c,
-            "d": d,
-            "drug_total_reports": drug_total,
-            "event_total_reports": event_total,
-        })
-
-    if not strata:
+    pair_counts = pair_counts[pair_counts["a"] >= min_cases].copy()
+    pair_counts["drug_total"] = pair_counts["drugname"].map(drug_totals).astype(int)
+    pair_counts["event_total"] = pair_counts["pt"].map(event_totals).astype(int)
+    pair_counts["b"] = pair_counts["drug_total"] - pair_counts["a"]
+    pair_counts["c"] = pair_counts["event_total"] - pair_counts["a"]
+    pair_counts["d"] = (
+        total_reports - pair_counts["drug_total"] - pair_counts["event_total"] + pair_counts["a"]
+    )
+    pair_counts = pair_counts[(pair_counts["b"] > 0) & (pair_counts["c"] > 0) & (pair_counts["d"] > 0)]
+    if pair_counts.empty:
         return pd.DataFrame(columns=SIGNAL_COLUMNS)
 
-    observed = np.array([s["a"] for s in strata], dtype=float)
-    expected = np.array([
-        expected_count(s["a"], s["b"], s["c"], s["d"], total_reports) for s in strata
-    ], dtype=float)
+    # The shrinkage prior is fitted on every eligible pair, even when the output is restricted.
+    observed = pair_counts["a"].to_numpy(dtype=float)
+    expected = (
+        pair_counts["drug_total"].to_numpy(dtype=float)
+        * pair_counts["event_total"].to_numpy(dtype=float)
+        / total_reports
+    )
     prior = fit_gamma_poisson_prior(observed, expected)
+
+    if restrict_to is not None:
+        wanted = pd.MultiIndex.from_tuples(sorted(restrict_to), names=["drugname", "pt"])
+        index = pd.MultiIndex.from_frame(pair_counts[["drugname", "pt"]])
+        pair_counts = pair_counts[index.isin(wanted)]
+        if pair_counts.empty:
+            return pd.DataFrame(columns=SIGNAL_COLUMNS)
+
+    strata = [
+        {
+            "drug": row.drugname,
+            "adverse_event": row.pt,
+            "a": int(row.a),
+            "b": int(row.b),
+            "c": int(row.c),
+            "d": int(row.d),
+            "drug_total_reports": int(row.drug_total),
+            "event_total_reports": int(row.event_total),
+        }
+        for row in pair_counts.itertuples(index=False)
+    ]
 
     results = []
     for s in strata:
@@ -218,10 +243,12 @@ def compute_disproportionality(pairs: pd.DataFrame, min_cases: int = 3) -> pd.Da
         })
 
     output = pd.DataFrame(results)
-    from ml_prioritization import apply_prioritization, train_prioritization_model
+    if score:
+        from ml_prioritization import apply_prioritization, load_model
+        from pair_features import case_level_features
 
-    model = train_prioritization_model(output, total_reports)
-    output = apply_prioritization(output, model, total_reports)
+        case_features = case_level_features(pairs, case_context) if case_context is not None else None
+        output = apply_prioritization(output, load_model(), total_reports, case_features)
     return output.reindex(columns=SIGNAL_COLUMNS)
 
 

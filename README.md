@@ -21,7 +21,7 @@ Pharmacovigilance teams screen spontaneous reports for unexpected drug–adverse
 | `/` | **Dashboard** | Case counts, drug–event pair volume, PRR / BCPNN / EBGM signal counts, top ML-priority pairs for the loaded dataset. |
 | `/upload` | **Data** | Upload FAERS DEMO, DRUG, and REAC files (CSV/TXT). Parse and analyse in-browser. Reset to the bundled sample dataset at any time. |
 | `/signals` | **Signal detection** | Sortable table of drug–event pairs with PRR, ROR, χ², IC (BCPNN), EBGM / EB05, multi-method flags, ML rank. Filter, adjust minimum case count, **export CSV**. |
-| `/ml` | **ML prioritisation** | Priority scores (0–1), global feature weights, and per-pair explanation of top drivers—retrained on the **currently loaded** data. |
+| `/ml` | **ML prioritisation** | Priority scores (0–1) from a pretrained model, its model card and held-out performance against single-statistic baselines, signed feature weights, and signed per-pair drivers. |
 | `/nlp` | **Case narratives** | Paste free text; extract suspected drugs (with brand→generic mapping), reactions, onset hints, and seriousness keywords. Method labelled as rule-based. |
 | `/compare` | **Drug comparison** | Select two or three drugs; view shared adverse events and PRR side by side. |
 | `/trends` | **Trends** | When `event_dt` is present on DEMO, plot monthly pair counts per drug (volume trend, not a formal scan statistic). |
@@ -69,17 +69,44 @@ A dataset-level gamma prior is fit across all pairs (DuMouchel-style marginal li
 - **EB05 / EB95** — approximate posterior percentiles
 - **EBGM signal:** EB05 > 2 (FDA MGPS-style rule of thumb)
 
-**Limits:** simplified prior vs full multi-item MGPS products; EB05 in the browser uses a fast approximation.
+**Limits:** simplified prior vs full multi-item MGPS products. The browser fits the prior on a coarse grid and uses a Wilson–Hilferty gamma quantile, so its EBGM values differ somewhat from the Python ones.
 
 ### ML prioritisation
 
-Features: PRR, ROR, χ², IC, EBGM, EB05, case count, log(cases), serious-PT flag, drug/event report shares.
+A pretrained **L2 logistic regression** ranks drug–event pairs. It is trained offline by `train_prioritizer.py` and shipped as `web/lib/pipeline/prioritizerModel.json`, which both the browser and the Python pipeline load. Nothing is trained on the data you upload.
 
-**Training:** logistic regression in the browser (gradient descent), with **weak labels**—pairs marked positive if they appear in a small reference set (synthetic planted signals in sample data + a few literature-aligned pairs in `reference_signals.py`). Everything else is treated as negative.
+**Labels.** Ground truth comes from two published reference sets (`reference_data/`): OMOP (Ryan et al. 2013; 165 positive and 234 negative drug–outcome controls) and EU-ADR (Coloma et al. 2013; 43 positive, 50 negative). Pairs outside the reference sets are unlabelled and are never treated as negatives. The reference outcomes are health outcomes of interest such as acute liver injury, so for training the MedDRA preferred terms listed in `reference_data/outcome_pt_map.json` are folded into each outcome. That mapping is a hand-written approximation, not an official SMQ; review it.
 
-**Output:** priority score (probability-like), rank, and top feature contributions (value × normalized weight).
+**Features.**
 
-**Limits:** labels are incomplete and not ground truth; the model is for **triage ranking only**, not validated performance metrics. Retrain happens whenever you load new data—scores are dataset-specific.
+| Group | Features | Source |
+|-------|----------|--------|
+| Disproportionality | IC, IC025, log PRR, log ROR lower 95% bound, log(1 + χ²), log(1 + cases) | The 2×2 table (always available) |
+| Case-level | Fatal / hospitalised or life-threatening / any serious outcome fractions | OUTC `outc_cod` |
+| | Health-professional reporter fraction, female fraction, mean age | DEMO `occp_cod`, `sex`, `age`, `age_cod` |
+| | Median days to onset, fraction with onset within 30 days | THER `start_dt` and DEMO `event_dt` |
+| | Fraction of reports where the event is also a reported indication | INDI `indi_pt` |
+| | Mean drugs per report, primary-suspect fraction | DRUG `drugname`, `role_cod` |
+
+A case-level feature whose table or column is missing is imputed with the training mean and contributes nothing to the score. The drug's and the event's share of all reports are deliberately excluded: the reference sets cover ten outcomes with very different positive-to-negative ratios, and either share lets a model work out which outcome a row belongs to rather than how strong the signal is. EBGM is reported but is not a model feature, because the browser and Python fit the shrinkage prior differently.
+
+**Evaluation.** Five repeats of 5-fold cross-validation grouped by drug, so no drug appears in both the training and the test fold. AUC, average precision and precision@k are reported for the logistic model with all features, with disproportionality features only, for gradient boosting, and for ranking by PRR, ROR lower bound, IC025, EB05, χ² or case count alone. With `--features auto` (default) the case-level features are exported only if they beat the disproportionality-only model by more than one standard deviation. The results are stored in the model file and shown on the `/ml` page.
+
+**Explanations.** Signed and exact for a linear model: feature *j* contributes `weight_j × (x_j − mean_j) / std_j` to the log-odds, so each driver shows whether it raised or lowered the priority relative to an average training pair.
+
+**Retraining on real FAERS.** Download quarterly ASCII files from the FDA, unzip them, then:
+
+```bash
+python train_prioritizer.py --faers-dir faers/24Q1/ASCII faers/24Q2/ASCII faers/24Q3/ASCII faers/24Q4/ASCII
+PYTHONPATH=. python3 scripts/export_parity_fixture.py
+cd web && npm run parity
+```
+
+Quarters are concatenated and reduced to the latest version of each case. Use several quarters: a control needs at least `--min-cases` reports to be scored.
+
+**The bundled weights are placeholders.** They were fitted with `python train_prioritizer.py --synthetic` on a synthetic benchmark in which only the reporting rate depends on the ground truth, so the case-level features carry no information there and the reported metrics say nothing about real reports. The `/ml` page shows a warning until the model is retrained on FAERS.
+
+**Limits:** triage ranking only, not validated for regulatory decisions. The controls date from 2013, cover ten outcomes, and the positives are established, labelled reactions, so the model learns what known reactions look like in spontaneous reports. It is trained on outcome groups and applied to single preferred terms.
 
 ### Narrative NLP
 
@@ -89,19 +116,22 @@ Keyword and regex patterns map brand names to canonical drugs and match reaction
 
 ## Data upload format
 
-Upload **three** files together on the **Data** page:
+Upload the **three** required files together on the **Data** page. The three optional files add case-level ML features:
 
 | File | Required columns | Notes |
 |------|------------------|--------|
 | **DEMO** | `primaryid` | Optional: `event_dt` (YYYYMMDD) for trends |
 | **DRUG** | `primaryid`, `drugname` | Optional: `role_cod` (`PS`, `SS`) |
 | **REAC** | `primaryid`, `pt` | MedDRA preferred term (or text treated as PT) |
+| **OUTC** (optional) | `primaryid`, `outc_cod` | Outcome seriousness features for ML prioritisation |
+| **INDI** (optional) | `primaryid`, `indi_pt` | Indication-overlap feature |
+| **THER** (optional) | `primaryid`, `start_dt` | Time-to-onset features; `dsg_drug_seq` links to DRUG `drug_seq` when present |
 
 **Delimiters:** comma, pipe `|`, dollar `$`, or tab (auto-detected). Headers are case-insensitive.
 
 **Size:** practical limit is browser memory; start with a single quarter or a filtered extract for large FAERS releases.
 
-**Sample data:** `web/public/sample/*.csv` mirrors `sample_data/` (~200 synthetic cases) and loads by default.
+**Sample data:** `web/public/sample/*.csv` mirrors `sample_data/` (~200 synthetic cases, all six tables) and loads by default.
 
 Real FAERS ASCII files: [FDA FAERS quarterly data](https://www.fda.gov/drugs/questions-and-answers-fdas-adverse-event-reporting-system-faers/fda-adverse-event-reporting-system-faers-latest-quarterly-data-files).
 
@@ -154,7 +184,11 @@ Regenerate the browser parity fixture after pipeline changes:
 PYTHONPATH=. python3 scripts/export_parity_fixture.py
 ```
 
-This writes `web/public/data/python-parity.json` (reference metrics for the WARFARIN / GI haemorrhage pair on sample data).
+This writes `web/public/data/python-parity.json`: reference metrics for the WARFARIN / GI haemorrhage pair plus every model feature and priority score for every pair in the sample. Check the browser pipeline against it with:
+
+```bash
+cd web && npm run parity
+```
 
 ### Optional FastAPI backend
 
@@ -195,8 +229,13 @@ pharmacovigil-ai/
 ├── sample_data/                  # Source CSVs for Python pipeline & fixture export
 ├── faers_signal_detection.py     # Python disproportionality + ML apply
 ├── bayesian_stats.py             # BCPNN, EBGM prior (Python)
-├── ml_prioritization.py          # Gradient boosting (Python reference)
-├── reference_signals.py          # Weak-label reference pairs
+├── ml_prioritization.py          # Loads the exported model; scoring and signed explanations
+├── pair_features.py              # Feature engineering (mirrored in web/lib/pipeline/pairFeatures.ts)
+├── train_prioritizer.py          # Offline training, grouped-CV evaluation, JSON export
+├── reference_sets.py             # OMOP / EU-ADR labels and outcome → PT mapping
+├── reference_data/               # Reference set CSVs, outcome_pt_map.json, attribution
+├── faers_loader.py               # Reads real FAERS quarters, keeps latest case version
+├── make_synthetic_benchmark.py   # Synthetic FAERS-shaped data for pipeline checks
 ├── main.py                       # Optional FastAPI
 ├── tests/                        # pytest (Bayesian + pipeline)
 ├── scripts/

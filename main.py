@@ -27,8 +27,8 @@ from faers_signal_detection import (
     normalize_drug_name,
 )
 from make_sample_data import generate_sample_dataframes
-from ml_prioritization import DISPLAY_NAMES, FEATURE_COLUMNS, train_prioritization_model
-from reference_signals import REFERENCE_POSITIVE_PAIRS
+from ml_prioritization import model_card
+from pair_features import CaseContext
 
 app = FastAPI(
     title="Pharmacovigilance Signal Analysis API",
@@ -139,7 +139,11 @@ def _pairs_and_meta():
 @lru_cache(maxsize=8)
 def _all_signals(min_cases: int = 3) -> list[dict[str, Any]]:
     pairs, _ = _pairs_and_meta()
-    return _jsonify_records(compute_disproportionality(pairs, min_cases=min_cases))
+    demo, drug, *_ = _load_tables()
+    context = CaseContext(demo=demo, drug=drug)
+    return _jsonify_records(
+        compute_disproportionality(pairs, min_cases=min_cases, case_context=context)
+    )
 
 
 def _invalidate_caches() -> None:
@@ -281,31 +285,9 @@ def api_drug_map() -> JSONResponse:
 
 
 @app.get("/api/prioritization/meta")
-def api_prioritization_meta(
-    min_cases: int = Query(3, ge=1, le=100),
-) -> JSONResponse:
-    """Document weak-label ML prioritisation and global feature importances."""
-    pairs, meta = _pairs_and_meta()
-    records = _all_signals(min_cases)
-    frame = pd.DataFrame(records)
-    model = train_prioritization_model(frame, int(meta["case_count"]))
-    return JSONResponse({
-        "method": "GradientBoostingClassifier on weak reference labels",
-        "label_source": "Planted boosted_pairs in sample data + small literature set",
-        "reference_positive_count": len(REFERENCE_POSITIVE_PAIRS),
-        "features": [
-            {"name": name, "label": DISPLAY_NAMES.get(name, name)}
-            for name in FEATURE_COLUMNS
-        ],
-        "global_importance": [
-            {"feature": name, "label": DISPLAY_NAMES.get(name, name), "importance": round(float(model.global_importance[name]), 4)}
-            for name in FEATURE_COLUMNS
-        ],
-        "limitations": [
-            "Not validated for regulatory use; ranks pairs for analyst triage only.",
-            "Labels are incomplete — many true signals are unlabelled in FAERS.",
-        ],
-    })
+def api_prioritization_meta() -> JSONResponse:
+    """Provenance, evaluation and weights of the pretrained prioritisation model."""
+    return JSONResponse(model_card())
 
 
 @app.get("/api/drugs")

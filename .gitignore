@@ -5,3 +5,4 @@ signals.csv
 web/node_modules/
 web/.next/
 web/out/
+synthetic_benchmark/
