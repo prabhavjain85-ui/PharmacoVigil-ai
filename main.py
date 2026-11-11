@@ -420,3 +420,232 @@ def api_compare(
         "shared_event_count": len(matrix),
         "shared_event_matrix": matrix,
     })
+
+
+# ---------------------------------------------------------------------------
+# Optional Server-Side LLM Narrative Extractor (/api/nlp/extract)
+# ---------------------------------------------------------------------------
+import json as _json
+import re as _re
+from urllib.request import Request as _Request, urlopen as _urlopen
+from pydantic import BaseModel, Field
+
+
+class NlpExtractRequest(BaseModel):
+    narrative: str = Field(..., min_length=1, max_length=20000)
+    consentConfirmed: bool = Field(False, description="User must explicitly confirm external LLM transmission")
+    loadedReacPts: list[str] = Field(default_factory=list)
+
+
+_PII_PATTERNS: list[tuple[str, _re.Pattern[str], str]] = [
+    ("email", _re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"), "[REDACTED_EMAIL]"),
+    ("phone", _re.compile(r"(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]\d{3}[-.\s]\d{4}\b"), "[REDACTED_PHONE]"),
+    ("ssn", _re.compile(r"\b\d{3}-\d{2}-\d{4}\b"), "[REDACTED_SSN]"),
+    (
+        "mrn",
+        _re.compile(
+            r"\b(?:MRN|Medical\s+Record(?:\s+Number)?|Record\s*#|Chart\s*#|Patient\s+ID)\s*[:#]?\s*[A-Za-z0-9-]{4,}\b",
+            _re.IGNORECASE,
+        ),
+        "[REDACTED_MRN]",
+    ),
+    (
+        "dob",
+        _re.compile(
+            r"\b(?:DOB|Date\s+of\s+Birth|born\s+on)\s*[:#]?\s*(?:\d{1,2}[/-]\d{1,2}[/-]\d{2,4}|\d{4}-\d{2}-\d{2})\b",
+            _re.IGNORECASE,
+        ),
+        "DOB: [REDACTED_DOB]",
+    ),
+    (
+        "titled_name",
+        _re.compile(r"\b(?:Mr|Mrs|Ms|Miss|Dr)\.?\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?\b"),
+        "[REDACTED_NAME]",
+    ),
+    (
+        "patient_name",
+        _re.compile(r"\bPatient\s+(?:Name\s*:\s*)?[A-Z][a-z]+\s+[A-Z][a-z]+\b"),
+        "Patient [REDACTED_NAME]",
+    ),
+]
+
+
+def redact_narrative_pii(text: str) -> str:
+    """Strip obvious personal identifiers before sending narrative text to an external LLM."""
+    cleaned = text
+    for _, pattern, replacement in _PII_PATTERNS:
+        cleaned = pattern.sub(replacement, cleaned)
+    return cleaned
+
+
+def _find_verbatim_span(narrative: str, candidate_text: str | None) -> dict[str, Any] | None:
+    """Verify that candidate_text occurs verbatim in narrative; return {start, end, text} or None."""
+    if not candidate_text or not str(candidate_text).strip():
+        return None
+    sub = str(candidate_text).strip()
+    idx = narrative.find(sub)
+    if idx >= 0:
+        return {"start": idx, "end": idx + len(sub), "text": sub}
+    lower_idx = narrative.lower().find(sub.lower())
+    if lower_idx >= 0:
+        actual = narrative[lower_idx : lower_idx + len(sub)]
+        return {"start": lower_idx, "end": lower_idx + len(actual), "text": actual}
+    return None
+
+
+def validate_llm_extraction_payload(narrative: str, raw: dict[str, Any]) -> dict[str, Any]:
+    """Validate structured LLM JSON output and reject any spans not present verbatim in narrative."""
+    validated_suspect: list[dict[str, Any]] = []
+    for item in raw.get("suspectDrugs") or []:
+        if not isinstance(item, dict):
+            continue
+        verbatim = item.get("verbatim") or (item.get("span") or {}).get("text")
+        span = _find_verbatim_span(narrative, verbatim)
+        if span is None:
+            continue
+        validated_suspect.append({
+            "verbatim": span["text"],
+            "canonical": normalize_drug_name(item.get("canonical") or span["text"]),
+            "role": "PS",
+            "dose": item.get("dose"),
+            "route": item.get("route"),
+            "startDate": item.get("startDate"),
+            "stopDate": item.get("stopDate"),
+            "indication": item.get("indication"),
+            "span": span,
+            "confidence": float(item.get("confidence", 0.9)),
+        })
+
+    validated_concomitant: list[dict[str, Any]] = []
+    for item in raw.get("concomitantDrugs") or []:
+        if not isinstance(item, dict):
+            continue
+        verbatim = item.get("verbatim") or (item.get("span") or {}).get("text")
+        span = _find_verbatim_span(narrative, verbatim)
+        if span is None:
+            continue
+        validated_concomitant.append({
+            "verbatim": span["text"],
+            "canonical": normalize_drug_name(item.get("canonical") or span["text"]),
+            "role": "C",
+            "dose": item.get("dose"),
+            "route": item.get("route"),
+            "startDate": item.get("startDate"),
+            "stopDate": item.get("stopDate"),
+            "indication": item.get("indication"),
+            "span": span,
+            "confidence": float(item.get("confidence", 0.88)),
+        })
+
+    validated_reactions: list[dict[str, Any]] = []
+    for item in raw.get("reactions") or []:
+        if not isinstance(item, dict):
+            continue
+        verbatim = item.get("verbatim") or (item.get("span") or {}).get("text")
+        span = _find_verbatim_span(narrative, verbatim)
+        if span is None:
+            continue
+        validated_reactions.append({
+            "verbatim": span["text"],
+            "mappedTerm": str(item.get("mappedTerm") or span["text"]).strip().upper(),
+            "negated": bool(item.get("negated", False)),
+            "uncertain": bool(item.get("uncertain", False)),
+            "historical": bool(item.get("historical", False)),
+            "onset": item.get("onset"),
+            "span": span,
+            "confidence": float(item.get("confidence", 0.9)),
+        })
+
+    return {
+        "suspectDrugs": validated_suspect,
+        "concomitantDrugs": validated_concomitant,
+        "reactions": validated_reactions,
+        "dechallenge": raw.get("dechallenge"),
+        "rechallenge": raw.get("rechallenge"),
+        "outcome": raw.get("outcome"),
+        "seriousness": raw.get("seriousness") or {},
+        "patientAge": raw.get("patientAge"),
+        "patientSex": raw.get("patientSex"),
+        "reporterType": raw.get("reporterType"),
+        "extractorUsed": "llm-server",
+        "requiresHumanReview": True,
+        "regulatoryDisclaimer": (
+            "Human review required — automated extraction is a research/triage aid "
+            "and is NOT validated for regulatory ICSR submission."
+        ),
+    }
+
+
+@app.post("/api/nlp/extract")
+def api_nlp_extract(req: NlpExtractRequest) -> JSONResponse:
+    """Optional server-side LLM narrative extractor.
+
+    Requires explicit user consent (`consentConfirmed=True`) and a server-side API key
+    (`NLP_LLM_API_KEY`, `GEMINI_API_KEY`, or `OPENAI_API_KEY`). Never logs narrative text.
+    """
+    if not req.consentConfirmed:
+        raise HTTPException(
+            status_code=400,
+            detail="Explicit user consent (consentConfirmed=True) is required before calling the external LLM extractor.",
+        )
+
+    api_key = (
+        os.environ.get("NLP_LLM_API_KEY")
+        or os.environ.get("GEMINI_API_KEY")
+        or os.environ.get("OPENAI_API_KEY")
+        or ""
+    ).strip()
+    if not api_key:
+        raise HTTPException(
+            status_code=503,
+            detail="Server LLM extractor is not configured (set NLP_LLM_API_KEY or GEMINI_API_KEY on the server).",
+        )
+
+    sanitized_narrative = redact_narrative_pii(req.narrative)
+    endpoint = os.environ.get(
+        "NLP_LLM_ENDPOINT",
+        "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+    ).strip()
+    model_name = os.environ.get("NLP_LLM_MODEL", "gemini-2.5-flash").strip()
+
+    system_prompt = (
+        "You are a pharmacovigilance clinical narrative entity extractor. "
+        "Return ONLY valid JSON with keys: suspectDrugs, concomitantDrugs, reactions, "
+        "dechallenge, rechallenge, outcome, seriousness, patientAge, patientSex, reporterType. "
+        "Every extracted item MUST include a `verbatim` string copied character-for-character "
+        "from the narrative and a `confidence` float in [0, 1]. Flag negated, historical, or "
+        "uncertain reactions with boolean flags (`negated`, `historical`, `uncertain`)."
+    )
+
+    payload = {
+        "model": model_name,
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": sanitized_narrative},
+        ],
+        "response_format": {"type": "json_object"},
+        "temperature": 0.0,
+    }
+
+    try:
+        http_req = _Request(
+            endpoint,
+            data=_json.dumps(payload).encode("utf-8"),
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {api_key}",
+            },
+            method="POST",
+        )
+        with _urlopen(http_req, timeout=20.0) as resp:
+            resp_data = _json.loads(resp.read().decode("utf-8"))
+        content = resp_data["choices"][0]["message"]["content"]
+        parsed = _json.loads(content)
+    except Exception:
+        raise HTTPException(
+            status_code=502,
+            detail="External LLM extraction request failed.",
+        )
+
+    validated = validate_llm_extraction_payload(sanitized_narrative, parsed)
+    return JSONResponse({"extraction": validated})

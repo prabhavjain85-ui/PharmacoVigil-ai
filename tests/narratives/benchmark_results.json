@@ -1,0 +1,154 @@
+{
+  "dataset_summary": {
+    "total_narratives": 60,
+    "negated_or_historical_or_uncertain_narratives": 20,
+    "disclaimer": "Synthetic benchmark narratives constructed for technical pipeline evaluation only. Does not establish clinical validity or regulatory readiness.",
+    "positive_only_narratives": 40
+  },
+  "extractors": {
+    "legacy_regex": {
+      "name": "Old Regex (10 drugs, 7 reactions, no negation)",
+      "metrics": {
+        "suspect_drugs": {
+          "tp": 16,
+          "fp": 1,
+          "fn": 44,
+          "precision": 0.9412,
+          "recall": 0.2667,
+          "f1": 0.4156
+        },
+        "concomitant_drugs": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 11,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "active_reactions": {
+          "tp": 24,
+          "fp": 13,
+          "fn": 69,
+          "precision": 0.6486,
+          "recall": 0.2581,
+          "f1": 0.3692
+        },
+        "negated_or_historical_reactions": {
+          "tp": 0,
+          "fp": 13,
+          "fn": 36,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "seriousness": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 30,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "demographics": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 120,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "clinical_course_and_reporter": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 121,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "micro_overall": {
+          "tp": 40,
+          "fp": 27,
+          "fn": 431,
+          "precision": 0.597,
+          "recall": 0.0849,
+          "f1": 0.1487
+        }
+      }
+    },
+    "local_extractor": {
+      "name": "Local Biomedical NER + NegEx/ConText Extractor",
+      "model_id": "onnx-community/biomedical-ner-all-ONNX (d4data/biomedical-ner-all, Apache-2.0, ~63.9 MB quantized ONNX)",
+      "metrics": {
+        "suspect_drugs": {
+          "tp": 60,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.9836,
+          "recall": 1,
+          "f1": 0.9917
+        },
+        "concomitant_drugs": {
+          "tp": 10,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1,
+          "recall": 0.9091,
+          "f1": 0.9524
+        },
+        "active_reactions": {
+          "tp": 92,
+          "fp": 2,
+          "fn": 1,
+          "precision": 0.9787,
+          "recall": 0.9892,
+          "f1": 0.984
+        },
+        "negated_or_historical_reactions": {
+          "tp": 36,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.973,
+          "recall": 1,
+          "f1": 0.9863
+        },
+        "seriousness": {
+          "tp": 29,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1,
+          "recall": 0.9667,
+          "f1": 0.9831
+        },
+        "demographics": {
+          "tp": 120,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "clinical_course_and_reporter": {
+          "tp": 107,
+          "fp": 0,
+          "fn": 14,
+          "precision": 1,
+          "recall": 0.8843,
+          "f1": 0.9386
+        },
+        "micro_overall": {
+          "tp": 454,
+          "fp": 4,
+          "fn": 17,
+          "precision": 0.9913,
+          "recall": 0.9639,
+          "f1": 0.9774
+        }
+      }
+    },
+    "llm_extractor": {
+      "name": "Optional Server LLM Extractor (Structured JSON + Verbatim Span Validation)",
+      "status": "off_by_default_requires_server_key_and_consent",
+      "metrics": null
+    }
+  }
+}
