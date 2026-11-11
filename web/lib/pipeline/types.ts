@@ -1,5 +1,12 @@
 export type FaersRow = Record<string, string>;
 
+export type PriorityExplain = {
+  feature: string;
+  label: string;
+  value: number;
+  contribution: number;
+};
+
 export type SignalRow = {
   drug: string;
   adverse_event: string;
@@ -27,11 +34,19 @@ export type SignalRow = {
   priority_explain: PriorityExplain[] | null;
 };
 
-export type PriorityExplain = {
-  feature: string;
-  label: string;
-  value: number;
-  contribution: number;
+export type OptionalTables = {
+  outc?: FaersRow[];
+  indi?: FaersRow[];
+  ther?: FaersRow[];
+};
+
+export type FileNames = {
+  demo?: string;
+  drug?: string;
+  reac?: string;
+  outc?: string;
+  indi?: string;
+  ther?: string;
 };
 
 export type DatasetMeta = {
@@ -40,9 +55,12 @@ export type DatasetMeta = {
   demo_rows: number;
   drug_rows: number;
   reac_rows: number;
+  outc_rows?: number;
+  indi_rows?: number;
+  ther_rows?: number;
   pair_count: number;
   drug_count: number;
-  fileNames?: { demo?: string; drug?: string; reac?: string };
+  fileNames?: FileNames;
 };
 
 export type PairRow = {
@@ -50,6 +68,67 @@ export type PairRow = {
   drugname: string;
   pt: string;
   event_dt?: string;
+  role_cod?: string;
+  drug_seq?: string;
+};
+
+export type ModelFeature = {
+  name: string;
+  label: string;
+  group: "disproportionality" | "case" | string;
+  weight: number;
+  mean: number;
+  std: number;
+  used: boolean;
+};
+
+export type CandidateMetrics = {
+  auc: number;
+  auc_sd: number;
+  ap: number;
+  ap_sd: number;
+  precision_at_k: Record<string, number>;
+};
+
+export type BaselineMetrics = {
+  auc: number;
+  ap: number;
+  precision_at_k: Record<string, number>;
+};
+
+export type ModelEvaluation = {
+  protocol: string;
+  n_labelled: number;
+  n_positive: number;
+  n_negative: number;
+  prevalence: number;
+  candidates: Record<string, CandidateMetrics>;
+  baselines: Record<string, BaselineMetrics>;
+  selected: string;
+};
+
+export type ModelTraining = {
+  data: "synthetic" | "faers" | string;
+  description: string;
+  quarters: string[];
+  reference_sets: string[];
+  label_unit: string;
+  min_cases: number;
+  n_cases: number;
+  superseded_versions_dropped: number;
+  controls_total: number;
+  controls_scored: number;
+};
+
+export type PrioritizerModel = {
+  schema_version: number;
+  model_type: string;
+  created: string;
+  feature_set: string;
+  training: ModelTraining;
+  evaluation: ModelEvaluation;
+  intercept: number;
+  features: ModelFeature[];
 };
 
 export type AnalysisResult = {
@@ -57,5 +136,6 @@ export type AnalysisResult = {
   pairs: PairRow[];
   signals: SignalRow[];
   prior: { alpha: number; beta: number };
-  globalImportance: { feature: string; label: string; importance: number }[];
+  model: PrioritizerModel;
+  featureAvailability: Record<string, number>;
 };
