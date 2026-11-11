@@ -1,0 +1,400 @@
+exposure_name,outcome_name,ground_truth,indication_name
+Adenosine,OMOP Acute Liver Failure 1,0,Paroxysmal Supraventricular Tachycardia
+almotriptan,OMOP Acute Liver Failure 1,0,Migraine
+Amylases,OMOP Acute Liver Failure 1,0,Pancreatic Insufficiency
+Benzocaine,OMOP Acute Liver Failure 1,0,Sore Throat
+benzonatate,OMOP Acute Liver Failure 1,0,Cough
+Cosyntropin,OMOP Acute Liver Failure 1,0,Acute Adrenocortical Insufficiency
+Dicyclomine,OMOP Acute Liver Failure 1,0,Irritable Bowel Syndrome
+Droperidol,OMOP Acute Liver Failure 1,0,Pain
+Endopeptidases,OMOP Acute Liver Failure 1,0,Pancreatic Insufficiency
+Ergotamine,OMOP Acute Liver Failure 1,0,Vascular Headache
+ferrous gluconate,OMOP Acute Liver Failure 1,0,Iron Deficiency Anemia
+Flavoxate,OMOP Acute Liver Failure 1,0,Dysuria
+fluticasone,OMOP Acute Liver Failure 1,0,Allergic Rhinitis
+gatifloxacin,OMOP Acute Liver Failure 1,0,E. Coli Pyelonephritis
+Griseofulvin,OMOP Acute Liver Failure 1,0,Tinea Barbae
+Hyoscyamine,OMOP Acute Liver Failure 1,0,Dysuria
+Ketotifen,OMOP Acute Liver Failure 1,0,Allergic Conjunctivitis
+Lactulose,OMOP Acute Liver Failure 1,0,Constipation
+Lipase,OMOP Acute Liver Failure 1,0,Pancreatic Insufficiency
+lithium citrate,OMOP Acute Liver Failure 1,0,Manic Bipolar Disorder
+Methenamine,OMOP Acute Liver Failure 1,0,Urinary Tract Infections
+Miconazole,OMOP Acute Liver Failure 1,0,Vulvovaginal Candidiasis
+Neostigmine,OMOP Acute Liver Failure 1,0,Urinary Retention
+oxybutynin,OMOP Acute Liver Failure 1,0,Urinary Urge Incontinence
+Paromomycin,OMOP Acute Liver Failure 1,0,Acute Intestinal Amebiasis
+Penicillin V,OMOP Acute Liver Failure 1,0,Pharyngitis
+Phentermine,OMOP Acute Liver Failure 1,0,Obesity
+Phentolamine,OMOP Acute Liver Failure 1,0,Cerebral Ischemia
+Primidone,OMOP Acute Liver Failure 1,0,Tonic-Clonic Epilepsy
+Propantheline,OMOP Acute Liver Failure 1,0,Peptic Ulcer
+salmeterol,OMOP Acute Liver Failure 1,0,Bronchial Asthma
+Scopolamine,OMOP Acute Liver Failure 1,0,Motion Sickness
+sitagliptin,OMOP Acute Liver Failure 1,0,Type 2 Diabetes Mellitus
+"Sodium Phosphate, Monobasic",OMOP Acute Liver Failure 1,0,Constipation
+Sucralfate,OMOP Acute Liver Failure 1,0,Duodenal Ulcer
+Tetrahydrocannabinol,OMOP Acute Liver Failure 1,0,Anorexia from HIV
+Tinidazole,OMOP Acute Liver Failure 1,0,Trichomoniasis
+Acarbose,OMOP Acute Renal Failure 1,0,Type 2 Diabetes Mellitus
+Adenosine,OMOP Acute Renal Failure 1,0,Paroxysmal Supraventricular Tachycardia
+almotriptan,OMOP Acute Renal Failure 1,0,Migraine
+Amylases,OMOP Acute Renal Failure 1,0,Pancreatic Insufficiency
+Benzocaine,OMOP Acute Renal Failure 1,0,Sore Throat
+benzonatate,OMOP Acute Renal Failure 1,0,Cough
+bromfenac,OMOP Acute Renal Failure 1,0,Postoperative Ocular Pain
+Chlorambucil,OMOP Acute Renal Failure 1,0,Chronic Lymphoid Leukemia
+Chlorazepate,OMOP Acute Renal Failure 1,0,Anxiety
+Clozapine,OMOP Acute Renal Failure 1,0,Treatment-Resistant Schizophrenia
+Cosyntropin,OMOP Acute Renal Failure 1,0,Acute Adrenocortical Insufficiency
+Dacarbazine,OMOP Acute Renal Failure 1,0,Hodgkin's Lymphoma
+darbepoetin alfa,OMOP Acute Renal Failure 1,0,Anemia due to Renal Failure
+darifenacin,OMOP Acute Renal Failure 1,0,Urinary Urge Incontinence
+darunavir,OMOP Acute Renal Failure 1,0,HIV Infection
+Dicyclomine,OMOP Acute Renal Failure 1,0,Irritable Bowel Syndrome
+Disulfiram,OMOP Acute Renal Failure 1,0,Alcoholism
+eletriptan,OMOP Acute Renal Failure 1,0,Migraine
+Endopeptidases,OMOP Acute Renal Failure 1,0,Pancreatic Insufficiency
+entecavir,OMOP Acute Renal Failure 1,0,Chronic Type B Viral Hepatitis
+Ergotamine,OMOP Acute Renal Failure 1,0,Vascular Headache
+ferrous gluconate,OMOP Acute Renal Failure 1,0,Iron Deficiency Anemia
+Flavoxate,OMOP Acute Renal Failure 1,0,Dysuria
+Flutamide,OMOP Acute Renal Failure 1,0,Advanced Prostatic Carcinoma
+frovatriptan,OMOP Acute Renal Failure 1,0,Migraine
+gatifloxacin,OMOP Acute Renal Failure 1,0,E. Coli Pyelonephritis
+Griseofulvin,OMOP Acute Renal Failure 1,0,Tinea Barbae
+Hyoscyamine,OMOP Acute Renal Failure 1,0,Dysuria
+Imipramine,OMOP Acute Renal Failure 1,0,Nocturnal Enuresis
+infliximab,OMOP Acute Renal Failure 1,0,Rheumatoid Arthritis
+Ketoconazole,OMOP Acute Renal Failure 1,0,Tinea Corporis
+Ketotifen,OMOP Acute Renal Failure 1,0,Allergic Conjunctivitis
+Lactulose,OMOP Acute Renal Failure 1,0,Constipation
+Lipase,OMOP Acute Renal Failure 1,0,Pancreatic Insufficiency
+Loratadine,OMOP Acute Renal Failure 1,0,Allergic Rhinitis
+Mebendazole,OMOP Acute Renal Failure 1,0,Enterobiasis
+metaxalone,OMOP Acute Renal Failure 1,0,Muscle Spasm
+Methenamine,OMOP Acute Renal Failure 1,0,Urinary Tract Infections
+Methocarbamol,OMOP Acute Renal Failure 1,0,Muscle Spasm with Pain
+Miconazole,OMOP Acute Renal Failure 1,0,Vulvovaginal Candidiasis
+Nelfinavir,OMOP Acute Renal Failure 1,0,HIV Infection
+Neostigmine,OMOP Acute Renal Failure 1,0,Urinary Retention
+Nortriptyline,OMOP Acute Renal Failure 1,0,Depression
+orlistat,OMOP Acute Renal Failure 1,0,Obesity
+Paromomycin,OMOP Acute Renal Failure 1,0,Acute Intestinal Amebiasis
+Penicillin V,OMOP Acute Renal Failure 1,0,Pharyngitis
+Phentermine,OMOP Acute Renal Failure 1,0,Obesity
+Phentolamine,OMOP Acute Renal Failure 1,0,Cerebral Ischemia
+Prilocaine,OMOP Acute Renal Failure 1,0,Regional Anesthesia for Postoperative Pain
+Primidone,OMOP Acute Renal Failure 1,0,Tonic-Clonic Epilepsy
+Prochlorperazine,OMOP Acute Renal Failure 1,0,Nausea and Vomiting
+ramelteon,OMOP Acute Renal Failure 1,0,Sleep-Onset Insomnia
+rizatriptan,OMOP Acute Renal Failure 1,0,Migraine
+Scopolamine,OMOP Acute Renal Failure 1,0,Motion Sickness
+Simethicone,OMOP Acute Renal Failure 1,0,Hiatal Hernia with Reflux Esophagitis
+"Sodium Phosphate, Monobasic",OMOP Acute Renal Failure 1,0,Constipation
+Temazepam,OMOP Acute Renal Failure 1,0,Insomnia
+Tetrahydrocannabinol,OMOP Acute Renal Failure 1,0,Anorexia from HIV
+Thiabendazole,OMOP Acute Renal Failure 1,0,Cutaneous Larva Migrans
+Thiothixene,OMOP Acute Renal Failure 1,0,Schizophrenia
+Tinidazole,OMOP Acute Renal Failure 1,0,Trichomoniasis
+Urea,OMOP Acute Renal Failure 1,0,Skin Rash
+Vitamin A,OMOP Acute Renal Failure 1,0,Vitamin Deficiency
+zafirlukast,OMOP Acute Renal Failure 1,0,Bronchial Asthma
+Acarbose,OMOP Acute myocardial Infarction  1,0,Type 2 Diabetes Mellitus
+Acetazolamide,OMOP Acute myocardial Infarction  1,0,Narrow Angle Glaucoma
+Amylases,OMOP Acute myocardial Infarction  1,0,Pancreatic Insufficiency
+benzonatate,OMOP Acute myocardial Infarction  1,0,Cough
+bromfenac,OMOP Acute myocardial Infarction  1,0,Postoperative Ocular Pain
+Chlorambucil,OMOP Acute myocardial Infarction  1,0,Chronic Lymphoid Leukemia
+Chlorazepate,OMOP Acute myocardial Infarction  1,0,Anxiety
+Chlorothiazide,OMOP Acute myocardial Infarction  1,0,Pulmonary Edema due to Chronic Heart Failure
+Clindamycin,OMOP Acute myocardial Infarction  1,0,Acne Vulgaris
+Cosyntropin,OMOP Acute myocardial Infarction  1,0,Acute Adrenocortical Insufficiency
+darifenacin,OMOP Acute myocardial Infarction  1,0,Urinary Urge Incontinence
+Dicyclomine,OMOP Acute myocardial Infarction  1,0,Irritable Bowel Syndrome
+Didanosine,OMOP Acute myocardial Infarction  1,0,HIV Infection
+Droperidol,OMOP Acute myocardial Infarction  1,0,Pain
+Endopeptidases,OMOP Acute myocardial Infarction  1,0,Pancreatic Insufficiency
+entecavir,OMOP Acute myocardial Infarction  1,0,Chronic Type B Viral Hepatitis
+ferrous gluconate,OMOP Acute myocardial Infarction  1,0,Iron Deficiency Anemia
+Flavoxate,OMOP Acute myocardial Infarction  1,0,Dysuria
+Flutamide,OMOP Acute myocardial Infarction  1,0,Advanced Prostatic Carcinoma
+fluticasone,OMOP Acute myocardial Infarction  1,0,Allergic Rhinitis
+gatifloxacin,OMOP Acute myocardial Infarction  1,0,E. Coli Pyelonephritis
+Hyoscyamine,OMOP Acute myocardial Infarction  1,0,Dysuria
+Ketoconazole,OMOP Acute myocardial Infarction  1,0,Tinea Corporis
+Ketotifen,OMOP Acute myocardial Infarction  1,0,Allergic Conjunctivitis
+Lactulose,OMOP Acute myocardial Infarction  1,0,Constipation
+Lipase,OMOP Acute myocardial Infarction  1,0,Pancreatic Insufficiency
+lithium citrate,OMOP Acute myocardial Infarction  1,0,Manic Bipolar Disorder
+Loratadine,OMOP Acute myocardial Infarction  1,0,Allergic Rhinitis
+Mebendazole,OMOP Acute myocardial Infarction  1,0,Enterobiasis
+metaxalone,OMOP Acute myocardial Infarction  1,0,Muscle Spasm
+Methenamine,OMOP Acute myocardial Infarction  1,0,Urinary Tract Infections
+Methimazole,OMOP Acute myocardial Infarction  1,0,Hyperthyroidism
+Methocarbamol,OMOP Acute myocardial Infarction  1,0,Muscle Spasm with Pain
+Miconazole,OMOP Acute myocardial Infarction  1,0,Vulvovaginal Candidiasis
+Nelfinavir,OMOP Acute myocardial Infarction  1,0,HIV Infection
+Nevirapine,OMOP Acute myocardial Infarction  1,0,HIV Infection
+oxybutynin,OMOP Acute myocardial Infarction  1,0,Urinary Urge Incontinence
+Paromomycin,OMOP Acute myocardial Infarction  1,0,Acute Intestinal Amebiasis
+Pemoline,OMOP Acute myocardial Infarction  1,0,Attention-Deficit Hyperactivity Disorder
+Penicillamine,OMOP Acute myocardial Infarction  1,0,Rheumatoid Arthritis
+Penicillin V,OMOP Acute myocardial Infarction  1,0,Pharyngitis
+posaconazole,OMOP Acute myocardial Infarction  1,0,Prevention of Invasive Pulmonary Aspergillosis
+Prilocaine,OMOP Acute myocardial Infarction  1,0,Regional Anesthesia for Postoperative Pain
+Primidone,OMOP Acute myocardial Infarction  1,0,Tonic-Clonic Epilepsy
+Prochlorperazine,OMOP Acute myocardial Infarction  1,0,Nausea and Vomiting
+Propantheline,OMOP Acute myocardial Infarction  1,0,Peptic Ulcer
+ramelteon,OMOP Acute myocardial Infarction  1,0,Sleep-Onset Insomnia
+salmeterol,OMOP Acute myocardial Infarction  1,0,Bronchial Asthma
+Scopolamine,OMOP Acute myocardial Infarction  1,0,Motion Sickness
+Simethicone,OMOP Acute myocardial Infarction  1,0,Hiatal Hernia with Reflux Esophagitis
+sitagliptin,OMOP Acute myocardial Infarction  1,0,Type 2 Diabetes Mellitus
+"Sodium Phosphate, Monobasic",OMOP Acute myocardial Infarction  1,0,Constipation
+Stavudine,OMOP Acute myocardial Infarction  1,0,HIV Infection
+Sucralfate,OMOP Acute myocardial Infarction  1,0,Duodenal Ulcer
+Sulfasalazine,OMOP Acute myocardial Infarction  1,0,Rheumatoid Arthritis
+Sulfisoxazole,OMOP Acute myocardial Infarction  1,0,Acute Otitis Media Infection
+Temazepam,OMOP Acute myocardial Infarction  1,0,Insomnia
+terbinafine,OMOP Acute myocardial Infarction  1,0,Onychomycosis due to Dermatophyte
+Tetrahydrocannabinol,OMOP Acute myocardial Infarction  1,0,Anorexia from HIV
+Thiabendazole,OMOP Acute myocardial Infarction  1,0,Cutaneous Larva Migrans
+Thiothixene,OMOP Acute myocardial Infarction  1,0,Schizophrenia
+Tinidazole,OMOP Acute myocardial Infarction  1,0,Trichomoniasis
+tipranavir,OMOP Acute myocardial Infarction  1,0,HIV Infection
+Urea,OMOP Acute myocardial Infarction  1,0,Skin Rash
+Vitamin A,OMOP Acute myocardial Infarction  1,0,Vitamin Deficiency
+zafirlukast,OMOP Acute myocardial Infarction  1,0,Bronchial Asthma
+abacavir,HOI Upper GI #3,0,HIV Infection
+Acarbose,HOI Upper GI #3,0,Type 2 Diabetes Mellitus
+Adenosine,HOI Upper GI #3,0,Paroxysmal Supraventricular Tachycardia
+Amylases,HOI Upper GI #3,0,Pancreatic Insufficiency
+Benzocaine,HOI Upper GI #3,0,Sore Throat
+benzonatate,HOI Upper GI #3,0,Cough
+bromfenac,HOI Upper GI #3,0,Postoperative Ocular Pain
+Chlorambucil,HOI Upper GI #3,0,Chronic Lymphoid Leukemia
+Chlorazepate,HOI Upper GI #3,0,Anxiety
+Cosyntropin,HOI Upper GI #3,0,Acute Adrenocortical Insufficiency
+Dacarbazine,HOI Upper GI #3,0,Hodgkin's Lymphoma
+darifenacin,HOI Upper GI #3,0,Urinary Urge Incontinence
+Dicyclomine,HOI Upper GI #3,0,Irritable Bowel Syndrome
+Disulfiram,HOI Upper GI #3,0,Alcoholism
+Droperidol,HOI Upper GI #3,0,Pain
+Endopeptidases,HOI Upper GI #3,0,Pancreatic Insufficiency
+entecavir,HOI Upper GI #3,0,Chronic Type B Viral Hepatitis
+Epoetin Alfa,HOI Upper GI #3,0,Anemia due to Renal Failure
+Ergotamine,HOI Upper GI #3,0,Vascular Headache
+ferrous gluconate,HOI Upper GI #3,0,Iron Deficiency Anemia
+fluticasone,HOI Upper GI #3,0,Allergic Rhinitis
+Griseofulvin,HOI Upper GI #3,0,Tinea Barbae
+Hyoscyamine,HOI Upper GI #3,0,Dysuria
+Itraconazole,HOI Upper GI #3,0,Onychomycosis due to Dermatophyte
+Ketoconazole,HOI Upper GI #3,0,Tinea Corporis
+Ketotifen,HOI Upper GI #3,0,Allergic Conjunctivitis
+Lactulose,HOI Upper GI #3,0,Constipation
+Lamivudine,HOI Upper GI #3,0,HIV Infection
+Lipase,HOI Upper GI #3,0,Pancreatic Insufficiency
+lithium citrate,HOI Upper GI #3,0,Manic Bipolar Disorder
+Loratadine,HOI Upper GI #3,0,Allergic Rhinitis
+Mebendazole,HOI Upper GI #3,0,Enterobiasis
+metaxalone,HOI Upper GI #3,0,Muscle Spasm
+Methocarbamol,HOI Upper GI #3,0,Muscle Spasm with Pain
+Miconazole,HOI Upper GI #3,0,Vulvovaginal Candidiasis
+moexipril,HOI Upper GI #3,0,Hypertension
+Neostigmine,HOI Upper GI #3,0,Urinary Retention
+Nevirapine,HOI Upper GI #3,0,HIV Infection
+Nitrofurantoin,HOI Upper GI #3,0,Enterobacter Cystitis
+orlistat,HOI Upper GI #3,0,Obesity
+oxybutynin,HOI Upper GI #3,0,Urinary Urge Incontinence
+Paromomycin,HOI Upper GI #3,0,Acute Intestinal Amebiasis
+Pemoline,HOI Upper GI #3,0,Attention-Deficit Hyperactivity Disorder
+Penicillin V,HOI Upper GI #3,0,Pharyngitis
+Phentermine,HOI Upper GI #3,0,Obesity
+Phentolamine,HOI Upper GI #3,0,Cerebral Ischemia
+pioglitazone,HOI Upper GI #3,0,Type 2 Diabetes Mellitus
+Prilocaine,HOI Upper GI #3,0,Regional Anesthesia for Postoperative Pain
+Prochlorperazine,HOI Upper GI #3,0,Nausea and Vomiting
+Propantheline,HOI Upper GI #3,0,Peptic Ulcer
+ramelteon,HOI Upper GI #3,0,Sleep-Onset Insomnia
+rosiglitazone,HOI Upper GI #3,0,Type 2 Diabetes Mellitus
+salmeterol,HOI Upper GI #3,0,Bronchial Asthma
+Scopolamine,HOI Upper GI #3,0,Motion Sickness
+Simethicone,HOI Upper GI #3,0,Hiatal Hernia with Reflux Esophagitis
+sitagliptin,HOI Upper GI #3,0,Type 2 Diabetes Mellitus
+Stavudine,HOI Upper GI #3,0,HIV Infection
+Sucralfate,HOI Upper GI #3,0,Duodenal Ulcer
+Temazepam,HOI Upper GI #3,0,Insomnia
+terbinafine,HOI Upper GI #3,0,Onychomycosis due to Dermatophyte
+Tetrahydrocannabinol,HOI Upper GI #3,0,Anorexia from HIV
+Thiabendazole,HOI Upper GI #3,0,Cutaneous Larva Migrans
+Thiothixene,HOI Upper GI #3,0,Schizophrenia
+Tinidazole,HOI Upper GI #3,0,Trichomoniasis
+Urea,HOI Upper GI #3,0,Skin Rash
+Vitamin A,HOI Upper GI #3,0,Vitamin Deficiency
+Zidovudine,HOI Upper GI #3,0,HIV Infection
+abacavir,OMOP Acute Liver Failure 1,1,HIV Infection
+Acetazolamide,OMOP Acute Liver Failure 1,1,Narrow Angle Glaucoma
+alatrofloxacin,OMOP Acute Liver Failure 1,1,Acute Bacterial Sinusitis
+Allopurinol,OMOP Acute Liver Failure 1,1,Hyperuricemia
+bortezomib,OMOP Acute Liver Failure 1,1,Multiple Myeloma
+bosentan,OMOP Acute Liver Failure 1,1,Pulmonary Hypertension
+Busulfan,OMOP Acute Liver Failure 1,1,Philadelphia Chromosome Positive Chronic Myelocytic Leukemia
+Captopril,OMOP Acute Liver Failure 1,1,Hypertension
+Carbamazepine,OMOP Acute Liver Failure 1,1,Mixed Epilepsy
+Caspofungin,OMOP Acute Liver Failure 1,1,Candidal Septicemia
+celecoxib,OMOP Acute Liver Failure 1,1,Pain
+Ciprofloxacin,OMOP Acute Liver Failure 1,1,Bladder Infection
+Clozapine,OMOP Acute Liver Failure 1,1,Treatment-Resistant Schizophrenia
+Cyclosporine,OMOP Acute Liver Failure 1,1,Severe Recalcitrant Psoriasis
+Dacarbazine,OMOP Acute Liver Failure 1,1,Hodgkin's Lymphoma
+darunavir,OMOP Acute Liver Failure 1,1,HIV Infection
+Didanosine,OMOP Acute Liver Failure 1,1,HIV Infection
+Diltiazem,OMOP Acute Liver Failure 1,1,Hypertension
+Disulfiram,OMOP Acute Liver Failure 1,1,Alcoholism
+efavirenz,OMOP Acute Liver Failure 1,1,HIV Infection
+Enalaprilat,OMOP Acute Liver Failure 1,1,Hypertension
+Erythromycin,OMOP Acute Liver Failure 1,1,Acne Vulgaris
+Etodolac,OMOP Acute Liver Failure 1,1,Pain
+felbamate,OMOP Acute Liver Failure 1,1,Simple-Partial Epilepsy
+Fluconazole,OMOP Acute Liver Failure 1,1,Vulvovaginal Candidiasis
+Flutamide,OMOP Acute Liver Failure 1,1,Advanced Prostatic Carcinoma
+gemcitabine,OMOP Acute Liver Failure 1,1,Pancreatic Carcinoma
+gemifloxacin,OMOP Acute Liver Failure 1,1,Bacterial Pneumonia
+Ibuprofen,OMOP Acute Liver Failure 1,1,Pain
+imatinib,OMOP Acute Liver Failure 1,1,Chronic Myelocytic Leukemia
+Indomethacin,OMOP Acute Liver Failure 1,1,Gout
+infliximab,OMOP Acute Liver Failure 1,1,Rheumatoid Arthritis
+Interferon beta-1a,OMOP Acute Liver Failure 1,1,Multiple Sclerosis
+isoniazid,OMOP Acute Liver Failure 1,1,Pulmonary Tuberculosis
+Itraconazole,OMOP Acute Liver Failure 1,1,Onychomycosis due to Dermatophyte
+Ketorolac,OMOP Acute Liver Failure 1,1,Severe Pain
+Lamivudine,OMOP Acute Liver Failure 1,1,HIV Infection
+lamotrigine,OMOP Acute Liver Failure 1,1,Bipolar Disorder in Remission
+Levofloxacin,OMOP Acute Liver Failure 1,1,Pyelonephritis
+Lisinopril,OMOP Acute Liver Failure 1,1,Hypertension
+Methimazole,OMOP Acute Liver Failure 1,1,Hyperthyroidism
+Methotrexate,OMOP Acute Liver Failure 1,1,Rheumatoid Arthritis
+Methyldopa,OMOP Acute Liver Failure 1,1,Hypertension
+moexipril,OMOP Acute Liver Failure 1,1,Hypertension
+Naproxen,OMOP Acute Liver Failure 1,1,Pain
+nefazodone,OMOP Acute Liver Failure 1,1,Depression
+Nevirapine,OMOP Acute Liver Failure 1,1,HIV Infection
+Niacin,OMOP Acute Liver Failure 1,1,Hyperlipidemia
+Nifedipine,OMOP Acute Liver Failure 1,1,Hypertension
+Nitrofurantoin,OMOP Acute Liver Failure 1,1,Enterobacter Cystitis
+Norfloxacin,OMOP Acute Liver Failure 1,1,Urinary Tract Infections
+Nortriptyline,OMOP Acute Liver Failure 1,1,Depression
+Ofloxacin,OMOP Acute Liver Failure 1,1,Otitis Externa
+orlistat,OMOP Acute Liver Failure 1,1,Obesity
+oxaprozin,OMOP Acute Liver Failure 1,1,Osteoarthritis
+Penicillamine,OMOP Acute Liver Failure 1,1,Rheumatoid Arthritis
+pioglitazone,OMOP Acute Liver Failure 1,1,Type 2 Diabetes Mellitus
+Piroxicam,OMOP Acute Liver Failure 1,1,Osteoarthritis
+posaconazole,OMOP Acute Liver Failure 1,1,Prevention of Invasive Pulmonary Aspergillosis
+Propylthiouracil,OMOP Acute Liver Failure 1,1,Hyperthyroidism
+quinapril,OMOP Acute Liver Failure 1,1,Hypertension
+Ramipril,OMOP Acute Liver Failure 1,1,Hypertension
+Rifampin,OMOP Acute Liver Failure 1,1,Miliary Tuberculosis
+Stavudine,OMOP Acute Liver Failure 1,1,HIV Infection
+Sulfisoxazole,OMOP Acute Liver Failure 1,1,Acute Otitis Media Infection
+Sulindac,OMOP Acute Liver Failure 1,1,Ankylosing Spondylitis
+Tamoxifen,OMOP Acute Liver Failure 1,1,Prevention of Breast Carcinoma
+Tenofovir,OMOP Acute Liver Failure 1,1,HIV Infection
+terbinafine,OMOP Acute Liver Failure 1,1,Onychomycosis due to Dermatophyte
+Thiabendazole,OMOP Acute Liver Failure 1,1,Cutaneous Larva Migrans
+Thioguanine,OMOP Acute Liver Failure 1,1,Acute Myeloid Leukemia
+tipranavir,OMOP Acute Liver Failure 1,1,HIV Infection
+tolcapone,OMOP Acute Liver Failure 1,1,Idiopathic Parkinsonism
+Tolmetin,OMOP Acute Liver Failure 1,1,Osteoarthritis
+trandolapril,OMOP Acute Liver Failure 1,1,Hypertension
+trovafloxacin,OMOP Acute Liver Failure 1,1,Urinary Tract Infections
+Valproate,OMOP Acute Liver Failure 1,1,Migraine Prevention
+voriconazole,OMOP Acute Liver Failure 1,1,Invasive Pulmonary Aspergillosis
+zafirlukast,OMOP Acute Liver Failure 1,1,Bronchial Asthma
+Zalcitabine,OMOP Acute Liver Failure 1,1,HIV Infection
+Zidovudine,OMOP Acute Liver Failure 1,1,HIV Infection
+Acyclovir,OMOP Acute Renal Failure 1,1,Herpes Simplex Infection
+Allopurinol,OMOP Acute Renal Failure 1,1,Hyperuricemia
+candesartan,OMOP Acute Renal Failure 1,1,Hypertension
+Capreomycin,OMOP Acute Renal Failure 1,1,Acute Tuberculosis
+Captopril,OMOP Acute Renal Failure 1,1,Hypertension
+Chlorothiazide,OMOP Acute Renal Failure 1,1,Pulmonary Edema due to Chronic Heart Failure
+Cyclosporine,OMOP Acute Renal Failure 1,1,Severe Recalcitrant Psoriasis
+Diflunisal,OMOP Acute Renal Failure 1,1,Pain
+Enalaprilat,OMOP Acute Renal Failure 1,1,Hypertension
+Etodolac,OMOP Acute Renal Failure 1,1,Pain
+Fenoprofen,OMOP Acute Renal Failure 1,1,Pain
+Hydrochlorothiazide,OMOP Acute Renal Failure 1,1,Hypertension
+Ibuprofen,OMOP Acute Renal Failure 1,1,Pain
+Ketoprofen,OMOP Acute Renal Failure 1,1,Pain
+Ketorolac,OMOP Acute Renal Failure 1,1,Severe Pain
+Lisinopril,OMOP Acute Renal Failure 1,1,Hypertension
+Mefenamate,OMOP Acute Renal Failure 1,1,Dysmenorrhea
+meloxicam,OMOP Acute Renal Failure 1,1,Osteoarthritis
+moexipril,OMOP Acute Renal Failure 1,1,Hypertension
+Naproxen,OMOP Acute Renal Failure 1,1,Pain
+Olmesartan medoxomil,OMOP Acute Renal Failure 1,1,Hypertension
+oxaprozin,OMOP Acute Renal Failure 1,1,Osteoarthritis
+Piroxicam,OMOP Acute Renal Failure 1,1,Osteoarthritis
+telmisartan,OMOP Acute Renal Failure 1,1,Hypertension
+almotriptan,OMOP Acute myocardial Infarction  1,1,Migraine
+Amlodipine,OMOP Acute myocardial Infarction  1,1,Hypertension
+Amoxapine,OMOP Acute myocardial Infarction  1,1,Depression
+Bromocriptine,OMOP Acute myocardial Infarction  1,1,Hyperprolactinemia
+darbepoetin alfa,OMOP Acute myocardial Infarction  1,1,Anemia due to Renal Failure
+Desipramine,OMOP Acute myocardial Infarction  1,1,Depression
+Diflunisal,OMOP Acute myocardial Infarction  1,1,Pain
+Dipyridamole,OMOP Acute myocardial Infarction  1,1,Prevention of Cerebral Thrombosis
+eletriptan,OMOP Acute myocardial Infarction  1,1,Migraine
+Enalaprilat,OMOP Acute myocardial Infarction  1,1,Hypertension
+Epoetin Alfa,OMOP Acute myocardial Infarction  1,1,Anemia due to Renal Failure
+Estradiol,OMOP Acute myocardial Infarction  1,1,Vasomotor Symptoms associated with Menopause
+"Estrogens, Conjugated (USP)",OMOP Acute myocardial Infarction  1,1,Vasomotor Symptoms associated with Menopause
+estropipate,OMOP Acute myocardial Infarction  1,1,Vasomotor Symptoms associated with Menopause
+Etodolac,OMOP Acute myocardial Infarction  1,1,Pain
+Factor VIIa,OMOP Acute myocardial Infarction  1,1,Hemophilia A
+Fenoprofen,OMOP Acute myocardial Infarction  1,1,Pain
+Flurbiprofen,OMOP Acute myocardial Infarction  1,1,Osteoarthritis
+frovatriptan,OMOP Acute myocardial Infarction  1,1,Migraine
+Imipramine,OMOP Acute myocardial Infarction  1,1,Nocturnal Enuresis
+Indomethacin,OMOP Acute myocardial Infarction  1,1,Gout
+Ketoprofen,OMOP Acute myocardial Infarction  1,1,Pain
+Ketorolac,OMOP Acute myocardial Infarction  1,1,Severe Pain
+moexipril,OMOP Acute myocardial Infarction  1,1,Hypertension
+nabumetone,OMOP Acute myocardial Infarction  1,1,Osteoarthritis
+naratriptan,OMOP Acute myocardial Infarction  1,1,Migraine
+Nifedipine,OMOP Acute myocardial Infarction  1,1,Hypertension
+Nortriptyline,OMOP Acute myocardial Infarction  1,1,Depression
+oxaprozin,OMOP Acute myocardial Infarction  1,1,Osteoarthritis
+Piroxicam,OMOP Acute myocardial Infarction  1,1,Osteoarthritis
+rizatriptan,OMOP Acute myocardial Infarction  1,1,Migraine
+Salsalate,OMOP Acute myocardial Infarction  1,1,Osteoarthritis
+Sulindac,OMOP Acute myocardial Infarction  1,1,Ankylosing Spondylitis
+Sumatriptan,OMOP Acute myocardial Infarction  1,1,Migraine
+Tolmetin,OMOP Acute myocardial Infarction  1,1,Osteoarthritis
+zolmitriptan,OMOP Acute myocardial Infarction  1,1,Migraine
+Citalopram,HOI Upper GI #3,1,Depression
+Clindamycin,HOI Upper GI #3,1,Acne Vulgaris
+clopidogrel,HOI Upper GI #3,1,Unstable Angina Pectoris
+Diflunisal,HOI Upper GI #3,1,Pain
+Escitalopram,HOI Upper GI #3,1,Major Depressive Disorder
+Etodolac,HOI Upper GI #3,1,Pain
+Fenoprofen,HOI Upper GI #3,1,Pain
+Fluoxetine,HOI Upper GI #3,1,Depression
+Flurbiprofen,HOI Upper GI #3,1,Osteoarthritis
+Ibuprofen,HOI Upper GI #3,1,Pain
+Indomethacin,HOI Upper GI #3,1,Gout
+Ketoprofen,HOI Upper GI #3,1,Pain
+Ketorolac,HOI Upper GI #3,1,Severe Pain
+Mefenamate,HOI Upper GI #3,1,Dysmenorrhea
+meloxicam,HOI Upper GI #3,1,Osteoarthritis
+nabumetone,HOI Upper GI #3,1,Osteoarthritis
+Naproxen,HOI Upper GI #3,1,Pain
+oxaprozin,HOI Upper GI #3,1,Osteoarthritis
+Piroxicam,HOI Upper GI #3,1,Osteoarthritis
+Potassium Chloride,HOI Upper GI #3,1,Hypokalemia
+Sertraline,HOI Upper GI #3,1,Depression
+Sulindac,HOI Upper GI #3,1,Ankylosing Spondylitis
+Tolmetin,HOI Upper GI #3,1,Osteoarthritis
+valdecoxib,HOI Upper GI #3,1,Pain

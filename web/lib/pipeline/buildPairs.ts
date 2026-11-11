@@ -27,12 +27,14 @@ export function buildCaseLevelTable(
     const pid = d.primaryid?.trim();
     const rawName = d.drugname?.trim();
     if (!pid || !rawName || !valid.has(pid)) continue;
-    if (d.role_cod) {
-      const role = d.role_cod.trim().toUpperCase();
+    const roleRaw = d.role_cod?.trim();
+    if (roleRaw) {
+      const role = roleRaw.toUpperCase();
       if (role && !["PS", "SS"].includes(role)) continue;
     }
     const drugname = canonicalizeDrug(rawName);
     if (!drugname) continue;
+    const drugSeq = d.drug_seq?.trim();
     const reactions = reacByCase.get(pid) ?? [];
     for (const r of reactions) {
       const pt = normalizePt(r.pt ?? "");
@@ -45,6 +47,8 @@ export function buildCaseLevelTable(
         drugname,
         pt,
         event_dt: eventByCase.get(pid),
+        role_cod: roleRaw,
+        drug_seq: drugSeq,
       });
     }
   }

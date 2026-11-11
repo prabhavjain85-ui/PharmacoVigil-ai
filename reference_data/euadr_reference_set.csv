@@ -1,0 +1,94 @@
+exposure_name,outcome_name,ground_truth,indication_name
+desloratadine,OMOP Aplastic Anemia 1,0,Allergic Rhinitis
+fluvastatin,OMOP Aplastic Anemia 1,0,Hypercholesterolemia
+irbesartan,OMOP Aplastic Anemia 1,0,Hypertension
+latanoprost,OMOP Aplastic Anemia 1,0,Ocular Hypertension
+Timolol,OMOP Aplastic Anemia 1,0,Ocular Hypertension
+Allopurinol,OMOP Aplastic Anemia 1,1,Hyperuricemia
+Captopril,OMOP Aplastic Anemia 1,1,Hypertension
+Carbamazepine,OMOP Aplastic Anemia 1,1,Mixed Epilepsy
+Methimazole,OMOP Aplastic Anemia 1,1,Hyperthyroidism
+Ticlopidine,OMOP Aplastic Anemia 1,1,Thrombosis Prevention after Percutaneous Coronary Intervention
+Carteolol,OMOP Acute Liver Failure 1,0,Ocular Hypertension
+formoterol,OMOP Acute Liver Failure 1,0,Chronic Obstructive Pulmonary Disease with Bronchospasms
+Levodopa,OMOP Acute Liver Failure 1,0,Parkinsonism
+Nitroglycerin,OMOP Acute Liver Failure 1,0,Angina
+Terazosin,OMOP Acute Liver Failure 1,0,Hypertension
+Amoxicillin,OMOP Acute Liver Failure 1,1,Acute Otitis Media Infection
+Carbamazepine,OMOP Acute Liver Failure 1,1,Mixed Epilepsy
+Sulfasalazine,OMOP Acute Liver Failure 1,1,Rheumatoid Arthritis
+Valproate,OMOP Acute Liver Failure 1,1,Migraine Prevention
+ferrous sulfate,OMOP Acute Renal Failure 1,0,Iron Deficiency Anemia
+fexofenadine,OMOP Acute Renal Failure 1,0,Allergic Rhinitis
+Levodopa,OMOP Acute Renal Failure 1,0,Parkinsonism
+Mometasone,OMOP Acute Renal Failure 1,0,Allergic Rhinitis
+Thyroxine,OMOP Acute Renal Failure 1,0,Hypothyroidism
+Acetaminophen,OMOP Acute Renal Failure 1,1,Pain
+Captopril,OMOP Acute Renal Failure 1,1,Hypertension
+Ciprofloxacin,OMOP Acute Renal Failure 1,1,Bladder Infection
+Ibuprofen,OMOP Acute Renal Failure 1,1,Pain
+Lithium Carbonate,OMOP Acute Renal Failure 1,1,Bipolar Disorder
+Amoxicillin,OMOP Acute myocardial Infarction  1,0,Acute Otitis Media Infection
+ferrous sulfate,OMOP Acute myocardial Infarction  1,0,Iron Deficiency Anemia
+Gemfibrozil,OMOP Acute myocardial Infarction  1,0,Hyperlipidemia
+"Regular Insulin, Human",OMOP Acute myocardial Infarction  1,0,Diabetes Mellitus
+valacyclovir,OMOP Acute myocardial Infarction  1,0,Herpes Zoster
+Levonorgestrel,OMOP Acute myocardial Infarction  1,1,Pregnancy Contraception
+rofecoxib,OMOP Acute myocardial Infarction  1,1,Pain
+rosiglitazone,OMOP Acute myocardial Infarction  1,1,Type 2 Diabetes Mellitus
+Sumatriptan,OMOP Acute myocardial Infarction  1,1,Migraine
+valdecoxib,OMOP Acute myocardial Infarction  1,1,Pain
+dorzolamide,HOI Upper GI #3,0,Ocular Hypertension
+Eszopiclone,HOI Upper GI #3,0,Insomnia
+fexofenadine,HOI Upper GI #3,0,Allergic Rhinitis
+Goserelin,HOI Upper GI #3,0,Advanced Prostatic Carcinoma
+Simvastatin,HOI Upper GI #3,0,Hypercholesterolemia
+Aspirin,HOI Upper GI #3,1,Pain
+Heparin,HOI Upper GI #3,1,Pulmonary Thromboembolism Prevention
+Ibuprofen,HOI Upper GI #3,1,Pain
+Indomethacin,HOI Upper GI #3,1,Gout
+prednisolone,HOI Upper GI #3,1,Bronchial Asthma
+Clonidine,Anaphylaxis #1,0,Hypertension
+Doxazosin,Anaphylaxis #1,0,Hypertension
+Mirtazapine,Anaphylaxis #1,0,Depression
+Oxazepam,Anaphylaxis #1,0,Alcohol Withdrawal Delirium
+Thyroxine,Anaphylaxis #1,0,Hypothyroidism
+Acetaminophen,Anaphylaxis #1,1,Pain
+Amoxicillin,Anaphylaxis #1,1,Acute Otitis Media Infection
+Aspirin,Anaphylaxis #1,1,Pain
+Ciprofloxacin,Anaphylaxis #1,1,Bladder Infection
+Diclofenac,Anaphylaxis #1,1,Pain
+Atenolol,Stevens-Johnson Syndrome #1,0,Hypertension
+Felodipine,Stevens-Johnson Syndrome #1,0,Hypertension
+Ipratropium,Stevens-Johnson Syndrome #1,0,Chronic Obstructive Pulmonary Disease with Bronchospasms
+Propafenone,Stevens-Johnson Syndrome #1,0,Paroxysmal Atrial Fibrillation
+tiotropium,Stevens-Johnson Syndrome #1,0,Chronic Obstructive Pulmonary Disease with Bronchospasms
+Allopurinol,Stevens-Johnson Syndrome #1,1,Hyperuricemia
+Carbamazepine,Stevens-Johnson Syndrome #1,1,Mixed Epilepsy
+Furosemide,Stevens-Johnson Syndrome #1,1,Pulmonary Edema due to Chronic Heart Failure
+lamotrigine,Stevens-Johnson Syndrome #1,1,Bipolar Disorder in Remission
+Sulfamethoxazole,Stevens-Johnson Syndrome #1,1,Bacterial Urinary Tract Infection
+atorvastatin,Leukopenia Including Neutropenia and Agranulocytosis,0,Hypercholesterolemia
+Isosorbide,Leukopenia Including Neutropenia and Agranulocytosis,0,Chronic Angina Pectoris
+Sotalol,Leukopenia Including Neutropenia and Agranulocytosis,0,Prevention of Recurrent Atrial Fibrillation
+tamsulosin,Leukopenia Including Neutropenia and Agranulocytosis,0,Benign Prostatic Hypertrophy
+Thyroxine,Leukopenia Including Neutropenia and Agranulocytosis,0,Hypothyroidism
+Captopril,Leukopenia Including Neutropenia and Agranulocytosis,1,Hypertension
+Carbamazepine,Leukopenia Including Neutropenia and Agranulocytosis,1,Mixed Epilepsy
+Methimazole,Leukopenia Including Neutropenia and Agranulocytosis,1,Hyperthyroidism
+Ticlopidine,Leukopenia Including Neutropenia and Agranulocytosis,1,Thrombosis Prevention after Percutaneous Coronary Intervention
+Valproate,Leukopenia Including Neutropenia and Agranulocytosis,1,Migraine Prevention
+Doxazosin,Rhabdomyolysis #1,0,Hypertension
+Estradiol,Rhabdomyolysis #1,0,Vasomotor Symptoms associated with Menopause
+glimepiride,Rhabdomyolysis #1,0,Type 2 Diabetes Mellitus
+Nitroglycerin,Rhabdomyolysis #1,0,Angina
+Timolol,Rhabdomyolysis #1,0,Ocular Hypertension
+atorvastatin,Rhabdomyolysis #1,1,Hypercholesterolemia
+Pravastatin,Rhabdomyolysis #1,1,Hypercholesterolemia
+rosuvastatin,Rhabdomyolysis #1,1,Hypercholesterolemia
+Simvastatin,Rhabdomyolysis #1,1,Hypercholesterolemia
+Estradiol,Cardiac Valve Fibrosis #1,0,Vasomotor Symptoms associated with Menopause
+Fluvoxamine,Cardiac Valve Fibrosis #1,0,Obsessive-Compulsive Disorder
+Furosemide,Cardiac Valve Fibrosis #1,0,Pulmonary Edema due to Chronic Heart Failure
+irbesartan,Cardiac Valve Fibrosis #1,0,Hypertension
+Methotrexate,Cardiac Valve Fibrosis #1,0,Rheumatoid Arthritis

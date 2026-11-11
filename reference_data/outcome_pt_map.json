@@ -1,0 +1,151 @@
+{
+  "_comment": "Hand-curated HOI to MedDRA PT mapping. An approximation, NOT an official SMQ.",
+  "outcomes": {
+    "ACUTE LIVER INJURY": {
+      "reference_names": [
+        "OMOP Acute Liver Failure 1"
+      ],
+      "pts": [
+        "HEPATIC FAILURE",
+        "ACUTE HEPATIC FAILURE",
+        "SUBACUTE HEPATIC FAILURE",
+        "HEPATITIS FULMINANT",
+        "HEPATITIS",
+        "HEPATITIS ACUTE",
+        "HEPATITIS TOXIC",
+        "HEPATITIS CHOLESTATIC",
+        "DRUG-INDUCED LIVER INJURY",
+        "LIVER INJURY",
+        "HEPATOCELLULAR INJURY",
+        "CHOLESTATIC LIVER INJURY",
+        "MIXED LIVER INJURY",
+        "HEPATOTOXICITY",
+        "HEPATIC NECROSIS",
+        "HEPATIC ENCEPHALOPATHY",
+        "COMA HEPATIC",
+        "HEPATORENAL FAILURE",
+        "JAUNDICE",
+        "LIVER DISORDER"
+      ]
+    },
+    "ACUTE KIDNEY INJURY": {
+      "reference_names": [
+        "OMOP Acute Renal Failure 1"
+      ],
+      "pts": [
+        "ACUTE KIDNEY INJURY",
+        "RENAL FAILURE ACUTE",
+        "RENAL FAILURE",
+        "RENAL IMPAIRMENT",
+        "RENAL INJURY",
+        "RENAL TUBULAR NECROSIS",
+        "NEPHROPATHY TOXIC",
+        "TUBULOINTERSTITIAL NEPHRITIS",
+        "PRERENAL FAILURE",
+        "ANURIA",
+        "OLIGURIA",
+        "AZOTAEMIA"
+      ]
+    },
+    "ACUTE MYOCARDIAL INFARCTION": {
+      "reference_names": [
+        "OMOP Acute myocardial Infarction  1"
+      ],
+      "pts": [
+        "MYOCARDIAL INFARCTION",
+        "ACUTE MYOCARDIAL INFARCTION",
+        "SILENT MYOCARDIAL INFARCTION",
+        "ACUTE CORONARY SYNDROME",
+        "CORONARY ARTERY THROMBOSIS",
+        "CORONARY ARTERY OCCLUSION"
+      ]
+    },
+    "UPPER GI BLEEDING": {
+      "reference_names": [
+        "HOI Upper GI #3"
+      ],
+      "pts": [
+        "GASTROINTESTINAL HAEMORRHAGE",
+        "UPPER GASTROINTESTINAL HAEMORRHAGE",
+        "GASTRIC HAEMORRHAGE",
+        "GASTRODUODENAL HAEMORRHAGE",
+        "OESOPHAGEAL HAEMORRHAGE",
+        "HAEMATEMESIS",
+        "MELAENA",
+        "GASTRIC ULCER HAEMORRHAGE",
+        "DUODENAL ULCER HAEMORRHAGE",
+        "PEPTIC ULCER HAEMORRHAGE",
+        "ULCER HAEMORRHAGE"
+      ]
+    },
+    "APLASTIC ANAEMIA": {
+      "reference_names": [
+        "OMOP Aplastic Anemia 1"
+      ],
+      "pts": [
+        "APLASTIC ANAEMIA",
+        "BONE MARROW FAILURE",
+        "PANCYTOPENIA"
+      ]
+    },
+    "ANAPHYLAXIS": {
+      "reference_names": [
+        "Anaphylaxis #1"
+      ],
+      "pts": [
+        "ANAPHYLACTIC REACTION",
+        "ANAPHYLACTIC SHOCK",
+        "ANAPHYLACTOID REACTION",
+        "ANAPHYLACTOID SHOCK"
+      ]
+    },
+    "CARDIAC VALVE FIBROSIS": {
+      "reference_names": [
+        "Cardiac Valve Fibrosis #1"
+      ],
+      "pts": [
+        "CARDIAC VALVE DISEASE",
+        "HEART VALVE INCOMPETENCE",
+        "CARDIAC VALVE SCLEROSIS",
+        "MITRAL VALVE INCOMPETENCE",
+        "MITRAL VALVE DISEASE",
+        "AORTIC VALVE INCOMPETENCE",
+        "AORTIC VALVE DISEASE",
+        "TRICUSPID VALVE INCOMPETENCE"
+      ]
+    },
+    "NEUTROPENIA": {
+      "reference_names": [
+        "Leukopenia Including Neutropenia and Agranulocytosis"
+      ],
+      "pts": [
+        "NEUTROPENIA",
+        "AGRANULOCYTOSIS",
+        "LEUKOPENIA",
+        "FEBRILE NEUTROPENIA",
+        "GRANULOCYTOPENIA",
+        "NEUTROPHIL COUNT DECREASED",
+        "WHITE BLOOD CELL COUNT DECREASED"
+      ]
+    },
+    "RHABDOMYOLYSIS": {
+      "reference_names": [
+        "Rhabdomyolysis #1"
+      ],
+      "pts": [
+        "RHABDOMYOLYSIS",
+        "MYOGLOBINURIA"
+      ]
+    },
+    "SEVERE CUTANEOUS REACTION": {
+      "reference_names": [
+        "Stevens-Johnson Syndrome #1"
+      ],
+      "pts": [
+        "STEVENS-JOHNSON SYNDROME",
+        "TOXIC EPIDERMAL NECROLYSIS",
+        "SJS-TEN OVERLAP"
+      ]
+    }
+  }
+}

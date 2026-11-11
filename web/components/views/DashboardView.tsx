@@ -23,7 +23,7 @@ export function DashboardView() {
         hint="Overview of the loaded FAERS-style dataset. All statistics run in your browser — nothing is sent to a server."
       />
       <HelpTip>
-        Default data is a synthetic sample for testing. Upload your quarterly DEMO / DRUG / REAC extracts under Data.
+        Default data is a synthetic sample for testing. Upload your quarterly DEMO / DRUG / REAC (and optional OUTC / INDI / THER) extracts under Data.
       </HelpTip>
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Stat label="Cases" value={m.case_count} />
@@ -44,12 +44,12 @@ export function DashboardView() {
               <span>
                 <strong>{s.drug}</strong> · {s.adverse_event}
               </span>
-              <span className="font-mono text-brand-600 dark:text-brand-400">{s.priority_score?.toFixed(3)}</span>
+              <span className="font-mono text-brand-600 dark:text-brand-400">{s.priority_score?.toFixed(4)}</span>
             </li>
           ))}
         </ul>
         <HelpTip>
-          ML scores use weak reference labels (literature + planted demo pairs) — triage aid only, not validated performance.
+          ML scores come from an offline-trained model on OMOP and EU-ADR reference controls (currently using synthetic benchmark weights — see ML priority for provenance and evaluation).
         </HelpTip>
       </div>
     </>

@@ -1,9 +1,14 @@
 import { bcpnn, chiSquareYates, ebgmPair, expectedCount, fitGammaPoissonPrior } from "./bayesian";
-import { uniqueCases } from "./buildPairs";
-import { trainAndScore, SERIOUS_EVENTS } from "./mlPrioritize";
-import type { AnalysisResult, FaersRow, PairRow, SignalRow } from "./types";
-import { buildCaseLevelTable } from "./buildPairs";
+import { buildCaseLevelTable, uniqueCases } from "./buildPairs";
+import { getPrioritizerModel, scoreFeatureFrames, SERIOUS_EVENTS } from "./mlPrioritize";
+import {
+  buildFeatureFrame,
+  caseLevelFeatures,
+  computeFeatureAvailability,
+  contextFromTables,
+} from "./pairFeatures";
 import { requireColumns } from "./parseCsv";
+import type { AnalysisResult, FaersRow, OptionalTables, PairRow, SignalRow } from "./types";
 
 export function runAnalysis(
   demo: FaersRow[],
@@ -12,6 +17,7 @@ export function runAnalysis(
   source: "sample" | "upload",
   fileNames?: AnalysisResult["meta"]["fileNames"],
   minCases = 3,
+  optional?: OptionalTables,
 ): AnalysisResult {
   requireColumns(demo, ["primaryid"], "DEMO");
   requireColumns(drug, ["primaryid", "drugname"], "DRUG");
@@ -20,16 +26,26 @@ export function runAnalysis(
   const pairs = buildCaseLevelTable(demo, drug, reac);
   const totalReports = uniqueCases(pairs);
   const signals = computeDisproportionality(pairs, totalReports, minCases);
-  const { scores, importances } = trainAndScore(signals, totalReports);
+
+  const context = contextFromTables(demo, drug, optional);
+  const caseFeats = caseLevelFeatures(pairs, context);
+  const featureFrames = buildFeatureFrame(signals, caseFeats);
+  const featureAvailability = computeFeatureAvailability(featureFrames);
+  const model = getPrioritizerModel();
+  const scored = scoreFeatureFrames(featureFrames, model);
 
   const ranked = signals
     .map((s, i) => ({
       ...s,
-      priority_score: scores[i]?.priority_score ?? null,
-      priority_explain: scores[i]?.priority_explain ?? null,
+      priority_score: scored[i]?.priority_score ?? null,
+      priority_explain: scored[i]?.priority_explain ?? null,
+      _origIdx: i,
     }))
-    .sort((a, b) => (b.priority_score ?? 0) - (a.priority_score ?? 0))
-    .map((s, i) => ({ ...s, priority_rank: i + 1 }));
+    .sort((a, b) => {
+      const diff = (b.priority_score ?? 0) - (a.priority_score ?? 0);
+      return diff !== 0 ? diff : a._origIdx - b._origIdx;
+    })
+    .map(({ _origIdx: _, ...s }, i) => ({ ...s, priority_rank: i + 1 }));
 
   const drugSet = new Set(ranked.map((s) => s.drug));
 
@@ -40,6 +56,9 @@ export function runAnalysis(
       demo_rows: demo.length,
       drug_rows: drug.length,
       reac_rows: reac.length,
+      outc_rows: optional?.outc?.length,
+      indi_rows: optional?.indi?.length,
+      ther_rows: optional?.ther?.length,
       pair_count: pairs.length,
       drug_count: drugSet.size,
       fileNames,
@@ -47,7 +66,8 @@ export function runAnalysis(
     pairs,
     signals: ranked,
     prior: ranked.length ? fitPriorFromSignals(ranked, totalReports) : { alpha: 1, beta: 1 },
-    globalImportance: importances,
+    model,
+    featureAvailability,
   };
 }
 
