@@ -1,134 +1,131 @@
 """
-Gradient-boosted prioritisation of drug–event pairs using weak reference labels.
+ML prioritisation of drug-event pairs with a pretrained, exported model.
 
-Training uses ``reference_signals.REFERENCE_POSITIVE_PAIRS`` as positives and
-all other eligible pairs as negatives. This is suitable for demo / triage ranking
-only — not validated for regulatory decision-making.
+The model is an L2-regularised logistic regression trained offline by
+``train_prioritizer.py`` on published reference sets (see ``reference_sets.py``)
+and stored as JSON.  The same JSON file is bundled into the web app, so the
+browser and this module score pairs identically.  Nothing is trained at
+scoring time.
+
+Explanations are signed and exact for a linear model: the contribution of
+feature j is ``weight_j * (x_j - mean_j) / std_j`` in log-odds, i.e. how far the
+feature moved this pair away from an average training pair.  A missing feature
+is imputed with the training mean and therefore contributes zero.
 """
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
-from typing import Any
+from functools import lru_cache
+from pathlib import Path
+from typing import Any, Optional
 
 import numpy as np
 import pandas as pd
-from sklearn.ensemble import GradientBoostingClassifier
 
-from reference_signals import is_reference_positive
+from pair_features import build_feature_frame
 
-FEATURE_COLUMNS = [
-    "PRR",
-    "ROR",
-    "chi_square",
-    "IC",
-    "EBGM",
-    "EB05",
-    "case_count_a",
-    "log_cases",
-    "serious_event",
-    "drug_report_share",
-    "event_report_share",
-]
-
-DISPLAY_NAMES = {
-    "PRR": "PRR",
-    "ROR": "ROR",
-    "chi_square": "χ²",
-    "IC": "IC (BCPNN)",
-    "EBGM": "EBGM",
-    "EB05": "EB05",
-    "case_count_a": "Case count",
-    "log_cases": "log(cases)",
-    "serious_event": "Serious PT flag",
-    "drug_report_share": "Drug report share",
-    "event_report_share": "Event report share",
-}
+MODEL_PATH = Path(__file__).resolve().parent / "web" / "lib" / "pipeline" / "prioritizerModel.json"
+TOP_DRIVERS = 3
 
 
-@dataclass
+@dataclass(frozen=True)
 class PrioritizationModel:
-    classifier: GradientBoostingClassifier
-    feature_columns: list[str]
-    global_importance: dict[str, float]
+    spec: dict[str, Any]
+
+    @property
+    def features(self) -> list[dict[str, Any]]:
+        return self.spec["features"]
+
+    @property
+    def used_features(self) -> list[dict[str, Any]]:
+        return [f for f in self.features if f.get("used")]
+
+    @property
+    def intercept(self) -> float:
+        return float(self.spec["intercept"])
+
+    def contributions(self, frame: pd.DataFrame) -> pd.DataFrame:
+        """Signed log-odds contribution per used feature (0 where the value is missing)."""
+        out = {}
+        for feat in self.used_features:
+            values = frame[feat["name"]].astype(float).to_numpy()
+            z = (values - feat["mean"]) / (feat["std"] or 1.0)
+            out[feat["name"]] = np.where(np.isnan(values), 0.0, feat["weight"] * z)
+        return pd.DataFrame(out, index=frame.index)
+
+    def score(self, frame: pd.DataFrame) -> tuple[np.ndarray, pd.DataFrame]:
+        contrib = self.contributions(frame)
+        logit = self.intercept + contrib.sum(axis=1).to_numpy()
+        return 1.0 / (1.0 + np.exp(-logit)), contrib
 
     def predict_batch(self, frame: pd.DataFrame) -> list[dict[str, Any]]:
-        matrix = frame[self.feature_columns].astype(float).values
-        probs = self.classifier.predict_proba(matrix)[:, 1]
-        importances = np.array(
-            [self.global_importance[c] for c in self.feature_columns], dtype=float
-        )
-        importances = importances / (importances.sum() or 1.0)
+        probs, contrib = self.score(frame)
+        labels = {f["name"]: f["label"] for f in self.features}
+        names = list(contrib.columns)
+        matrix = contrib.to_numpy()
         rows: list[dict[str, Any]] = []
-        for idx, prob in enumerate(probs):
-            feat_row = matrix[idx]
-            contributions = feat_row * importances
-            order = np.argsort(-np.abs(contributions))[:3]
-            explain = [
-                {
-                    "feature": self.feature_columns[i],
-                    "label": DISPLAY_NAMES.get(self.feature_columns[i], self.feature_columns[i]),
-                    "value": round(float(feat_row[i]), 4),
-                    "contribution": round(float(contributions[i]), 4),
-                }
-                for i in order
-            ]
-            rows.append({
-                "priority_score": round(float(prob), 4),
-                "priority_explain": explain,
-            })
+        for i, prob in enumerate(probs):
+            order = np.argsort(-np.abs(matrix[i]))[:TOP_DRIVERS]
+            explain = []
+            for j in order:
+                name = names[j]
+                value = float(frame[name].iloc[i])
+                if np.isnan(value) or matrix[i, j] == 0:
+                    continue
+                explain.append({
+                    "feature": name,
+                    "label": labels[name],
+                    "value": round(value, 4),
+                    "contribution": round(float(matrix[i, j]), 4),
+                })
+            rows.append({"priority_score": round(float(prob), 4), "priority_explain": explain})
         return rows
 
 
-def _build_feature_matrix(signals: pd.DataFrame, total_reports: int) -> pd.DataFrame:
-    frame = signals.copy()
-    frame["log_cases"] = np.log1p(frame["case_count_a"].astype(float))
-    frame["serious_event"] = frame["serious_event"].astype(float)
-    frame["drug_report_share"] = frame["drug_total_reports"] / max(total_reports, 1)
-    frame["event_report_share"] = frame["event_total_reports"] / max(total_reports, 1)
-    return frame
+@lru_cache(maxsize=4)
+def _load_cached(path: str) -> PrioritizationModel:
+    return PrioritizationModel(json.loads(Path(path).read_text(encoding="utf-8")))
 
 
-def train_prioritization_model(
-    signals: pd.DataFrame,
-    total_reports: int,
-    random_state: int = 42,
-) -> PrioritizationModel:
-    if signals.empty:
-        clf = GradientBoostingClassifier(random_state=random_state)
-        return PrioritizationModel(clf, FEATURE_COLUMNS, {c: 0.0 for c in FEATURE_COLUMNS})
-
-    frame = _build_feature_matrix(signals, total_reports)
-    labels = [
-        1 if is_reference_positive(row["drug"], row["adverse_event"]) else 0
-        for _, row in frame.iterrows()
-    ]
-    y = np.array(labels, dtype=int)
-    x = frame[FEATURE_COLUMNS].astype(float).values
-
-    clf = GradientBoostingClassifier(
-        random_state=random_state,
-        max_depth=3,
-        n_estimators=120,
-        learning_rate=0.08,
-        subsample=0.9,
-    )
-    clf.fit(x, y)
-    global_imp = dict(zip(FEATURE_COLUMNS, clf.feature_importances_, strict=True))
-    return PrioritizationModel(clf, FEATURE_COLUMNS, global_imp)
+def load_model(path: Optional[Path | str] = None) -> PrioritizationModel:
+    """Load the exported model (default: the copy bundled with the web app)."""
+    return _load_cached(str(path or MODEL_PATH))
 
 
 def apply_prioritization(
     signals: pd.DataFrame,
     model: PrioritizationModel,
     total_reports: int,
+    case_features: Optional[pd.DataFrame] = None,
 ) -> pd.DataFrame:
+    """Add ``priority_score``, ``priority_explain`` and ``priority_rank`` and sort by score."""
     if signals.empty:
         return signals
-    frame = _build_feature_matrix(signals, total_reports)
+    frame = build_feature_frame(signals, total_reports, case_features)
     scored = model.predict_batch(frame)
     out = signals.copy()
     out["priority_score"] = [row["priority_score"] for row in scored]
     out["priority_explain"] = [row["priority_explain"] for row in scored]
-    out = out.sort_values("priority_score", ascending=False).reset_index(drop=True)
+    out = out.sort_values("priority_score", ascending=False, kind="mergesort").reset_index(drop=True)
     out["priority_rank"] = np.arange(1, len(out) + 1)
     return out
+
+
+def model_card(model: Optional[PrioritizationModel] = None) -> dict[str, Any]:
+    """Training provenance, evaluation and weights, for the API and the UI."""
+    spec = (model or load_model()).spec
+    return {
+        "model_type": spec["model_type"],
+        "created": spec["created"],
+        "feature_set": spec["feature_set"],
+        "training": spec["training"],
+        "evaluation": spec["evaluation"],
+        "features": spec["features"],
+        "limitations": [
+            "Ranks pairs for analyst triage only; not validated for regulatory decisions.",
+            "Trained on health-outcome groups from 2013 reference sets, then applied to single preferred terms.",
+            "Positive controls are established, labelled reactions, so the model learns what known "
+            "reactions look like in spontaneous reports rather than what emerging ones look like.",
+        ],
+    }
