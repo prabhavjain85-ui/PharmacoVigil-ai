@@ -44,6 +44,13 @@ export function MlView() {
         hint="Offline-trained model on published OMOP and EU-ADR reference sets, exported to JSON and evaluated in-browser with exact Python parity."
       />
 
+      <div className="mb-6 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-xs text-[var(--fg)]">
+        <strong className="font-semibold text-amber-800 dark:text-amber-300">
+          Methodological Limitations (Spontaneous Reporting):
+        </strong>{" "}
+        Supervised prioritisation models trained on spontaneous-report features inherit selective reporting biases, missing denominators, and confounding by indication. Priority scores rank pairs for human review and represent <strong>hypotheses, not causal findings</strong>.
+      </div>
+
       {isSynthetic && (
         <div
           role="alert"

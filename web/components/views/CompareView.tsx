@@ -37,6 +37,12 @@ export function CompareView() {
   return (
     <>
       <PageHeader title="Drug comparison" hint="Select 2–3 drugs to compare PRR across shared adverse events." />
+      <div className="mb-6 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-xs text-[var(--fg)]">
+        <strong className="font-semibold text-amber-800 dark:text-amber-300">
+          Methodological Limitations (Spontaneous Reporting):
+        </strong>{" "}
+        Direct PRR comparisons across drugs do not account for differences in patient demographics, prescribing denominators, reporting notoriety, or confounding by indication. Signals are <strong>hypotheses, not causal findings</strong>.
+      </div>
       <div className="flex flex-wrap gap-2">
         {drugs.map((d) => (
           <button

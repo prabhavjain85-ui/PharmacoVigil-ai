@@ -5,14 +5,23 @@ import { HelpTip, PageHeader } from "@/components/AppShell";
 import { Badge } from "@/components/ui/Badge";
 
 export function DashboardView() {
-  const { loading, error, analysis } = useData();
+  const { loading, error, analysis, workerProgress } = useData();
   const m = analysis?.meta;
 
-  if (loading) return <p className="text-[var(--muted)]">Loading sample dataset…</p>;
+  if (loading) {
+    return (
+      <div className="glass rounded-2xl p-6">
+        <p className="text-sm font-medium text-[var(--fg)]">
+          {workerProgress ? `Web Worker: ${workerProgress.step} (${workerProgress.percent}%)` : "Loading sample dataset…"}
+        </p>
+      </div>
+    );
+  }
   if (error) return <p className="text-red-500">{error}</p>;
   if (!m || !analysis) return null;
 
   const prr = analysis.signals.filter((s) => s.signal_detected).length;
+  const fdr = analysis.signals.filter((s) => s.signal_fdr).length;
   const bcp = analysis.signals.filter((s) => s.signal_bcpnn).length;
   const ebg = analysis.signals.filter((s) => s.signal_ebgm).length;
 
@@ -20,19 +29,29 @@ export function DashboardView() {
     <>
       <PageHeader
         title="Dashboard"
-        hint="Overview of the loaded FAERS-style dataset. All statistics run in your browser — nothing is sent to a server."
+        hint="Overview of the loaded FAERS-style dataset. All statistics run in your browser inside a Web Worker — nothing is sent to a server."
       />
+
+      {/* Methodological Limitations Banner */}
+      <div className="mb-6 rounded-2xl border border-amber-500/40 bg-amber-500/10 p-4 text-xs text-[var(--fg)]">
+        <strong className="font-semibold text-amber-800 dark:text-amber-300">
+          Methodological Limitations (Spontaneous Reporting):
+        </strong>{" "}
+        FAERS is a voluntary spontaneous reporting system subject to under-reporting, stimulated reporting (notoriety bias), missing exposure denominators (no true incidence rates), and confounding by indication or co-prescribing. Statistical signals are <strong>hypotheses for pharmacovigilance assessment, not causal findings</strong>.
+      </div>
+
       <HelpTip>
         Default data is a synthetic sample for testing. Upload your quarterly DEMO / DRUG / REAC (and optional OUTC / INDI / THER) extracts under Data.
       </HelpTip>
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label="Cases" value={m.case_count} />
+        <Stat label="Cases (deduplicated)" value={m.case_count} />
         <Stat label="Drug–event pairs" value={m.pair_count} />
         <Stat label="Drugs" value={m.drug_count} />
         <Stat label="Source" value={m.source === "sample" ? "Sample" : "Upload"} />
       </div>
-      <div className="mt-8 grid gap-4 md:grid-cols-3">
+      <div className="mt-8 grid gap-4 md:grid-cols-4">
         <SignalCard title="PRR / χ² signals" count={prr} />
+        <SignalCard title="BH FDR (q < 0.05 & PRR ≥ 2)" count={fdr} />
         <SignalCard title="BCPNN (IC025 > 0)" count={bcp} />
         <SignalCard title="EBGM (EB05 > 2)" count={ebg} />
       </div>

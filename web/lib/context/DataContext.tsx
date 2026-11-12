@@ -9,9 +9,12 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { runAnalysis } from "@/lib/pipeline/analyze";
 import { fetchCsv } from "@/lib/pipeline/parseCsv";
 import type { AnalysisResult, FaersRow, FileNames, OptionalTables } from "@/lib/pipeline/types";
+import {
+  runWorkerAnalyzeTables,
+  runWorkerParseAndAnalyze,
+} from "@/lib/pipeline/workerClient";
 
 export interface NewCasePayload {
   demoRow: FaersRow;
@@ -22,12 +25,25 @@ export interface NewCasePayload {
   therRows?: FaersRow[];
 }
 
+export interface RawUploadTexts {
+  demoText: string;
+  drugText: string;
+  reacText: string;
+  outcText?: string | null;
+  indiText?: string | null;
+  therText?: string | null;
+  names: FileNames;
+}
+
 type DataContextValue = {
   loading: boolean;
   error: string | null;
   analysis: AnalysisResult | null;
+  workerProgress: { step: string; percent: number } | null;
   minCases: number;
   setMinCases: (n: number) => void;
+  excludeFlaggedDuplicates: boolean;
+  setExcludeFlaggedDuplicates: (v: boolean) => void;
   loadSample: () => Promise<void>;
   loadUpload: (
     demo: FaersRow[],
@@ -36,6 +52,7 @@ type DataContextValue = {
     names: FileNames,
     optional?: OptionalTables,
   ) => void;
+  loadUploadTexts: (payload: RawUploadTexts) => Promise<void>;
   reacPts: string[];
   addedCaseIds: string[];
   addCaseToDataset: (payload: NewCasePayload) => string;
@@ -53,7 +70,11 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [source, setSource] = useState<"sample" | "upload">("sample");
   const [fileNames, setFileNames] = useState<FileNames>();
   const [minCases, setMinCases] = useState(3);
+  const [excludeFlaggedDuplicates, setExcludeFlaggedDuplicates] = useState(false);
   const [analysis, setAnalysis] = useState<AnalysisResult | null>(null);
+  const [workerProgress, setWorkerProgress] = useState<{ step: string; percent: number } | null>(
+    null,
+  );
   const [addedCaseIds, setAddedCaseIds] = useState<string[]>([]);
 
   useEffect(() => {
@@ -61,14 +82,39 @@ export function DataProvider({ children }: { children: ReactNode }) {
       setAnalysis(null);
       return;
     }
-    try {
-      setAnalysis(runAnalysis(demo, drug, reac, source, fileNames, minCases, optional));
-      setError(null);
-    } catch (e) {
-      setAnalysis(null);
-      setError(e instanceof Error ? e.message : "Analysis failed");
-    }
-  }, [demo, drug, reac, optional, source, fileNames, minCases]);
+    let cancelled = false;
+    setWorkerProgress({ step: "Starting Web Worker analysis...", percent: 5 });
+
+    runWorkerAnalyzeTables({
+      demo,
+      drug,
+      reac,
+      optional,
+      source,
+      fileNames,
+      minCases,
+      excludeFlaggedDuplicates,
+      onProgress: (step, percent) => {
+        if (!cancelled) setWorkerProgress({ step, percent });
+      },
+    })
+      .then((res) => {
+        if (cancelled) return;
+        setAnalysis(res);
+        setError(null);
+        setWorkerProgress(null);
+      })
+      .catch((e) => {
+        if (cancelled) return;
+        setAnalysis(null);
+        setError(e instanceof Error ? e.message : "Analysis failed");
+        setWorkerProgress(null);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [demo, drug, reac, optional, source, fileNames, minCases, excludeFlaggedDuplicates]);
 
   const reacPts = useMemo(() => {
     const pts = new Set<string>();
@@ -124,6 +170,43 @@ export function DataProvider({ children }: { children: ReactNode }) {
       setError(null);
     },
     [],
+  );
+
+  const loadUploadTexts = useCallback(
+    async (payload: RawUploadTexts) => {
+      setLoading(true);
+      setError(null);
+      setWorkerProgress({ step: "Sending files to Web Worker...", percent: 2 });
+      try {
+        const res = await runWorkerParseAndAnalyze({
+          demoText: payload.demoText,
+          drugText: payload.drugText,
+          reacText: payload.reacText,
+          outcText: payload.outcText,
+          indiText: payload.indiText,
+          therText: payload.therText,
+          source: "upload",
+          fileNames: payload.names,
+          minCases,
+          excludeFlaggedDuplicates,
+          onProgress: (step, percent) => setWorkerProgress({ step, percent }),
+        });
+        setDemo(res.demo);
+        setDrug(res.drug);
+        setReac(res.reac);
+        setOptional(res.optional);
+        setSource("upload");
+        setFileNames(payload.names);
+        setAnalysis(res.analysis);
+        setAddedCaseIds([]);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Failed to parse and analyze uploaded files");
+      } finally {
+        setWorkerProgress(null);
+        setLoading(false);
+      }
+    },
+    [minCases, excludeFlaggedDuplicates],
   );
 
   const addCaseToDataset = useCallback((payload: NewCasePayload): string => {
@@ -198,10 +281,14 @@ export function DataProvider({ children }: { children: ReactNode }) {
         loading,
         error,
         analysis,
+        workerProgress,
         minCases,
         setMinCases,
+        excludeFlaggedDuplicates,
+        setExcludeFlaggedDuplicates,
         loadSample,
         loadUpload,
+        loadUploadTexts,
         reacPts,
         addedCaseIds,
         addCaseToDataset,
