@@ -10,7 +10,15 @@ import {
   type ReactNode,
 } from "react";
 import { fetchCsv } from "@/lib/pipeline/parseCsv";
-import type { AnalysisResult, FaersRow, FileNames, OptionalTables } from "@/lib/pipeline/types";
+import { runOpenFdaCountAnalysis } from "@/lib/pipeline/analyze";
+import { fetchOpenFdaLiveCounts } from "@/lib/pipeline/signalCopilot";
+import type {
+  AnalysisResult,
+  FaersRow,
+  FileNames,
+  OpenFdaCountRow,
+  OptionalTables,
+} from "@/lib/pipeline/types";
 import {
   runWorkerAnalyzeTables,
   runWorkerParseAndAnalyze,
@@ -35,6 +43,16 @@ export interface RawUploadTexts {
   names: FileNames;
 }
 
+type OpenFdaCountPayload = {
+  source: "openfda_live";
+  drug: string;
+  retrieved_at: string;
+  total_reports: number;
+  drug_total_reports: number;
+  count_rows: OpenFdaCountRow[];
+  disclaimer: string;
+};
+
 type DataContextValue = {
   loading: boolean;
   error: string | null;
@@ -53,6 +71,7 @@ type DataContextValue = {
     optional?: OptionalTables,
   ) => void;
   loadUploadTexts: (payload: RawUploadTexts) => Promise<void>;
+  loadOpenFdaLive: (drugName: string, maxEvents?: number) => Promise<void>;
   reacPts: string[];
   addedCaseIds: string[];
   addCaseToDataset: (payload: NewCasePayload) => string;
@@ -67,7 +86,8 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [drug, setDrug] = useState<FaersRow[]>([]);
   const [reac, setReac] = useState<FaersRow[]>([]);
   const [optional, setOptional] = useState<OptionalTables | undefined>(undefined);
-  const [source, setSource] = useState<"sample" | "upload">("sample");
+  const [source, setSource] = useState<"sample" | "upload" | "openfda_live">("sample");
+  const [openFdaPayload, setOpenFdaPayload] = useState<OpenFdaCountPayload | null>(null);
   const [fileNames, setFileNames] = useState<FileNames>();
   const [minCases, setMinCases] = useState(3);
   const [excludeFlaggedDuplicates, setExcludeFlaggedDuplicates] = useState(false);
@@ -78,6 +98,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [addedCaseIds, setAddedCaseIds] = useState<string[]>([]);
 
   useEffect(() => {
+    if (source === "openfda_live" && openFdaPayload) {
+      setAnalysis(runOpenFdaCountAnalysis(openFdaPayload, minCases));
+      return;
+    }
     if (!demo.length || !drug.length || !reac.length) {
       setAnalysis(null);
       return;
@@ -90,7 +114,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       drug,
       reac,
       optional,
-      source,
+      source: source === "upload" ? "upload" : "sample",
       fileNames,
       minCases,
       excludeFlaggedDuplicates,
@@ -114,7 +138,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [demo, drug, reac, optional, source, fileNames, minCases, excludeFlaggedDuplicates]);
+  }, [
+    demo,
+    drug,
+    reac,
+    optional,
+    source,
+    openFdaPayload,
+    fileNames,
+    minCases,
+    excludeFlaggedDuplicates,
+  ]);
 
   const reacPts = useMemo(() => {
     const pts = new Set<string>();
@@ -141,6 +175,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       setDrug(dr);
       setReac(rc);
       setOptional({ outc, indi, ther });
+      setOpenFdaPayload(null);
       setSource("sample");
       setFileNames(undefined);
       setAddedCaseIds([]);
@@ -163,6 +198,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       setDrug(dr);
       setReac(rc);
       setOptional(opt);
+      setOpenFdaPayload(null);
       setSource("upload");
       setFileNames(names);
       setAddedCaseIds([]);
@@ -195,6 +231,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         setDrug(res.drug);
         setReac(res.reac);
         setOptional(res.optional);
+        setOpenFdaPayload(null);
         setSource("upload");
         setFileNames(payload.names);
         setAnalysis(res.analysis);
@@ -207,6 +244,36 @@ export function DataProvider({ children }: { children: ReactNode }) {
       }
     },
     [minCases, excludeFlaggedDuplicates],
+  );
+
+  const loadOpenFdaLive = useCallback(
+    async (drugName: string, maxEvents = 25) => {
+      setLoading(true);
+      setError(null);
+      setWorkerProgress({
+        step: `Querying live openFDA 2x2 counts for ${drugName.toUpperCase()}...`,
+        percent: 25,
+      });
+      try {
+        const payload = await fetchOpenFdaLiveCounts(drugName, maxEvents, minCases);
+        setWorkerProgress({
+          step: "Running disproportionality & empirical Bayes EBGM on openFDA 2x2 counts...",
+          percent: 80,
+        });
+        const res = runOpenFdaCountAnalysis(payload, minCases);
+        setOpenFdaPayload(payload);
+        setSource("openfda_live");
+        setFileNames(undefined);
+        setAnalysis(res);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "openFDA live count query failed");
+        throw e;
+      } finally {
+        setWorkerProgress(null);
+        setLoading(false);
+      }
+    },
+    [minCases],
   );
 
   const addCaseToDataset = useCallback((payload: NewCasePayload): string => {
@@ -289,6 +356,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         loadSample,
         loadUpload,
         loadUploadTexts,
+        loadOpenFdaLive,
         reacPts,
         addedCaseIds,
         addCaseToDataset,

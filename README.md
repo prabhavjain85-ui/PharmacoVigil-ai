@@ -99,15 +99,47 @@ For each drug–event pair with $a \ge \text{min\_cases}$, a $2 \times 2$ contin
   - Ryan PB, Schuemie MJ, Welebob E, Duke J, Valentine S, Hartzema AG (2013). *Defining a reference set to support methodological research in drug safety.* Drug Safety, 36(Suppl 1):S33–S47.
   - Coloma PM, Avillach P, Salvo F, Schuemie MJ, Ferrajolo C, Pariente A, et al. (2013). *A reference standard for evaluation of methods for drug safety signal detection using electronic healthcare record databases.* Drug Safety, 36(1):13–23.
 
+### 11. Optional Backend Features: Signal Assessment Drafts, "Ask Your Data" JSON Filter & Live openFDA Counts (`signal_copilot.py` & `main.py`)
+- **Static-First Architecture:** The public Next.js site (`web/`) is a static export (`output: "export"`) with no server. All external-API and LLM features are **off by default** and enabled only when `NEXT_PUBLIC_API_URL` is configured. With no backend configured, the site builds and behaves identically to before, with backend buttons disabled and accompanied by an explicit explanation. API keys (`NLP_LLM_API_KEY`, `OPENFDA_API_KEY`, `NCBI_API_KEY`) live exclusively on the server (`main.py`), never in client code, the static bundle, the repo, or logs.
+- **Signal Assessment Drafts (`POST /api/signals/assess`, button on each row of `/signals`):**
+  - Accepts **only aggregate statistics** (`AggregatePairStatsModel` with `extra="forbid"`, rejecting any report-level data).
+  - Retrieves product label sections (`boxed_warning`, `warnings`, `adverse_reactions`) from the openFDA Drug Label API and up to 20 PubMed abstracts (newest first) via NCBI E-utilities.
+  - Determines `"already labelled"` deterministically (`determine_label_status`) by matching the event and its clinical synonyms against the retrieved SPL sections with a negation guard (`no evidence of`, `not associated with`), returning the verbatim label excerpt.
+  - Verifies every factual sentence after generation (`verify_draft_sentences`) to ensure each cited tag (`[LABEL:...]`, `[PMID:...]`, `[STATS]`) exists in what was retrieved, drops unverified sentences, sanitizes causal language so the draft never states that the drug causes the event, records `model_name`, `prompt_version`, and `retrieval_timestamp`, and exports as Markdown (`.md`).
+- **Ask Your Data (`POST /api/signals/filter-query`, search box on `/signals`):**
+  - Translates natural-language questions (e.g., `"serious events for warfarin with at least 5 cases not flagged by PRR"`) into a strictly validated JSON filter (`validate_signal_filter`) over allowed fields and operators, applied with ordinary code (`apply_signal_filter`) — never executing model-written code or SQL. Displays the interpreted filter as interactive chips so the user can inspect and edit clauses.
+- **Live Data from openFDA (`GET /api/openfda/live-signals`, new option on `/upload`):**
+  - Queries openFDA `drug/event` count endpoints for $a$ (reports with drug & event), $a+b$ (drug total), $a+c$ (event total), and $N$ (all reports), builds the $2 \times 2$ tables, and runs the existing disproportionality pipeline (`compute_disproportionality_from_counts` / `runOpenFdaCountAnalysis`). Clearly warns that openFDA API counts are not de-duplicated quarterly FAERS extracts and marks all 11 case-level ML features as **Missing (`0%` coverage)**.
+- **Rate Limiting & Spending Cap:** All routes in `main.py` are protected by `SlidingWindowRateLimiter` (default `15 RPM` per client/route) and `check_spending_cap` (`MAX_REQUEST_COST_USD = $0.02`, `MAX_OUTPUT_TOKENS = 1200`).
+
+#### Evaluation Summary (`scripts/evaluate_signal_copilot.py` & `evaluation/copilot_evaluation_results.json`)
+1. **Deterministic SPL Label-Status Check (20 drug–event pairs: 10 known labelled, 10 known unlabelled):** **20/20 (`100.0%` accuracy; `TP=10, FP=0, TN=10, FN=0`)**.
+2. **Natural-Language → Validated JSON Filter (30 benchmark questions):** **30/30 (`100.0%` exact-match accuracy)**.
+3. **Hand-Checked Citation Audit across 10 Generated Signal Assessment Drafts (`71/71 = 100.0%` sentences supported by cited source):**
+
+| Draft | Drug → Adverse Event Pair | Deterministic Label Status | PubMed Abstracts | Verified Sentences | Hand-Checked Source-Supported Share |
+| :--- | :--- | :--- | :---: | :---: | :---: |
+| `D01` | `WARFARIN → GASTROINTESTINAL HAEMORRHAGE` | Labelled (`boxed_warning`) | 2 | 8 | **100.0% (8/8)** |
+| `D02` | `ATORVASTATIN → RHABDOMYOLYSIS` | Labelled (`warnings`) | 2 | 8 | **100.0% (8/8)** |
+| `D03` | `LISINOPRIL → ANGIOEDEMA` | Labelled (`warnings`) | 1 | 7 | **100.0% (7/7)** |
+| `D04` | `AMOXICILLIN → ANAPHYLACTIC REACTION` | Labelled (`warnings`) | 1 | 7 | **100.0% (7/7)** |
+| `D05` | `METFORMIN → LACTIC ACIDOSIS` | Labelled (`boxed_warning`) | 2 | 8 | **100.0% (8/8)** |
+| `D06` | `ACETAMINOPHEN → HEPATIC FAILURE` | Labelled (`boxed_warning`) | 1 | 7 | **100.0% (7/7)** |
+| `D07` | `METFORMIN → RHABDOMYOLYSIS` | Not in label (`not_found_in_label`) | 1 | 7 | **100.0% (7/7)** |
+| `D08` | `LORATADINE → GASTROINTESTINAL HAEMORRHAGE` | Not in label (`not_found_in_label`) | 0 | 7 | **100.0% (7/7)** |
+| `D09` | `CIPROFLOXACIN → TENDON RUPTURE` | Labelled (`boxed_warning`) | 1 | 7 | **100.0% (7/7)** |
+| `D10` | `EXPERIMENTAL_COMPOUND_X99 → IDIOSYNCRATIC NEUROPATHY` | No label (`no_label_retrieved`) | 0 | 5 | **100.0% (5/5, empty-retrieval refusal)** |
+
 ---
 
 ## Verification & Python–Browser Parity
 
-Run the Python unit test suite (including hand-checked arithmetic tests in `tests/test_advanced_statistics.py`):
+Run the Python unit test suite (including hand-checked arithmetic tests in `tests/test_advanced_statistics.py` and copilot evaluation tests in `tests/test_signal_copilot.py`):
 
 ```bash
 pip install -r requirements.txt
 pytest tests/
+python3 scripts/evaluate_signal_copilot.py
 ```
 
 Regenerate and verify the Python–TypeScript parity fixture across all 110 sample pairs, 17 ML features, EBGM/EB05 (within `0.02`), $p$-values, BH $q$-values, Mantel–Haenszel estimates, Weibull TTO shapes, $\Omega$ interactions, and temporal series:
@@ -116,3 +148,4 @@ Regenerate and verify the Python–TypeScript parity fixture across all 110 samp
 PYTHONPATH=. python3 scripts/export_parity_fixture.py
 cd web && npm install && npx tsc --noEmit && npm run lint && npm run parity
 ```
+

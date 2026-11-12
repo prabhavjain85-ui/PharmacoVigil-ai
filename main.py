@@ -15,7 +15,7 @@ from typing import Any
 from urllib.parse import unquote
 
 import pandas as pd
-from fastapi import FastAPI, File, HTTPException, Query, UploadFile
+from fastapi import FastAPI, File, HTTPException, Query, Request as FastAPIRequest, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
@@ -649,3 +649,142 @@ def api_nlp_extract(req: NlpExtractRequest) -> JSONResponse:
 
     validated = validate_llm_extraction_payload(sanitized_narrative, parsed)
     return JSONResponse({"extraction": validated})
+
+
+# ---------------------------------------------------------------------------
+# Signal Assessment Drafts, Natural-Language Filter Translation & Live openFDA
+# ---------------------------------------------------------------------------
+
+from signal_copilot import (
+    MAX_OUTPUT_TOKENS,
+    SlidingWindowRateLimiter,
+    check_spending_cap,
+    fetch_openfda_drug_counts,
+    generate_signal_assessment_draft,
+    translate_nl_query_to_filter,
+)
+
+_rate_limiter = SlidingWindowRateLimiter(
+    max_requests=int(os.environ.get("RATE_LIMIT_RPM", "15")),
+    window_seconds=60.0,
+)
+
+
+def _enforce_rate_limit(request: FastAPIRequest, route_name: str) -> None:
+    client_host = (request.client.host if request.client else "local") or "local"
+    allowed, retry_after = _rate_limiter.check(f"{route_name}:{client_host}")
+    if not allowed:
+        raise HTTPException(
+            status_code=429,
+            detail=f"Rate limit exceeded for {route_name}. Retry after {retry_after}s.",
+            headers={"Retry-After": str(int(retry_after))},
+        )
+
+
+class AggregatePairStatsModel(BaseModel):
+    model_config = {"extra": "forbid"}
+
+    case_count_a: int = Field(..., ge=1)
+    drug_total_reports: int = Field(..., ge=1)
+    event_total_reports: int = Field(..., ge=1)
+    PRR: float
+    PRR_MH: float | None = None
+    ROR: float
+    ROR_95CI_low: float = 0.0
+    ROR_95CI_high: float = 0.0
+    chi_square: float
+    p_value: float = 1.0
+    q_value: float = 1.0
+    IC: float
+    IC025: float
+    EBGM: float
+    EB05: float
+    weibull_shape: float | None = None
+    weibull_regime: str | None = None
+
+
+class SignalAssessmentRequest(BaseModel):
+    model_config = {"extra": "forbid"}
+
+    drug: str = Field(..., min_length=1, max_length=120)
+    adverse_event: str = Field(..., min_length=1, max_length=160)
+    statistics: AggregatePairStatsModel
+    use_llm: bool = Field(True, description="Whether to use configured server LLM for grounded prose synthesis")
+
+
+class SignalFilterQueryRequest(BaseModel):
+    model_config = {"extra": "forbid"}
+
+    question: str = Field(..., min_length=2, max_length=500)
+    use_llm: bool = Field(True)
+
+
+@app.post("/api/signals/assess")
+def api_signals_assess(
+    req: SignalAssessmentRequest,
+    request: FastAPIRequest,
+) -> JSONResponse:
+    """
+    Generate a verified Signal Assessment Draft for a drug-event pair.
+    - Accepts ONLY aggregate statistics (`AggregatePairStatsModel` forbids extra fields,
+      preventing any report-level data from being sent).
+    - Retrieves openFDA SPL label sections and PubMed abstracts (max 20, newest first).
+    - Computes deterministic label status and verifies every sentence citation.
+    """
+    _enforce_rate_limit(request, "signals_assess")
+    try:
+        draft = generate_signal_assessment_draft(
+            drug=req.drug,
+            adverse_event=req.adverse_event,
+            stats_payload=req.statistics.model_dump(),
+            use_llm=req.use_llm,
+        )
+        return JSONResponse(draft)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(
+            status_code=502,
+            detail=f"Signal assessment generation failed: {exc}",
+        ) from exc
+
+
+@app.post("/api/signals/filter-query")
+def api_signals_filter_query(
+    req: SignalFilterQueryRequest,
+    request: FastAPIRequest,
+) -> JSONResponse:
+    """
+    Translate a natural-language question into a strictly validated JSON filter
+    over the signals table. Never executes model-written code or SQL.
+    """
+    _enforce_rate_limit(request, "signals_filter_query")
+    try:
+        result = translate_nl_query_to_filter(req.question, use_llm=req.use_llm)
+        return JSONResponse(result)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.get("/api/openfda/live-signals")
+def api_openfda_live_signals(
+    request: FastAPIRequest,
+    drug: str = Query(..., min_length=2, max_length=120, description="Drug name to query in openFDA"),
+    max_events: int = Query(25, ge=5, le=50),
+    min_cases: int = Query(3, ge=1, le=100),
+) -> JSONResponse:
+    """
+    Build 2x2 tables from live openFDA drug/event count queries for `drug`
+    and run the existing disproportionality & ML scoring pipeline.
+    """
+    _enforce_rate_limit(request, "openfda_live_signals")
+    try:
+        payload = fetch_openfda_drug_counts(drug, max_events=max_events, min_cases=min_cases)
+        return JSONResponse(payload)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(
+            status_code=502,
+            detail=f"openFDA count query failed: {exc}",
+        ) from exc
