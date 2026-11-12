@@ -197,4 +197,102 @@ for (let i = 0; i < pyTemp.points.length; i++) {
   }
 }
 
-console.log(`Parity OK: ${py.pairs.length} pairs, ${py.feature_names.length} features each`);
+const {
+  computeDisproportionalityFromCounts,
+  runOpenFdaCountAnalysis,
+} = await import("../lib/pipeline/analyze.ts");
+const {
+  validateSignalFilter,
+  applySignalFilter,
+  parseNlQueryDeterministic,
+} = await import("../lib/pipeline/signalCopilot.ts");
+
+// Check that 2x2 count-table disproportionality reproduces the exact pooled stats
+const totalReports = result.meta.case_count;
+const countEntries = result.signals.map((s) => {
+  const a = s.case_count_a;
+  const drugTotal = s.drug_total_reports;
+  const eventTotal = s.event_total_reports;
+  const b = drugTotal - a;
+  const c = eventTotal - a;
+  const d = totalReports - drugTotal - eventTotal + a;
+  return {
+    drug: s.drug,
+    adverse_event: s.adverse_event,
+    a,
+    b,
+    c,
+    d,
+    drug_total: drugTotal,
+    event_total: eventTotal,
+    total_reports: totalReports,
+  };
+});
+const countSignals = computeDisproportionalityFromCounts(countEntries, totalReports, 3);
+if (countSignals.length !== result.signals.length) {
+  console.error(`Count disproportionality length mismatch: ${countSignals.length} vs ${result.signals.length}`);
+  process.exit(1);
+}
+for (let i = 0; i < result.signals.length; i++) {
+  const orig = result.signals[i];
+  const fromCounts = countSignals.find(
+    (x) => x.drug === orig.drug && x.adverse_event === orig.adverse_event,
+  );
+  if (!fromCounts) {
+    console.error(`Missing count signal for ${orig.drug}|${orig.adverse_event}`);
+    process.exit(1);
+  }
+  for (const k of ["PRR", "ROR", "IC", "IC025", "EBGM", "EB05", "p_value", "q_value"]) {
+    if (Math.abs((orig[k] ?? 0) - (fromCounts[k] ?? 0)) > ebgmTol) {
+      console.error(`Count disproportionality mismatch on ${orig.drug}|${orig.adverse_event}.${k}: ${orig[k]} vs ${fromCounts[k]}`);
+      process.exit(1);
+    }
+  }
+}
+
+// Verify openFDA live count analysis marks all 11 case-level ML features as missing (0% coverage)
+const liveResult = runOpenFdaCountAnalysis(
+  {
+    drug: "WARFARIN",
+    retrieved_at: "2026-04-12T00:00:00Z",
+    total_reports: totalReports,
+    drug_total_reports: countEntries[0].drug_total,
+    count_rows: countEntries.slice(0, 10),
+    disclaimer: "openFDA count query disclaimer",
+  },
+  3,
+);
+const caseLevelKeys = [
+  "n_cases",
+  "pct_serious_outcome",
+  "pct_death",
+  "pct_life_threatening",
+  "pct_hospitalization",
+  "median_age",
+  "pct_female",
+  "pct_elderly",
+  "pct_primary_suspect",
+  "pct_with_indication",
+  "median_therapy_days",
+];
+for (const k of caseLevelKeys) {
+  if ((liveResult.featureAvailability[k] ?? 0) !== 0) {
+    console.error(`Expected 0% case-level feature availability in openfda_live mode, got ${liveResult.featureAvailability[k]} for ${k}`);
+    process.exit(1);
+  }
+}
+
+// Verify NL filter deterministic translation & execution
+const sampleFilter = validateSignalFilter(
+  parseNlQueryDeterministic("serious events for warfarin with at least 5 cases not flagged by PRR"),
+);
+const filteredRows = applySignalFilter(result.signals, sampleFilter);
+for (const r of filteredRows) {
+  if (r.drug !== "WARFARIN" || r.case_count_a < 5 || r.signal_detected !== false || r.serious_event !== true) {
+    console.error("NL filter execution failed on row:", r);
+    process.exit(1);
+  }
+}
+
+console.log(`Parity OK: ${py.pairs.length} pairs, ${py.feature_names.length} features each, count-mode & NL filter verified`);
+

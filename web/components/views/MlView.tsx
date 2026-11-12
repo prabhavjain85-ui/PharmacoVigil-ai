@@ -260,11 +260,22 @@ export function MlView() {
 
       {/* Case-level Feature Availability & Model Usage */}
       <div className="glass mt-8 rounded-2xl p-6">
-        <h2 className="font-display text-lg font-semibold">
-          Case-level feature coverage in loaded dataset
-        </h2>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="font-display text-lg font-semibold">
+            Case-level feature coverage in loaded dataset
+          </h2>
+          {analysis.meta.source === "openfda_live" && (
+            <Badge tone="warn">
+              openFDA Live Count Mode — Case-level ML features unavailable (100% Missing)
+            </Badge>
+          )}
+        </div>
         <HelpTip>
-          Shows the share of scored drug–event pairs where each optional case-level feature is available in the currently loaded dataset, and whether the active model uses it. Missing values are imputed at the training mean and contribute 0 to log-odds.
+          Shows the share of scored drug–event pairs where each optional case-level feature is
+          available in the currently loaded dataset, and whether the active model uses it. In live
+          openFDA 2×2 count mode, report-level tables (DEMO, OUTC, INDI, THER) are not available, so
+          all 11 case-level features are shown as missing and imputed at the training mean (0
+          log-odds contribution).
         </HelpTip>
         <div className="mt-4 overflow-x-auto">
           <table className="w-full min-w-[560px] text-left text-sm">
@@ -284,7 +295,15 @@ export function MlView() {
                 return (
                   <tr key={f.name} className="border-b border-[var(--border)]/50">
                     <td className="py-2 pr-4 font-medium">{f.label}</td>
-                    <td className="py-2 pr-4 font-mono">{pct}%</td>
+                    <td className="py-2 pr-4 font-mono">
+                      {analysis.meta.source === "openfda_live" || pct === 0 ? (
+                        <span className="text-amber-600 dark:text-amber-400">
+                          Missing (0% — unavailable in count mode)
+                        </span>
+                      ) : (
+                        `${pct}%`
+                      )}
+                    </td>
                     <td className="py-2 pr-4">
                       {f.used ? (
                         <Badge tone="ok">Used in model</Badge>

@@ -215,7 +215,7 @@ export type FileNames = {
 };
 
 export type DatasetMeta = {
-  source: "sample" | "upload";
+  source: "sample" | "upload" | "openfda_live";
   case_count: number;
   demo_rows: number;
   superseded_versions_dropped?: number;
@@ -228,6 +228,9 @@ export type DatasetMeta = {
   pair_count: number;
   drug_count: number;
   fileNames?: FileNames;
+  openfda_drug?: string;
+  openfda_retrieved_at?: string;
+  openfda_disclaimer?: string;
 };
 
 export type PairRow = {
@@ -310,3 +313,110 @@ export type AnalysisResult = {
   weibull: Record<string, WeibullTtoResult>;
   interactions: InteractionSignalRow[];
 };
+
+export type SignalFilterOperator =
+  | "eq"
+  | "neq"
+  | "gt"
+  | "gte"
+  | "lt"
+  | "lte"
+  | "contains"
+  | "in";
+
+export type SignalFilterClause = {
+  field: string;
+  op: SignalFilterOperator;
+  value: string | number | boolean | string[];
+};
+
+export type SignalFilter = {
+  clauses: SignalFilterClause[];
+  sort_by: string | null;
+  sort_dir: "asc" | "desc";
+  limit: number | null;
+};
+
+export type VerifiedSentence = {
+  sentence: string;
+  text?: string;
+  citations: string[];
+  verified: boolean;
+  status: string;
+  causal_rewritten?: boolean;
+};
+
+export type LabelStatusResult = {
+  status: string;
+  is_labelled: boolean;
+  already_labelled?: boolean;
+  matched_section: string | null;
+  matched_term: string | null;
+  excerpt: string | null;
+  synonyms_checked: string[];
+  method: string;
+  explanation: string;
+};
+
+export type PubMedArticleSummary = {
+  pmid: string;
+  title: string;
+  year: string;
+  abstract: string;
+};
+
+export type SignalAssessmentDraft = {
+  is_draft_for_human_review: boolean;
+  human_review_notice: string;
+  model_name: string;
+  prompt_version: string;
+  retrieval_timestamp: string;
+  provenance: {
+    model_name: string;
+    prompt_version: string;
+    retrieval_timestamp: string;
+    estimated_cost_usd: number;
+    valid_sources: string[];
+    sentences_total: number;
+    sentences_verified: number;
+  };
+  drug: string;
+  adverse_event: string;
+  statistics: {
+    drug: string;
+    adverse_event: string;
+    case_count_a: number;
+    drug_total_reports: number;
+    event_total_reports: number;
+    PRR: number;
+    PRR_MH?: number | null;
+    ROR: number;
+    ROR_95CI_low: number;
+    ROR_95CI_high: number;
+    chi_square: number;
+    p_value: number;
+    q_value: number;
+    IC: number;
+    IC025: number;
+    EBGM: number;
+    EB05: number;
+    weibull_shape?: number | null;
+    weibull_regime?: string | null;
+  };
+  label_status: LabelStatusResult;
+  pubmed_articles: PubMedArticleSummary[];
+  retrieval_empty: boolean;
+  literature_summary: VerifiedSentence[];
+  alternative_explanations: VerifiedSentence[];
+  suggested_next_steps: string[];
+  markdown: string;
+};
+
+export type OpenFdaCountRow = {
+  drug: string;
+  adverse_event: string;
+  a: number;
+  drug_total: number;
+  event_total: number;
+};
+

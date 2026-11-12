@@ -1558,9 +1558,10 @@ export async function extractWithServerLlm(
     );
   }
   const redacted = redactNarrativePii(text);
+  const proc = (globalThis as unknown as { process?: { env?: Record<string, string | undefined> } }).process;
   const base =
     endpointUrl ||
-    (typeof process !== "undefined" && process.env?.NEXT_PUBLIC_NLP_API_URL) ||
+    proc?.env?.NEXT_PUBLIC_NLP_API_URL ||
     "/api/nlp/extract";
 
   const resp = await fetch(base, {

@@ -29,6 +29,7 @@ import type {
   DuplicateSignalCounts,
   FaersRow,
   InteractionSignalRow,
+  OpenFdaCountRow,
   OptionalTables,
   PairRow,
   SignalRow,
@@ -996,3 +997,187 @@ export function signalsToCsv(signals: SignalRow[]): string {
 function csvEsc(v: string) {
   return `"${v.replace(/"/g, '""')}"`;
 }
+
+/**
+ * Runs the existing disproportionality pipeline directly on 2x2 contingency counts
+ * `(a, drug_total, event_total, totalReports)` returned by live openFDA count queries.
+ */
+export function computeDisproportionalityFromCounts(
+  countRows: OpenFdaCountRow[],
+  totalReports: number,
+  minCases = 3,
+): SignalRow[] {
+  const strata: {
+    drug: string;
+    adverse_event: string;
+    a: number;
+    b: number;
+    c: number;
+    d: number;
+    drug_total_reports: number;
+    event_total_reports: number;
+  }[] = [];
+
+  const sorted = [...countRows].sort(
+    (x, y) => x.drug.localeCompare(y.drug) || x.adverse_event.localeCompare(y.adverse_event),
+  );
+
+  for (const r of sorted) {
+    const a = Math.round(r.a);
+    if (a < minCases) continue;
+    const drugTotal = Math.round(r.drug_total);
+    const eventTotal = Math.round(r.event_total);
+    const b = drugTotal - a;
+    const c = eventTotal - a;
+    const d = totalReports - drugTotal - eventTotal + a;
+    if (b <= 0 || c <= 0 || d <= 0) continue;
+    strata.push({
+      drug: r.drug.trim().toUpperCase(),
+      adverse_event: r.adverse_event.trim().toUpperCase(),
+      a,
+      b,
+      c,
+      d,
+      drug_total_reports: drugTotal,
+      event_total_reports: eventTotal,
+    });
+  }
+
+  if (strata.length === 0) return [];
+
+  const observed = strata.map((s) => s.a);
+  const expected = strata.map((s) => expectedCount(s.a, s.b, s.c, s.d, totalReports));
+  const prior = fitGammaPoissonPrior(observed, expected);
+
+  const rawRows = strata.map((s) => {
+    const prr = (s.a / (s.a + s.b)) / (s.c / (s.c + s.d));
+    const ror = (s.a * s.d) / (s.b * s.c);
+    const chi2 = chiSquareYates(s.a, s.b, s.c, s.d);
+    const rawP = chiSquarePValue(chi2);
+    const se = Math.sqrt(1 / s.a + 1 / s.b + 1 / s.c + 1 / s.d);
+    const logRor = Math.log(ror);
+    const bcp = bcpnn(s.a, s.b, s.c, s.d, totalReports);
+    const exp = expectedCount(s.a, s.b, s.c, s.d, totalReports);
+    const ebg = ebgmPair(s.a, exp, prior);
+    return { s, prr, ror, chi2, rawP, se, logRor, bcp, ebg };
+  });
+
+  const qValues = benjaminiHochberg(rawRows.map((r) => round6(r.rawP)));
+
+  return rawRows.map((r, idx) => {
+    const qVal = qValues[idx];
+    return {
+      drug: r.s.drug,
+      adverse_event: r.s.adverse_event,
+      case_count_a: r.s.a,
+      drug_total_reports: r.s.drug_total_reports,
+      event_total_reports: r.s.event_total_reports,
+      PRR: round3(r.prr),
+      ROR: round3(r.ror),
+      ROR_95CI_low: round3(Math.exp(r.logRor - 1.96 * r.se)),
+      ROR_95CI_high: round3(Math.exp(r.logRor + 1.96 * r.se)),
+      chi_square: round3(r.chi2),
+      p_value: round6(r.rawP),
+      q_value: qVal,
+      signal_fdr: qVal < 0.05 && r.prr >= 2 && r.s.a >= minCases,
+      IC: r.bcp.ic,
+      IC025: r.bcp.ic025,
+      IC975: r.bcp.ic975,
+      signal_bcpnn: r.bcp.signal_bcpnn,
+      EBGM: r.ebg.ebgm,
+      EB05: r.ebg.eb05,
+      EB95: r.ebg.eb95,
+      signal_ebgm: r.ebg.signal_ebgm,
+      serious_event: SERIOUS_EVENTS.has(r.s.adverse_event),
+      signal_detected: r.prr >= 2 && r.chi2 >= 4 && r.s.a >= minCases,
+      priority_score: null,
+      priority_rank: null,
+      priority_explain: null,
+    };
+  });
+}
+
+/**
+ * Builds an AnalysisResult from live openFDA 2x2 count queries.
+ * Case-level ML features (OUTC, INDI, THER, DEMO strata) are unavailable in live count mode
+ * and are explicitly marked missing (0% coverage in featureAvailability).
+ */
+export function runOpenFdaCountAnalysis(
+  payload: {
+    drug: string;
+    retrieved_at: string;
+    total_reports: number;
+    drug_total_reports: number;
+    count_rows: OpenFdaCountRow[];
+    disclaimer: string;
+  },
+  minCases = 3,
+): AnalysisResult {
+  const signals = computeDisproportionalityFromCounts(
+    payload.count_rows,
+    payload.total_reports,
+    minCases,
+  );
+  // Pass undefined for caseFeatures so all 11 case-level ML features are marked missing (null)
+  const featureFrames = buildFeatureFrame(signals, undefined);
+  const featureAvailability = computeFeatureAvailability(featureFrames);
+  const model = getPrioritizerModel();
+  const scored = scoreFeatureFrames(featureFrames, model);
+
+  const ranked = signals
+    .map((s, i) => ({
+      ...s,
+      priority_score: scored[i]?.priority_score ?? null,
+      priority_explain: scored[i]?.priority_explain ?? null,
+      _origIdx: i,
+    }))
+    .sort((a, b) => {
+      const diff = (b.priority_score ?? 0) - (a.priority_score ?? 0);
+      return diff !== 0 ? diff : a._origIdx - b._origIdx;
+    })
+    .map(({ _origIdx: _, ...s }, i) => ({ ...s, priority_rank: i + 1 }));
+
+  const counts: DuplicateSignalCounts = {
+    cases: payload.total_reports,
+    signals_prr: ranked.filter((s) => s.signal_detected).length,
+    signals_bcpnn: ranked.filter((s) => s.signal_bcpnn).length,
+    signals_ebgm: ranked.filter((s) => s.signal_ebgm).length,
+    signals_fdr: ranked.filter((s) => s.signal_fdr).length,
+  };
+
+  return {
+    meta: {
+      source: "openfda_live",
+      case_count: payload.total_reports,
+      demo_rows: 0,
+      superseded_versions_dropped: 0,
+      probable_duplicates_flagged: 0,
+      drug_rows: payload.drug_total_reports,
+      reac_rows: ranked.reduce((acc, s) => acc + s.case_count_a, 0),
+      pair_count: ranked.length,
+      drug_count: 1,
+      openfda_drug: payload.drug,
+      openfda_retrieved_at: payload.retrieved_at,
+      openfda_disclaimer: payload.disclaimer,
+    },
+    pairs: [],
+    signals: ranked,
+    prior: ranked.length
+      ? fitPriorFromSignals(ranked, payload.total_reports)
+      : { alpha: 1, beta: 1 },
+    model,
+    featureAvailability,
+    duplicates: {
+      superseded_versions_dropped: 0,
+      flagged_pairs: [],
+      flagged_secondary_primaryids: [],
+      excluded_active: false,
+      baseline_counts: counts,
+      excluded_counts: counts,
+    },
+    stratified: {},
+    weibull: {},
+    interactions: [],
+  };
+}
+
