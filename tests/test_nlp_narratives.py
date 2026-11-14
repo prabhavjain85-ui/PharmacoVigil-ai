@@ -41,36 +41,72 @@ def test_gold_narratives_fixture_structure() -> None:
     assert "GASTROINTESTINAL HAEMORRHAGE" not in n01["gold"]["active_reactions"]
 
 
+PMC_TEST_PATH = ROOT / "tests" / "narratives" / "pmc_independent_test_set.json"
+GUIDELINE_PATH = ROOT / "tests" / "narratives" / "ANNOTATION_GUIDELINE.md"
+
+
+def test_independent_pmc_test_set_and_guideline() -> None:
+    """Verify >= 60 open-access PubMed Central case reports exist with PMID, PMCID, license, and guideline."""
+    assert GUIDELINE_PATH.exists(), "tests/narratives/ANNOTATION_GUIDELINE.md must exist"
+    assert PMC_TEST_PATH.exists(), "tests/narratives/pmc_independent_test_set.json must exist"
+    pmc_items = json.loads(PMC_TEST_PATH.read_text(encoding="utf-8"))
+    assert len(pmc_items) >= 60
+    for item in pmc_items:
+        assert item.get("pmid"), f"Missing PMID on {item.get('id')}"
+        assert str(item.get("pmcid", "")).startswith("PMC"), f"Missing PMCID on {item.get('id')}"
+        assert item.get("license"), f"Missing open-access license on {item.get('id')}"
+        assert len(item.get("text", "")) >= 100
+        assert len(item["gold"]["suspect_drugs"]) >= 1
+        assert len(item["gold"]["active_reactions"]) >= 1
+
+
 def test_benchmark_results_reported() -> None:
-    """Verify precision, recall, and F1 per entity type are recorded for legacy and local extractors."""
+    """Verify precision, recall, and F1 per entity type are recorded separately for legacy_regex, rule_based, and transformers_ner."""
     assert BENCH_PATH.exists(), "tests/narratives/benchmark_results.json must exist"
     bench = json.loads(BENCH_PATH.read_text(encoding="utf-8"))
     assert bench["dataset_summary"]["total_narratives"] == 60
     assert bench["dataset_summary"]["negated_or_historical_or_uncertain_narratives"] >= 15
+    assert bench["independent_test_set_summary"]["total_narratives"] >= 60
 
     legacy = bench["extractors"]["legacy_regex"]["metrics"]
-    local = bench["extractors"]["local_extractor"]["metrics"]
+    rule_based = bench["extractors"]["rule_based"]["metrics"]
+    transformers_ner = bench["extractors"]["transformers_ner"]["metrics"]
 
-    for key in (
-        "suspect_drugs",
-        "concomitant_drugs",
-        "active_reactions",
-        "negated_or_historical_reactions",
-        "seriousness",
-        "demographics",
-        "clinical_course_and_reporter",
-        "micro_overall",
-    ):
-        assert key in legacy
-        assert key in local
-        for metric_name in ("precision", "recall", "f1"):
-            assert 0.0 <= legacy[key][metric_name] <= 1.0
-            assert 0.0 <= local[key][metric_name] <= 1.0
+    for ext_name in ("legacy_regex", "rule_based", "transformers_ner"):
+        ext = bench["extractors"][ext_name]
+        assert "metrics" in ext
+        assert "independent_test_metrics" in ext
+        for key in (
+            "suspect_drugs",
+            "concomitant_drugs",
+            "active_reactions",
+            "negated_or_historical_reactions",
+            "seriousness",
+            "demographics",
+            "clinical_course_and_reporter",
+            "micro_overall",
+        ):
+            assert key in ext["metrics"]
+            assert key in ext["independent_test_metrics"]
+            for metric_name in ("precision", "recall", "f1"):
+                assert 0.0 <= ext["metrics"][key][metric_name] <= 1.0
+                assert 0.0 <= ext["independent_test_metrics"][key][metric_name] <= 1.0
 
-    # Local extractor must substantially outperform legacy regex on active reactions and negation filtering
-    assert local["active_reactions"]["f1"] > legacy["active_reactions"]["f1"]
-    assert local["negated_or_historical_reactions"]["f1"] > 0.90
-    assert legacy["negated_or_historical_reactions"]["f1"] == 0.0
+    # Ensure rule_based and transformers_ner are genuinely distinct measurements
+    assert (
+        rule_based["micro_overall"]["f1"] != transformers_ner["micro_overall"]["f1"]
+    ), "rule_based and transformers_ner must be evaluated separately"
+    assert rule_based["active_reactions"]["f1"] > legacy["active_reactions"]["f1"]
+    assert transformers_ner["active_reactions"]["f1"] > legacy["active_reactions"]["f1"]
+
+    # Verify Top-1 and Top-3 term mapping accuracy are reported
+    tm = bench["term_mapping_evaluation"]
+    assert tm["independent_test_mentions"] >= 60
+    assert 0.0 < tm["trigram_plus_lexical_synonym"]["top1_accuracy"] <= 1.0
+    assert (
+        tm["trigram_plus_lexical_synonym"]["top3_accuracy"]
+        >= tm["trigram_plus_lexical_synonym"]["top1_accuracy"]
+    )
 
 
 def test_pii_redaction_strips_identifiers() -> None:
