@@ -1,0 +1,2439 @@
+[
+  {
+    "id": "PMC-01",
+    "pmid": "41890483",
+    "pmcid": "PMC13014114",
+    "doi": "10.7759/cureus.104091",
+    "journal": "Cureus",
+    "year": "2026",
+    "license": "CC BY 4.0",
+    "title": "Rifaximin-Induced Rhabdomyolysis.",
+    "category": "published_case_report",
+    "text": "We reported a case of a 62-year-old male with a history of liver cirrhosis (ascites), hepatocellular carcinoma, and coronary artery disease (post coronary artery bypass grafting (CABG)) who presented\u00a0with abdominal distension, generalized weakness, proximal muscle pain, and dark urine, with five years of atorvastatin medication without side effects. He was\u00a0initiated on rifaximin (two weeks) for hepatic encephalopathy, along with lactulose, before experiencing proximal muscle pain and generalized weakness. This article will highlight our patient who developed rhabdomyolysis after initiating rifaximin with long-term use of statin, the trends of\u00a0creatine kinase till resolution, and the treatment instituted.",
+    "gold": {
+      "suspect_drugs": [
+        "RIFAXIMIN"
+      ],
+      "concomitant_drugs": [
+        "ATORVASTATIN",
+        "LACTULOSE"
+      ],
+      "active_reactions": [
+        "RHABDOMYOLYSIS",
+        "MYALGIA",
+        "FATIGUE"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "rhabdomyolysis",
+          "gold_pt": "RHABDOMYOLYSIS"
+        },
+        {
+          "verbatim": "proximal muscle pain",
+          "gold_pt": "MYALGIA"
+        },
+        {
+          "verbatim": "generalized weakness",
+          "gold_pt": "FATIGUE"
+        }
+      ],
+      "serious": true,
+      "age": 62,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "PMC-02",
+    "pmid": "25878387",
+    "pmcid": "PMC4386136",
+    "doi": "10.4103/0253-7613.153435",
+    "journal": "Indian journal of pharmacology",
+    "year": "2015",
+    "license": "CC BY-NC-SA 3.0",
+    "title": "Acebrophylline-induced angioedema.",
+    "category": "published_case_report",
+    "text": "A 53-year-old woman visited her physician complaining of acute breathlessness and productive cough. Her medications included budesonide and formoterol for asthma, fixed-dose combination aspirin 150 mg + clopidogrel 75 mg + atorvastatin 20 mg for ischemic heart disease. History revealed that she had allergic rhinitis and was hypersensitive to penicillins. The patient was prescribed acebrophylline (ABP). Six hours after ABP therapy she presented with generalized urticarial lesions, swelling of hands, feet, lips and face, suggestive of angioedema.",
+    "gold": {
+      "suspect_drugs": [
+        "ATORVASTATIN",
+        "CLOPIDOGREL",
+        "ASPIRIN"
+      ],
+      "concomitant_drugs": [
+        "BUDESONIDE",
+        "FORMOTEROL"
+      ],
+      "active_reactions": [
+        "ANGIOEDEMA",
+        "RASH",
+        "DYSPNOEA",
+        "COUGH"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "swelling of hands, feet, lips and face",
+          "gold_pt": "ANGIOEDEMA"
+        },
+        {
+          "verbatim": "urticarial lesions",
+          "gold_pt": "RASH"
+        },
+        {
+          "verbatim": "acute breathlessness",
+          "gold_pt": "DYSPNOEA"
+        },
+        {
+          "verbatim": "productive cough",
+          "gold_pt": "COUGH"
+        }
+      ],
+      "serious": true,
+      "age": 53,
+      "sex": "F",
+      "reporter": "MD",
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-03",
+    "pmid": "40761336",
+    "pmcid": "PMC12321452",
+    "doi": "10.14309/crj.0000000000001776",
+    "journal": "ACG case reports journal",
+    "year": "2025",
+    "license": "CC BY-NC-ND 4.0",
+    "title": "Semaglutide-Induced Liver Injury.",
+    "category": "published_case_report",
+    "text": "We detail a case of a 44-year-old woman who developed liver injury with elevated liver enzymes after semaglutide initiation for weight management. Liver enzyme levels normalized after discontinuing the drug and worsened upon rechallenge, confirming semaglutide's potential to cause liver injury. In addition, our case study encompasses a literature review of all reported semaglutide-related drug-induced liver injury cases, highlighting the need for diligent liver function monitoring in patients on semaglutide and offering valuable insights into its hepatotoxic potential.",
+    "gold": {
+      "suspect_drugs": [
+        "SEMAGLUTIDE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "liver injury",
+          "gold_pt": "HEPATIC FAILURE"
+        }
+      ],
+      "serious": true,
+      "age": 44,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": "positive",
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "PMC-04",
+    "pmid": "36825108",
+    "pmcid": "PMC9941788",
+    "doi": "10.1159/000526931",
+    "journal": "Case reports in oncology",
+    "year": "2022",
+    "license": "CC BY-NC 4.0",
+    "title": "Pembrolizumab-Induced Toxic Epidermal Necrolysis.",
+    "category": "published_case_report",
+    "text": "In this report, we describe a case of TEN following the second dose of three-weekly pembrolizumab in a 50-year-old man, comparing it to four similar cases reported in the literature. It is important that oncologists are aware of this potentially life-threatening adverse reaction of pembrolizumab, as early recognition and treatment of TEN are essential to improve clinical outcome.",
+    "gold": {
+      "suspect_drugs": [
+        "PEMBROLIZUMAB"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "TOXIC EPIDERMAL NECROLYSIS"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "TEN",
+          "gold_pt": "TOXIC EPIDERMAL NECROLYSIS"
+        }
+      ],
+      "serious": true,
+      "age": 50,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-05",
+    "pmid": "37051257",
+    "pmcid": "PMC10084538",
+    "doi": "10.1177/20542704231155815",
+    "journal": "JRSM open",
+    "year": "2023",
+    "license": "CC BY-NC 4.0",
+    "title": "Secondary haemophagocytic lymphohistiocytosis vs methotrexate toxicity - a diagnostic conundrum.",
+    "category": "published_case_report",
+    "text": "A 74-year-old female with a background of rheumatoid arthritis, managed with weekly methotrexate, was admitted with; oedema, dyspnoea, cachexia and jaundice. Bloods revealed pancytopenia, hyperferritinaemia, hyperbilirubinaemia, hypoalbuminaemia and hypofolataemia. Imaging showed a large right-sided pleural effusion, requiring therapeutic aspiration, and splenomegaly. Bone marrow aspirate revealed haemophagocytosis. Differential diagnoses included methotrexate toxicity (MTXT) and haemophagocytic lymphohistiocytosis (HLH). Management was initiated for MTXT whilst ongoing investigation for possible HLH continued.",
+    "gold": {
+      "suspect_drugs": [
+        "METHOTREXATE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE",
+        "PANCYTOPENIA",
+        "DYSPNOEA"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "jaundice",
+          "gold_pt": "HEPATIC FAILURE"
+        },
+        {
+          "verbatim": "pancytopenia",
+          "gold_pt": "PANCYTOPENIA"
+        },
+        {
+          "verbatim": "dyspnoea",
+          "gold_pt": "DYSPNOEA"
+        }
+      ],
+      "serious": true,
+      "age": 74,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-06",
+    "pmid": "38347997",
+    "pmcid": "PMC10861211",
+    "doi": "10.7759/cureus.52222",
+    "journal": "Cureus",
+    "year": "2024",
+    "license": "CC BY 4.0",
+    "title": "Allopurinol-Induced Toxic Epidermal Necrolysis.",
+    "category": "published_case_report",
+    "text": "We present the case of a 68-year-old female with a recent diagnosis of hyperuricemia who started treatment with allopurinol. A week later, she presented to the emergency department with an extensive maculopapular exanthema with blisters and skin detachment. After the exclusion of other etiologies, the diagnosis of allopurinol-induced TEN was made, with 35% of BSA involvement. Due to the severity of the clinical condition, she was admitted to intensive care and treated with corticoids that had no response.",
+    "gold": {
+      "suspect_drugs": [
+        "ALLOPURINOL"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "TOXIC EPIDERMAL NECROLYSIS"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "skin detachment",
+          "gold_pt": "TOXIC EPIDERMAL NECROLYSIS"
+        }
+      ],
+      "serious": true,
+      "age": 68,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-07",
+    "pmid": "37366440",
+    "pmcid": "PMC10290569",
+    "doi": "10.7759/cureus.39504",
+    "journal": "Cureus",
+    "year": "2023",
+    "license": "CC BY 3.0",
+    "title": "Levofloxacin-Induced Toxic Epidermal Necrolysis.",
+    "category": "published_case_report",
+    "text": "We report a case of a 19-year-old male\u00a0with the presenting complaint of generalized skin blistering over the previous seven days at the dermatology outpatient clinic. The patient has had epilepsy since he was 10 years old. Due to an upper respiratory tract illness, a local healthcare facility recommended oral levofloxacin to him seven days ago. Levofloxacin-induced toxic epidermal necrolysis (TEN) was suspected based on the patient's medical history, physical examination, and research.",
+    "gold": {
+      "suspect_drugs": [
+        "LEVOFLOXACIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "TOXIC EPIDERMAL NECROLYSIS"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "toxic epidermal necrolysis",
+          "gold_pt": "TOXIC EPIDERMAL NECROLYSIS"
+        }
+      ],
+      "serious": true,
+      "age": 19,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-08",
+    "pmid": "37900492",
+    "pmcid": "PMC10611446",
+    "doi": "10.7759/cureus.46086",
+    "journal": "Cureus",
+    "year": "2023",
+    "license": "CC BY 3.0",
+    "title": "The Use of Abatacept for the Treatment of Felty Syndrome in Rheumatoid Arthritis.",
+    "category": "negated_or_historical",
+    "text": "We report a case of an 81-year-old man with a 22-year history of rheumatoid arthritis who developed pancytopenia and neutropenia for one month. An abdominal ultrasound revealed splenomegaly. A bone marrow biopsy excluded large granular lymphocytic leukemia, thus Felty Syndrome was diagnosed. He was treated with a maximum tolerated dose of methotrexate (15 mg once a week) for two months with no improvement in absolute neutrophil count.",
+    "gold": {
+      "suspect_drugs": [
+        "METHOTREXATE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "NEUTROPENIA"
+      ],
+      "negated_or_historical_reactions": [
+        "PANCYTOPENIA"
+      ],
+      "reaction_mentions": [
+        {
+          "verbatim": "neutropenia",
+          "gold_pt": "NEUTROPENIA"
+        }
+      ],
+      "serious": true,
+      "age": 81,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-09",
+    "pmid": "33564510",
+    "pmcid": "PMC7861060",
+    "doi": "10.7759/cureus.12502",
+    "journal": "Cureus",
+    "year": "2021",
+    "license": "CC BY 3.0",
+    "title": "Atorvastatin-Induced Refractory Thrombocytopenia.",
+    "category": "published_case_report",
+    "text": "Drug-induced thrombocytopenia is rarely associated with statin medications. We describe the case of a 69-year-old woman who developed refractory thrombocytopenia following atorvastatin use. To our knowledge, this is the fourth reported case of atorvastatin-induced thrombocytopenia and the first reported case of atorvastatin-induced refractory thrombocytopenia. Additionally, we summarize the cases of statin-induced thrombocytopenia reported in the medical literature.",
+    "gold": {
+      "suspect_drugs": [
+        "ATORVASTATIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "THROMBOCYTOPENIA"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "thrombocytopenia",
+          "gold_pt": "THROMBOCYTOPENIA"
+        }
+      ],
+      "serious": false,
+      "age": 69,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-10",
+    "pmid": "37811521",
+    "pmcid": "PMC10557962",
+    "doi": "10.2147/CPAA.S427714",
+    "journal": "Clinical pharmacology : advances and applications",
+    "year": "2023",
+    "license": "CC BY-NC 3.0",
+    "title": "Allopurinol-Induced Stevens-Johnson Syndrome (SJS).",
+    "category": "published_case_report",
+    "text": "We describe a case of allopurinol-induced SJS in a 95-year-old Asian female. The patient started allopurinol 13 days prior to presenting to the emergency room (ER). On day 10 of therapy, the patient developed a diffuse erythematous desquamating rash which prompted her to visit the ER after 3 days from the rash onset. This case report describes a rare fatal hypersensitivity reaction that requires rapid identification and treatment in a multi-disciplinary setting.",
+    "gold": {
+      "suspect_drugs": [
+        "ALLOPURINOL"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "STEVENS-JOHNSON SYNDROME",
+        "RASH"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "SJS",
+          "gold_pt": "STEVENS-JOHNSON SYNDROME"
+        },
+        {
+          "verbatim": "rash",
+          "gold_pt": "RASH"
+        }
+      ],
+      "serious": true,
+      "age": 95,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": "fatal"
+    }
+  },
+  {
+    "id": "PMC-11",
+    "pmid": "36324366",
+    "pmcid": "PMC9617813",
+    "doi": "10.7759/cureus.29764",
+    "journal": "Cureus",
+    "year": "2022",
+    "license": "CC BY 3.0",
+    "title": "Daptomycin-Related Rhabdomyolysis Complicated by Severe Hyperkalemia and Acute Kidney Injury.",
+    "category": "published_case_report",
+    "text": "We describe a case of a 65-year-old man who presented with progressive generalized weakness. He was started on daptomycin for methicillin-resistant Staphylococcus aureus (MRSA) right fifth metatarsal osteomyelitis. Laboratory testing revealed severe hyperkalemia of 7.5 mEq/L (normal range: 3.3-5.1) and acute kidney injury (AKI) stage 1 associated with a substantial elevation in serum creatine kinase (CK). He had been on a high-intensity statin for years, and daptomycin was switched to linezolid, and statin was held as daptomycin-related rhabdomyolysis was suspected. Our case highlights the importance of seeking alternatives to daptomycin for patients on chronic statins.",
+    "gold": {
+      "suspect_drugs": [
+        "LINEZOLID"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "RHABDOMYOLYSIS",
+        "ACUTE KIDNEY INJURY",
+        "FATIGUE"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "rhabdomyolysis",
+          "gold_pt": "RHABDOMYOLYSIS"
+        },
+        {
+          "verbatim": "acute kidney injury",
+          "gold_pt": "ACUTE KIDNEY INJURY"
+        },
+        {
+          "verbatim": "generalized weakness",
+          "gold_pt": "FATIGUE"
+        }
+      ],
+      "serious": true,
+      "age": 65,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-12",
+    "pmid": "32231507",
+    "pmcid": "PMC7098330",
+    "doi": "10.1159/000506184",
+    "journal": "Case reports in gastroenterology",
+    "year": "2020",
+    "license": "CC BY-NC 4.0",
+    "title": "Amiodarone-Induced Acute Liver Injury.",
+    "category": "published_case_report",
+    "text": "Amiodarone is a lipophilic structure with a half-life of 25-100 days. Long-term oral amiodarone is associated with photosensitivity, thyroid dysfunction, and pulmonary and hepatic toxicity. Intravenous amiodarone can lead to sweating, heating sensation, nausea, phlebitis at the injection site, and rarely acute hepatitis. This is a compelling case of a 60-year-old male who developed acute liver injury 24-36 h after starting amiodarone. All the possible causes of acute liver injury were ruled out, and his liver enzymes improved after discontinuing amiodarone.",
+    "gold": {
+      "suspect_drugs": [
+        "AMIODARONE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE",
+        "NAUSEA"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "acute liver injury",
+          "gold_pt": "HEPATIC FAILURE"
+        },
+        {
+          "verbatim": "nausea",
+          "gold_pt": "NAUSEA"
+        }
+      ],
+      "serious": true,
+      "age": 60,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": "positive",
+      "outcome": "recovering"
+    }
+  },
+  {
+    "id": "PMC-13",
+    "pmid": "41088598",
+    "pmcid": "PMC12517774",
+    "doi": "10.1097/MD.0000000000045189",
+    "journal": "Medicine",
+    "year": "2025",
+    "license": "CC BY 4.0",
+    "title": "Combination of atorvastatin and ticagrelor associated with rhabdomyolysis: A case report.",
+    "category": "published_case_report",
+    "text": "A 57-year-old male patient with acute coronary syndrome underwent emergency percutaneous coronary intervention surgery. He was prescribed ticagrelor (90\u2009mg twice daily) and atorvastatin (40\u2009mg once daily). Three days after treatment initiation, his creatine kinase, creatinine, and myoglobin levels increased markedly, and he developed acute renal failure.",
+    "gold": {
+      "suspect_drugs": [
+        "ATORVASTATIN",
+        "TICAGRELOR"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "ACUTE KIDNEY INJURY"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "acute renal failure",
+          "gold_pt": "ACUTE KIDNEY INJURY"
+        }
+      ],
+      "serious": true,
+      "age": 57,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-14",
+    "pmid": "32110225",
+    "pmcid": "PMC7036533",
+    "doi": "10.1159/000505235",
+    "journal": "Case reports in oncology",
+    "year": "2020",
+    "license": "CC BY-NC 4.0",
+    "title": "Rapidly Progressive Acute Kidney Injury Associated with Nivolumab Treatment.",
+    "category": "published_case_report",
+    "text": "A 63-year-old man with pulmonary adenocarcinoma was treated with nivolumab. High fever developed within several hours after the first administration of nivolumab; subsequently, serum creatinine levels kept increasing daily. We diagnosed acute kidney injury (AKI) as an immune-related adverse event; the patient was initially treated with 50 mg prednisolone, and the dose was then tapered. Renal biopsy pathologically revealed tubulointerstitial inflammation with strong infiltration of only T cells that were CD3+, CD4+, and CD8+.",
+    "gold": {
+      "suspect_drugs": [
+        "NIVOLUMAB"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "ACUTE KIDNEY INJURY"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "acute kidney injury",
+          "gold_pt": "ACUTE KIDNEY INJURY"
+        }
+      ],
+      "serious": true,
+      "age": 63,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-15",
+    "pmid": "39809192",
+    "pmcid": "PMC11596591",
+    "doi": "10.1097/MD.0000000000040658",
+    "journal": "Medicine",
+    "year": "2024",
+    "license": "CC BY 4.0",
+    "title": "Warfarin-induced gastrointestinal bleeding with acute liver failure: A case report.",
+    "category": "published_case_report",
+    "text": "A 64-year-old woman with warfarin 4.5\u2009mg medical history 10 years after mechanical mitral valve replacement. Who presented with gastrointestinal bleeding and extensive ecchymosis, due to rising international normalized ratio (INR), and then progressed to acute liver injury.",
+    "gold": {
+      "suspect_drugs": [
+        "WARFARIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "GASTROINTESTINAL HAEMORRHAGE",
+        "HEPATIC FAILURE"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "gastrointestinal bleeding",
+          "gold_pt": "GASTROINTESTINAL HAEMORRHAGE"
+        },
+        {
+          "verbatim": "acute liver injury",
+          "gold_pt": "HEPATIC FAILURE"
+        }
+      ],
+      "serious": true,
+      "age": 64,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "PMC-16",
+    "pmid": "39012853",
+    "pmcid": "PMC11315611",
+    "doi": "10.12659/AJCR.943492",
+    "journal": "The American journal of case reports",
+    "year": "2024",
+    "license": "CC BY-NC-ND 4.0",
+    "title": "Rhabdomyolysis Risk: The Dangers of Tribulus Terrestris, an Over-the-Counter Supplement.",
+    "category": "published_case_report",
+    "text": "CASE REPORT A 71-year-old man presented to the Emergency Department in rhabdomyolysis with a mild transaminitis after taking the over-the-counter supplement Tribulus terrestris while on long-term atorvastatin. His rhabdomyolysis peaked at day 4 after cessation of the Tribulus and atorvastatin and aggressive fluid resuscitation with a normal saline bolus at admission followed by a D5 sodium bicarbonate drip later transitioned to a normal saline drip with subsequent down-trending of the creatinine phosphokinase levels. CONCLUSIONS Tribulus terrestris is an herbal supplement used for erectile dysfunction and energy.",
+    "gold": {
+      "suspect_drugs": [
+        "ATORVASTATIN"
+      ],
+      "concomitant_drugs": [
+        "ATORVASTATIN"
+      ],
+      "active_reactions": [
+        "RHABDOMYOLYSIS",
+        "HEPATIC FAILURE"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "rhabdomyolysis",
+          "gold_pt": "RHABDOMYOLYSIS"
+        },
+        {
+          "verbatim": "transaminitis",
+          "gold_pt": "HEPATIC FAILURE"
+        }
+      ],
+      "serious": true,
+      "age": 71,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-17",
+    "pmid": "39574993",
+    "pmcid": "PMC11581461",
+    "doi": "10.7759/cureus.72098",
+    "journal": "Cureus",
+    "year": "2024",
+    "license": "CC BY 4.0",
+    "title": "Toxic Epidermal Necrolysis Induced by Doxycycline: A Case Report and Literature Review.",
+    "category": "published_case_report",
+    "text": "Lyell syndrome, also known as toxic epidermal necrolysis (TEN), is a rare but life-threatening skin condition, often triggered by certain medications. Antiepileptics, allopurinol, and some nonsteroidal anti-inflammatory drugs are the most common causes. Some antibiotics are also common culprits, although tetracyclines are rarely linked to this condition. We hereby report a case of TEN induced by doxycycline in an 18-year-old girl who was taking the drug for the treatment of acne.",
+    "gold": {
+      "suspect_drugs": [
+        "ALLOPURINOL",
+        "DOXYCYCLINE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "TOXIC EPIDERMAL NECROLYSIS"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "toxic epidermal necrolysis",
+          "gold_pt": "TOXIC EPIDERMAL NECROLYSIS"
+        }
+      ],
+      "serious": true,
+      "age": 18,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-18",
+    "pmid": "37885502",
+    "pmcid": "PMC10599792",
+    "doi": "10.7759/cureus.45949",
+    "journal": "Cureus",
+    "year": "2023",
+    "license": "CC BY 3.0",
+    "title": "An Uncommon Side Effect of Rivaroxaban: A Drug-Induced Liver Injury.",
+    "category": "published_case_report",
+    "text": "Rivaroxaban is rarely associated with drug-induced liver injury (DILI). A 57-year-old male was sent to the emergency room from an endocrine clinic for a presyncope evaluation. His exam was non-focal, and his laboratory work was remarkable for the hepatocellular pattern of liver injury. Upon detailed assessment, he was found to have DILI due to rivaroxaban. The liver function tests improved after its discontinuation. This case emphasizes the need for early recognition and timely intervention to prevent further hepatotoxicity from the culprit drug.",
+    "gold": {
+      "suspect_drugs": [
+        "RIVAROXABAN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE",
+        "DIZZINESS"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "liver injury",
+          "gold_pt": "HEPATIC FAILURE"
+        },
+        {
+          "verbatim": "presyncope",
+          "gold_pt": "DIZZINESS"
+        }
+      ],
+      "serious": true,
+      "age": 57,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": "recovering"
+    }
+  },
+  {
+    "id": "PMC-19",
+    "pmid": "37171309",
+    "pmcid": "PMC10174378",
+    "doi": "10.1097/MD.0000000000033743",
+    "journal": "Medicine",
+    "year": "2023",
+    "license": "CC BY 4.0",
+    "title": "Fatal hepatic failure following atorvastatin treatment: A case report.",
+    "category": "published_case_report",
+    "text": "A 63-year-old male patient was admitted due to unexplained chest pain. After admission, his liver function had decreased < 24 hours after taking 20\u2009mg tablets of atorvastatin due to lacunar infarction, which was improved after drug withdrawal. The treatment regimen was restarted 15 days later, but within 16 hours, the patient developed multiple organ failure, including liver failure and renal failure.",
+    "gold": {
+      "suspect_drugs": [
+        "ATORVASTATIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE",
+        "ACUTE KIDNEY INJURY"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "liver failure",
+          "gold_pt": "HEPATIC FAILURE"
+        },
+        {
+          "verbatim": "renal failure",
+          "gold_pt": "ACUTE KIDNEY INJURY"
+        }
+      ],
+      "serious": true,
+      "age": 63,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": "fatal"
+    }
+  },
+  {
+    "id": "PMC-20",
+    "pmid": "36591506",
+    "pmcid": "PMC9795206",
+    "doi": "10.3389/fonc.2022.1026434",
+    "journal": "Frontiers in oncology",
+    "year": "2022",
+    "license": "CC BY 4.0",
+    "title": "Severe toxic rhabdomyolysis under combined palbociclib and simvastatin treatment: A case report.",
+    "category": "published_case_report",
+    "text": "We report the fourth described case of severe toxic rhabdomyolysis occurring in an 81-year-old woman caused by the concomitant administration of palbociclib taken at the usual dosage (125 mg per day) and simvastatin. To the best of our knowledge, this is the first reported case successfully treated by plasma exchanges, with complete functional recovery within two months. The severity of this case justifies further consideration of pharmacokinetic interactions between palbociclib or other CDK-4-6 inhibitors and statins, which potentially increase the risk of an adverse event.",
+    "gold": {
+      "suspect_drugs": [
+        "SIMVASTATIN",
+        "PALBOCICLIB"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "RHABDOMYOLYSIS"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "rhabdomyolysis",
+          "gold_pt": "RHABDOMYOLYSIS"
+        }
+      ],
+      "serious": true,
+      "age": 81,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "PMC-21",
+    "pmid": "31723648",
+    "pmcid": "PMC6786734",
+    "doi": "10.4266/kjccm.2016.00052",
+    "journal": "Korean journal of critical care medicine",
+    "year": "2017",
+    "license": "CC BY-NC 4.0",
+    "title": "Clozapine Induced Neuroleptic Malignant Syndrome.",
+    "category": "published_case_report",
+    "text": "Neuroleptic malignant syndrome is a rare, but potentially life-threatening adverse event associated with the use of neuroleptic agents. We describe the case of a 47-year-old schizophrenic woman who was treated with clozapine for years. The patient developed acute renal failure with pulmonary edema, and underwent mechanical ventilation and hemodialysis.",
+    "gold": {
+      "suspect_drugs": [
+        "CLOZAPINE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "ACUTE KIDNEY INJURY"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "acute renal failure",
+          "gold_pt": "ACUTE KIDNEY INJURY"
+        }
+      ],
+      "serious": true,
+      "age": 47,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-22",
+    "pmid": "37833638",
+    "pmcid": "PMC10576332",
+    "doi": "10.1186/s12879-023-08652-8",
+    "journal": "BMC infectious diseases",
+    "year": "2023",
+    "license": "CC BY 4.0",
+    "title": "Fosfomycin-induced agranulocytosis: a case report and review of the literature.",
+    "category": "published_case_report",
+    "text": "A 45 year-old woman was admitted to the intensive care unit for post-surgical meningitis following meningioma resection. Meropenem and vancomycin were first introduced. A DRESS-syndrom with meropenem was suspected. Neutropenia was diagnosed three days after the introduction of parenteral fosfomycin and agranulocytosis four days later. Eosinophilia was also observed. A bone marrow aspiration was performed showing a disappearance of the neutrophil granulocyte line and a significant eosinophilia.",
+    "gold": {
+      "suspect_drugs": [
+        "VANCOMYCIN",
+        "FOSFOMYCIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "AGRANULOCYTOSIS",
+        "NEUTROPENIA"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "agranulocytosis",
+          "gold_pt": "AGRANULOCYTOSIS"
+        },
+        {
+          "verbatim": "Neutropenia",
+          "gold_pt": "NEUTROPENIA"
+        }
+      ],
+      "serious": true,
+      "age": 45,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-23",
+    "pmid": "39286238",
+    "pmcid": "PMC11403680",
+    "doi": "10.1177/20420986241270866",
+    "journal": "Therapeutic advances in drug safety",
+    "year": "2024",
+    "license": "CC BY-NC 4.0",
+    "title": "Pirfenidone-induced liver injury, a case report of a rare idiosyncratic reaction.",
+    "category": "published_case_report",
+    "text": "This report presents the case of a 70-year-old woman with known idiopathic pulmonary fibrosis, depression, hypothyroidism, and hypercholesterolemia who presented at our emergency department with jaundice, anorexia, and asthenia. The patient's medication regimen included lamotrigine, simvastatin, levothyroxine, and pirfenidone, which had been introduced 6\u2009months prior. Laboratory testing revealed elevated liver enzyme levels consistent with acute hepatocellular hepatitis.",
+    "gold": {
+      "suspect_drugs": [
+        "SIMVASTATIN",
+        "LAMOTRIGINE",
+        "PIRFENIDONE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE",
+        "FATIGUE"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "jaundice",
+          "gold_pt": "HEPATIC FAILURE"
+        },
+        {
+          "verbatim": "asthenia",
+          "gold_pt": "FATIGUE"
+        }
+      ],
+      "serious": true,
+      "age": 70,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-24",
+    "pmid": "36718280",
+    "pmcid": "PMC9883986",
+    "doi": "10.2147/BCTT.S380485",
+    "journal": "Breast cancer (Dove Medical Press)",
+    "year": "2023",
+    "license": "CC BY-NC 3.0",
+    "title": "Rhabdomyolysis Induced by the Interaction Between Ribociclib and Statins- Case Report and Literature Review.",
+    "category": "published_case_report",
+    "text": "We report a case of a 73-year-old woman with metastatic HR-positive and HER-2 negative breast cancer who developed rhabdomyolysis and acute kidney injury due to interaction between simvastatin and ribociclib with a literature review.",
+    "gold": {
+      "suspect_drugs": [
+        "SIMVASTATIN",
+        "RIBOCICLIB"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "RHABDOMYOLYSIS",
+        "ACUTE KIDNEY INJURY"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "rhabdomyolysis",
+          "gold_pt": "RHABDOMYOLYSIS"
+        },
+        {
+          "verbatim": "acute kidney injury",
+          "gold_pt": "ACUTE KIDNEY INJURY"
+        }
+      ],
+      "serious": true,
+      "age": 73,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-25",
+    "pmid": "40487811",
+    "pmcid": "PMC12140955",
+    "doi": "10.1016/j.idcr.2025.e02242",
+    "journal": "IDCases",
+    "year": "2025",
+    "license": "CC BY-NC-ND 4.0",
+    "title": "Severe Legionnaires' disease refractory to azithromycin: Are quinolones superior to macrolides?",
+    "category": "published_case_report",
+    "text": "We present a case of a 43-year-old immunosuppressed man with severe Legionella pneumonia whose clinical course was complicated by persistent fevers, acute metabolic encephalopathy, septic shock, rhabdomyolysis, and acute kidney injury while on azithromycin. He rapidly improved after a switch to levofloxacin. The current guidelines recommend either using a quinolone or macrolide for Legionella pneumonia. However, there are conflicting data suggestive of a benefit of quinolones over macrolides.",
+    "gold": {
+      "suspect_drugs": [
+        "LEVOFLOXACIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "RHABDOMYOLYSIS",
+        "ACUTE KIDNEY INJURY",
+        "HYPOTENSION"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "rhabdomyolysis",
+          "gold_pt": "RHABDOMYOLYSIS"
+        },
+        {
+          "verbatim": "acute kidney injury",
+          "gold_pt": "ACUTE KIDNEY INJURY"
+        },
+        {
+          "verbatim": "shock",
+          "gold_pt": "HYPOTENSION"
+        }
+      ],
+      "serious": true,
+      "age": 43,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": "positive",
+      "outcome": "recovering"
+    }
+  },
+  {
+    "id": "PMC-26",
+    "pmid": "31101801",
+    "pmcid": "PMC6537756",
+    "doi": "10.12659/AJCR.914707",
+    "journal": "The American journal of case reports",
+    "year": "2019",
+    "license": "CC BY-NC-ND 4.0",
+    "title": "Statin-Induced Rhabdomyolysis, Acute Kidney Injury, and Hepatitis Leading to Death.",
+    "category": "published_case_report",
+    "text": "CASE REPORT A 67-year-old man was admitted to our hospital with generalized body aches, muscle weakness, jaundice, dark urine, and decreased urine output. He was started on atorvastatin 4 months prior to presentation after having an episode of myocardial infarction, and he was diagnosed as having statin-induced hepatitis, rhabdomyolysis, and acute kidney injury. A basic workup excluded other possible causes. The patient, unfortunately, died of unknown causes on day 6 after admission, and an autopsy was not performed.",
+    "gold": {
+      "suspect_drugs": [
+        "ATORVASTATIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "RHABDOMYOLYSIS",
+        "HEPATIC FAILURE",
+        "ACUTE KIDNEY INJURY"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "rhabdomyolysis",
+          "gold_pt": "RHABDOMYOLYSIS"
+        },
+        {
+          "verbatim": "jaundice",
+          "gold_pt": "HEPATIC FAILURE"
+        },
+        {
+          "verbatim": "acute kidney injury",
+          "gold_pt": "ACUTE KIDNEY INJURY"
+        }
+      ],
+      "serious": true,
+      "age": 67,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": "fatal"
+    }
+  },
+  {
+    "id": "PMC-27",
+    "pmid": "31232948",
+    "pmcid": "PMC6636951",
+    "doi": "10.1097/MD.0000000000016078",
+    "journal": "Medicine",
+    "year": "2019",
+    "license": "CC BY-NC-ND 4.0",
+    "title": "Allopurinol-induced toxic epidermal necrolysis featuring almost 60% skin detachment.",
+    "category": "negated_or_historical",
+    "text": "A 33-year-old male presented to the emergency department with a 1-day history of fever and rash. The patient, being newly diagnosed with gout 10 days ago, received allopurinol at a dose of 250\u200amg by mouth daily. After 10 days' exposure to allopurinol, the patient manifested with an \"influenza-like\" prodromal phase (fever of 38\u00b0C, throat pains), which was treated with amoxicillin and nonsteroidal anti-inflammatory drugs of the oxicam type. The next day, he developed a worsening fever of 39.5\u00b0C, accompanied by a pruriginous rash all over his body.",
+    "gold": {
+      "suspect_drugs": [
+        "ALLOPURINOL"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "RASH"
+      ],
+      "negated_or_historical_reactions": [
+        "RASH"
+      ],
+      "reaction_mentions": [
+        {
+          "verbatim": "rash",
+          "gold_pt": "RASH"
+        }
+      ],
+      "serious": false,
+      "age": 33,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-28",
+    "pmid": "30197906",
+    "pmcid": "PMC6120420",
+    "doi": "10.1159/000491631",
+    "journal": "Case reports in nephrology and dialysis",
+    "year": "2018",
+    "license": "CC BY-NC 4.0",
+    "title": "Acute Kidney Injury after Pembrolizumab-Induced Adrenalitis and Adrenal Insufficiency.",
+    "category": "published_case_report",
+    "text": "We report a 70-year-old Caucasian male who underwent treatment with pembrolizumab for adenocarcinoma of the lung. He developed acute adrenal insufficiency and concomitant severe hypotension upon presentation. He did not require renal replacement therapy, rather his severe acute kidney injury resolved with hydration, normalization of blood pressures with vasopressors, and treatment with high-dose corticosteroids. His urinary indices (fractional excretion of urea, FEUrea) and clinical course were highly suspicious for acute tubular necrosis that resolved quickly after treating his underlying adrenalitis.",
+    "gold": {
+      "suspect_drugs": [
+        "PEMBROLIZUMAB"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "ACUTE KIDNEY INJURY",
+        "HYPOTENSION"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "acute kidney injury",
+          "gold_pt": "ACUTE KIDNEY INJURY"
+        },
+        {
+          "verbatim": "hypotension",
+          "gold_pt": "HYPOTENSION"
+        }
+      ],
+      "serious": true,
+      "age": 70,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "PMC-29",
+    "pmid": "31735738",
+    "pmcid": "PMC6911765",
+    "doi": "10.2169/internalmedicine.2591-18",
+    "journal": "Internal medicine (Tokyo, Japan)",
+    "year": "2019",
+    "license": "CC BY-NC-ND 4.0",
+    "title": "Cholestatic Liver Injury Induced by Pembrolizumab in a Patient with Lung Adenocarcinoma.",
+    "category": "published_case_report",
+    "text": "We herein report a 48-year-old man with lung adenocarcinoma who was treated with pembrolizumab and developed cholestatic liver injury. In this case, the importance of evaluating the histology of hepatotoxicity and the effectiveness of ursodeoxycholic acid for cholestatic liver injury is indicated.",
+    "gold": {
+      "suspect_drugs": [
+        "PEMBROLIZUMAB"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "liver injury",
+          "gold_pt": "HEPATIC FAILURE"
+        }
+      ],
+      "serious": true,
+      "age": 48,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-30",
+    "pmid": "29531873",
+    "pmcid": "PMC5837234",
+    "doi": "10.7759/cureus.2020",
+    "journal": "Cureus",
+    "year": "2018",
+    "license": "CC BY 3.0",
+    "title": "The Concomitant Use of Atorvastatin and Amlodipine Leading to Rhabdomyolysis.",
+    "category": "negated_or_historical",
+    "text": "A 65-year-old man, with\u00a0a history of hypertension and hyperlipidemia, presented with intractable lower back pain, shortness of breath, and decreasing urine output\u00a0at the emergency room\u00a0and was admitted after he was found to have\u00a0elevated creatinine kinase levels of greater than 160,000 U/L. We discontinued all his home medications, which included atorvastatin and amlodipine. We trended\u00a0his creatine phosphokinase (CPK) level daily and noticed it decreasing significantly off these meds.",
+    "gold": {
+      "suspect_drugs": [
+        "ATORVASTATIN",
+        "AMLODIPINE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "DYSPNOEA"
+      ],
+      "negated_or_historical_reactions": [
+        "HYPERTENSION"
+      ],
+      "reaction_mentions": [
+        {
+          "verbatim": "shortness of breath",
+          "gold_pt": "DYSPNOEA"
+        }
+      ],
+      "serious": true,
+      "age": 65,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-31",
+    "pmid": "38827262",
+    "pmcid": "PMC11142754",
+    "doi": "10.5415/apallergy.0000000000000131",
+    "journal": "Asia Pacific allergy",
+    "year": "2024",
+    "license": "CC BY 4.0",
+    "title": "Pembrolizumab-induced Stevens-Johnson syndrome/Toxic Epidermal Necrolysis in a Vietnamese patient with nonsmall-cell lung cancer.",
+    "category": "published_case_report",
+    "text": "We present a case of a 65-year-old male with NSCLC who underwent first-line chemotherapy with paclitaxel, carboplatin, and pembrolizumab, which was later followed by a second cycle of the same therapies. The patient developed a fever and rash 12 days after the second cycle. Pembrolizumab was strongly suspected as the culprit medication because cutaneous reactions to this drug have been frequently reported and threw other medications used as less likely candidates.",
+    "gold": {
+      "suspect_drugs": [
+        "PEMBROLIZUMAB"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "RASH"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "rash",
+          "gold_pt": "RASH"
+        }
+      ],
+      "serious": false,
+      "age": 65,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-32",
+    "pmid": "28008402",
+    "pmcid": "PMC5171930",
+    "doi": "10.14309/crj.2016.142",
+    "journal": "ACG case reports journal",
+    "year": "2016",
+    "license": "CC BY-NC-ND 4.0",
+    "title": "Dapagliflozin-Induced Acute-on-Chronic Liver Injury.",
+    "category": "published_case_report",
+    "text": "We present a 48-year-old woman with type 2 diabetes mellitus and Child's Class A cirrhosis secondary to nonalcoholic steatohepatitis presenting with jaundice and acute cholestatic liver injury. Other than starting dapagliflozin, she reported no medication changes or supplement use. Before treatment, her total bilirubin was 1.2 mg/dL. On admission, her liver values were elevated and liver biopsy was consistent with drug-induced liver injury.",
+    "gold": {
+      "suspect_drugs": [
+        "DAPAGLIFLOZIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "jaundice",
+          "gold_pt": "HEPATIC FAILURE"
+        }
+      ],
+      "serious": true,
+      "age": 48,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-33",
+    "pmid": "30868040",
+    "pmcid": "PMC6402866",
+    "doi": "10.7759/cureus.3827",
+    "journal": "Cureus",
+    "year": "2019",
+    "license": "CC BY 3.0",
+    "title": "Ciprofloxacin-induced Stevens-Johnson Syndrome with Grapefruit Juice Consumption: A Case Report.",
+    "category": "published_case_report",
+    "text": "We describe the case of a 49-year-old, otherwise healthy, Hispanic male who underwent an uncomplicated vasectomy and was treated prophylactically with a one-week course of ciprofloxacin. Two days after completing the antibiotic course, he developed a pruritic, blistering rash that covered 90% of his body surface area. Punch biopsy of the skin lesions confirmed the diagnosis of Stevens-Johnson syndrome (SJS). Upon further questioning, it was revealed that the patient had consumed approximately 32 ounces of grapefruit juice each of the seven days following his vasectomy.",
+    "gold": {
+      "suspect_drugs": [
+        "CIPROFLOXACIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "STEVENS-JOHNSON SYNDROME",
+        "RASH"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "Stevens-Johnson syndrome",
+          "gold_pt": "STEVENS-JOHNSON SYNDROME"
+        },
+        {
+          "verbatim": "rash",
+          "gold_pt": "RASH"
+        }
+      ],
+      "serious": true,
+      "age": 49,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-34",
+    "pmid": "39742213",
+    "pmcid": "PMC11688008",
+    "doi": "10.14309/crj.0000000000001570",
+    "journal": "ACG case reports journal",
+    "year": "2025",
+    "license": "CC BY 4.0",
+    "title": "Atorvastatin-Induced Liver Injury With Concurrent Rhabdomyolysis After a Positive Rechallenge.",
+    "category": "published_case_report",
+    "text": "Statin-induced liver injury has been widely described. However, cases of clinically significant liver injury are rare. We present a 56-year-old woman who developed atorvastatin-induced grade III acute liver injury with concurrent rhabdomyolysis that worsened after rechallenging, which highlighted the need for pharmacovigilance with statins. The Roussel Uclaf Causality Assessment Method and Revised Electronic Causality Assessment Method both showed that atorvastatin was highly probable in causing hepatotoxicity. To our knowledge, this is the first reported case of concurrent drug-induced liver injury and rhabdomyolysis after a positive rechallenge with atorvastatin.",
+    "gold": {
+      "suspect_drugs": [
+        "ATORVASTATIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "RHABDOMYOLYSIS",
+        "HEPATIC FAILURE"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "rhabdomyolysis",
+          "gold_pt": "RHABDOMYOLYSIS"
+        },
+        {
+          "verbatim": "liver injury",
+          "gold_pt": "HEPATIC FAILURE"
+        }
+      ],
+      "serious": true,
+      "age": 56,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-35",
+    "pmid": "40988805",
+    "pmcid": "PMC12451219",
+    "doi": "10.7759/cureus.90700",
+    "journal": "Cureus",
+    "year": "2025",
+    "license": "CC BY 4.0",
+    "title": "Generalized Rash and Angioedema During Triple Antiepileptic Therapy: A Case Report.",
+    "category": "published_case_report",
+    "text": "We present the case of a 42-year-old woman with drug-resistant symptomatic focal epilepsy secondary to focal cortical dysplasia, first diagnosed at the age of 15. The patient was on triple antiepileptic drug (AED) therapy: levetiracetam (LEV), lamotrigine (LTG), and oxcarbazepine (OxCBZ). Three months after the introduction of oxcarbazepine, she developed a generalized skin rash accompanied by episodic angioedema, manifesting as lip swelling and intermittent dyspnea.",
+    "gold": {
+      "suspect_drugs": [
+        "LAMOTRIGINE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "ANGIOEDEMA",
+        "RASH",
+        "DYSPNOEA"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "angioedema",
+          "gold_pt": "ANGIOEDEMA"
+        },
+        {
+          "verbatim": "rash",
+          "gold_pt": "RASH"
+        },
+        {
+          "verbatim": "dyspnea",
+          "gold_pt": "DYSPNOEA"
+        }
+      ],
+      "serious": true,
+      "age": 42,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-36",
+    "pmid": "38143660",
+    "pmcid": "PMC10748208",
+    "doi": "10.7759/cureus.49289",
+    "journal": "Cureus",
+    "year": "2023",
+    "license": "CC BY 4.0",
+    "title": "A Multifactorial Case of Stevens-Johnson Syndrome With Atypical Features.",
+    "category": "published_case_report",
+    "text": "The patient was a 29-year-old female with a past medical history of recurrent cerebrovascular accident (CVA) who presented for an evaluation of chest pain. After empiric vancomycin was started for suspicion of endocarditis, our patient developed altered mental status, mucositis, and a painful erythematous erosion on her chest concerning for vasculitis, but after treatment and pathological review, it was found to be Stevens-Johnson syndrome. It is important to not forget the wide variety of risk factors for developing Stevens-Johnson syndrome and some of its unique associated presenting symptoms.",
+    "gold": {
+      "suspect_drugs": [
+        "VANCOMYCIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "STEVENS-JOHNSON SYNDROME"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "Stevens-Johnson syndrome",
+          "gold_pt": "STEVENS-JOHNSON SYNDROME"
+        }
+      ],
+      "serious": true,
+      "age": 29,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-37",
+    "pmid": "37575835",
+    "pmcid": "PMC10419328",
+    "doi": "10.7759/cureus.41781",
+    "journal": "Cureus",
+    "year": "2023",
+    "license": "CC BY 3.0",
+    "title": "Multiorgan Failure From Nivolumab and Ipilimumab: A Case Report and Literature Review.",
+    "category": "published_case_report",
+    "text": "A 60-year-old male with a history of ulcerative colitis in remission and metastatic melanoma was admitted on February 25, 2021, for presumed sepsis, after presenting with neutropenic fever. His brain metastases were previously resected on January 14, 2021, and he was started on dexamethasone 4 mg BID for six weeks. On February 11, 2021, he received one dose of nivolumab plus ipilimumab, per the CheckMate-067 protocol. He presented 14 days later with fever, diarrhea, pancytopenia, renal failure, drug-induced hepatitis, and myocarditis.",
+    "gold": {
+      "suspect_drugs": [
+        "NIVOLUMAB",
+        "IPILIMUMAB"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "ACUTE KIDNEY INJURY",
+        "PANCYTOPENIA",
+        "DIARRHOEA"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "renal failure",
+          "gold_pt": "ACUTE KIDNEY INJURY"
+        },
+        {
+          "verbatim": "pancytopenia",
+          "gold_pt": "PANCYTOPENIA"
+        },
+        {
+          "verbatim": "diarrhea",
+          "gold_pt": "DIARRHOEA"
+        }
+      ],
+      "serious": true,
+      "age": 60,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-38",
+    "pmid": "36507113",
+    "pmcid": "PMC9731548",
+    "doi": "10.7759/cureus.29189",
+    "journal": "Cureus",
+    "year": "2022",
+    "license": "CC BY 3.0",
+    "title": "The Interplay of COVID-19 and Hereditary Angioedema: Preventing an Acute Attack.",
+    "category": "published_case_report",
+    "text": "Hereditary angioedema (HAE) is a rare inherited disease that is caused by the inactivation of the C1 esterase inhibitor. In this case report, we present a 51-year-old female previously diagnosed with HAE who tested positive for SARS-Cov-2 (COVID-19). The patient was treated symptomatically. Dexamethasone was used to treat COVID-19 pneumonia. Broad-spectrum antibiotics (vancomycin and meropenem) were utilized to prevent future infection. Although the patient did not experience an acute angioedema attack during her hospital stay, the patient expired due to the exacerbation of\u00a0COVID-19 pneumonia.",
+    "gold": {
+      "suspect_drugs": [
+        "VANCOMYCIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "ANGIOEDEMA"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "angioedema",
+          "gold_pt": "ANGIOEDEMA"
+        }
+      ],
+      "serious": true,
+      "age": 51,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-39",
+    "pmid": "35983297",
+    "pmcid": "PMC9380730",
+    "doi": "10.2147/IDR.S373082",
+    "journal": "Infection and drug resistance",
+    "year": "2022",
+    "license": "CC BY-NC 3.0",
+    "title": "Compassionate Use of Contezolid for the Treatment of Tuberculous Pleurisy in a Patient with a Leadless Pacemaker.",
+    "category": "published_case_report",
+    "text": "We report the case of an 87-year-old woman with tuberculous pleurisy. She developed adverse effects in the form of thrombocytopenia and gastrointestinal hemorrhage with isoniazid, and thrombocytopenia with linezolid. Her treatment was switched to contezolid plus cycloserine for a 4-week antibiotic duration, with a favorable outcome.",
+    "gold": {
+      "suspect_drugs": [
+        "LINEZOLID"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "GASTROINTESTINAL HAEMORRHAGE",
+        "THROMBOCYTOPENIA"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "gastrointestinal hemorrhage",
+          "gold_pt": "GASTROINTESTINAL HAEMORRHAGE"
+        },
+        {
+          "verbatim": "thrombocytopenia",
+          "gold_pt": "THROMBOCYTOPENIA"
+        }
+      ],
+      "serious": true,
+      "age": 87,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-40",
+    "pmid": "42558853",
+    "pmcid": "PMC13438339",
+    "doi": "10.1177/17562864261474798",
+    "journal": "Therapeutic advances in neurological disorders",
+    "year": "2026",
+    "license": "CC BY-NC 4.0",
+    "title": "Lamotrigine-induced Stevens-Johnson syndrome in the setting of mitochondrial encephalomyopathy: A case report.",
+    "category": "published_case_report",
+    "text": "A 67-year-old male with Mitochondrial Encephalomyopathy with Lactic Acidosis and Stroke-Like Episodes (MELAS) who developed life-threatening Stevens-Johnson Syndrome (SJS) more than one month after initiating lamotrigine (LTG) for epilepsy management. Despite prompt LTG discontinuation and aggressive immunomodulatory therapy, the patient succumbed to severe infection and multiple organ failure. LTG-induced SJS is associated with multiple risk factors.",
+    "gold": {
+      "suspect_drugs": [
+        "LAMOTRIGINE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "STEVENS-JOHNSON SYNDROME",
+        "LACTIC ACIDOSIS"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "Stevens-Johnson Syndrome",
+          "gold_pt": "STEVENS-JOHNSON SYNDROME"
+        },
+        {
+          "verbatim": "Lactic Acidosis",
+          "gold_pt": "LACTIC ACIDOSIS"
+        }
+      ],
+      "serious": true,
+      "age": 67,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": "fatal"
+    }
+  },
+  {
+    "id": "PMC-41",
+    "pmid": "36324933",
+    "pmcid": "PMC9610455",
+    "doi": "10.25259/SNI_608_2022",
+    "journal": "Surgical neurology international",
+    "year": "2022",
+    "license": "CC BY-NC-SA 4.0",
+    "title": "Spontaneous epidural hematoma induced by rivaroxaban: A case report and review of the literature.",
+    "category": "published_case_report",
+    "text": "A 27-year-old male with a history of deep vein thrombosis and one month of rivaroxaban medication presented with seizure and loss of consciousness following a severe headache. A CT scan of the head revealed epidural bleeding, and emergency blood clot removal was performed. As a reversal, prothrombin complex was utilized.",
+    "gold": {
+      "suspect_drugs": [
+        "RIVAROXABAN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "SEIZURE"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "seizure",
+          "gold_pt": "SEIZURE"
+        }
+      ],
+      "serious": false,
+      "age": 27,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-42",
+    "pmid": "38644949",
+    "pmcid": "PMC11026985",
+    "doi": "10.7759/cureus.58513",
+    "journal": "Cureus",
+    "year": "2024",
+    "license": "CC BY 4.0",
+    "title": "A Case of Direct-Acting Oral Anticoagulant-Induced Intramural Colon Hematoma Successfully Treated by Laparoscopic Surgery.",
+    "category": "published_case_report",
+    "text": "An 80-year-old male patient with a history of atrial fibrillation and cerebral infarction, on treatment with apixaban, was brought to our hospital with the chief complaints of abdominal pain, vomiting, and melena. Imaging revealed the cause of symptoms to be intestinal obstruction caused by a mass lesion on the wall of the ascending colon. We initially opted for conservative treatment with discontinuation of apixaban and insertion of an ileus tube.",
+    "gold": {
+      "suspect_drugs": [
+        "APIXABAN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "GASTROINTESTINAL HAEMORRHAGE",
+        "VOMITING"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "melena",
+          "gold_pt": "GASTROINTESTINAL HAEMORRHAGE"
+        },
+        {
+          "verbatim": "vomiting",
+          "gold_pt": "VOMITING"
+        }
+      ],
+      "serious": true,
+      "age": 80,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-43",
+    "pmid": "39071072",
+    "pmcid": "PMC11282444",
+    "doi": "10.7759/cureus.65488",
+    "journal": "Cureus",
+    "year": "2024",
+    "license": "CC BY 4.0",
+    "title": "Ceftaroline-Induced Thrombocytopenia: A Case Report.",
+    "category": "published_case_report",
+    "text": "This report discusses a rare case of severe thrombocytopenia induced by ceftaroline in a 69-year-old male with a history of atrial fibrillation on rivaroxaban and allergies to amoxicillin and sulfa drugs. Following the initiation of ceftaroline for left lower extremity purulent cellulitis, his platelet count dropped from 204,000 to 4,000 x 10\u00b3/\u03bcL within a day. Given the low platelet levels, anticoagulation therapy, and bleeding risk, immediate interventions and prompt recognition prevented major complications, highlighting the importance of recognizing drug-induced thrombocytopenia in clinical practice.",
+    "gold": {
+      "suspect_drugs": [
+        "AMOXICILLIN",
+        "RIVAROXABAN",
+        "CEFTAROLINE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "THROMBOCYTOPENIA"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "thrombocytopenia",
+          "gold_pt": "THROMBOCYTOPENIA"
+        }
+      ],
+      "serious": false,
+      "age": 69,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-44",
+    "pmid": "33510926",
+    "pmcid": "PMC7826224",
+    "doi": "10.1155/2021/8870154",
+    "journal": "Case reports in surgery",
+    "year": "2021",
+    "license": "CC BY 4.0",
+    "title": "Hemorrhage of the Ramus Lumbalis of the Iliolumbar Artery as a Cause for Shock in Blunt Trauma Victims on Therapeutic Anticoagulation.",
+    "category": "published_case_report",
+    "text": "Two cases (an 80-year-old female on warfarin and a 67-year-old male on apixaban for atrial fibrillation) presented with shock after direct blunt trauma in their torsos. Embolotherapy techniques were utilized to obtain angiostasis while the patients were resuscitated with massive transfusion protocols and reversal of the agents received. In the setting of severe localized blunt trauma on an aging victim while on antithrombotic medications, noncavitary torso hemorrhage must be included in the differential diagnosis.",
+    "gold": {
+      "suspect_drugs": [
+        "WARFARIN",
+        "APIXABAN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HYPOTENSION"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "shock",
+          "gold_pt": "HYPOTENSION"
+        }
+      ],
+      "serious": false,
+      "age": 80,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-45",
+    "pmid": "36545559",
+    "pmcid": "PMC9764033",
+    "doi": "10.1002/ccr3.6766",
+    "journal": "Clinical case reports",
+    "year": "2022",
+    "license": "CC BY 4.0",
+    "title": "Ciprofloxacin induced toxic epidermal necrolysis with cholestatic hepatitis: A case report with literature review and revisit to the Naranjo adverse drug reaction probability scale.",
+    "category": "published_case_report",
+    "text": "Ciprofloxacin, among the many Fluoroquinolones, has been widely used as a broad-spectrum antibiotic due to its wide range of action and relatively safe adverse effect profile. However, among the cutaneous adverse drug reactions due to Ciprofloxacin, toxic epidermal necrolysis occurring along with cholestatic hepatitis is a rare one. Here, we present a case of a 22-year-old male patient who was diagnosed with toxic epidermal necrolysis with cholestatic hepatitis secondary to Ciprofloxacin. Naranjo adverse drug reaction probability scale was used for the causal association.",
+    "gold": {
+      "suspect_drugs": [
+        "CIPROFLOXACIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "TOXIC EPIDERMAL NECROLYSIS",
+        "HEPATIC FAILURE"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "toxic epidermal necrolysis",
+          "gold_pt": "TOXIC EPIDERMAL NECROLYSIS"
+        },
+        {
+          "verbatim": "cholestatic hepatitis",
+          "gold_pt": "HEPATIC FAILURE"
+        }
+      ],
+      "serious": true,
+      "age": 22,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-46",
+    "pmid": "35317001",
+    "pmcid": "PMC8931819",
+    "doi": "10.1093/omcr/omac025",
+    "journal": "Oxford medical case reports",
+    "year": "2022",
+    "license": "CC BY 4.0",
+    "title": "Pembrolizumab-induced toxic epidermal necrolysis: case report.",
+    "category": "published_case_report",
+    "text": "A 63-year-old man with metastatic lung adenocarcinoma presented with biopsy confirmed toxic epidermal necrolysis (TEN). Symptoms commenced following 3\u00a0cycles of carboplatin, pemetrexed and pembrolizumab, with the first cycle given ~9.5\u00a0weeks prior to presentation. The patient was managed with immunosuppressive therapy including high dose methylprednisolone, cyclosporine, intravenous immunoglobulin, antibiotics and optimal skin care, and achieved excellent recovery of the skin lesions with minimal sequelae.",
+    "gold": {
+      "suspect_drugs": [
+        "PEMBROLIZUMAB"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "TOXIC EPIDERMAL NECROLYSIS"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "toxic epidermal necrolysis",
+          "gold_pt": "TOXIC EPIDERMAL NECROLYSIS"
+        }
+      ],
+      "serious": true,
+      "age": 63,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "PMC-47",
+    "pmid": "28772029",
+    "pmcid": "PMC5542730",
+    "doi": "10.1002/ehf2.12161",
+    "journal": "ESC heart failure",
+    "year": "2017",
+    "license": "CC BY-NC-ND 4.0",
+    "title": "ACE inhibitor-associated intestinal angioedema in orthotopic heart transplantation.",
+    "category": "published_case_report",
+    "text": "A 36-year-old Caucasian woman with history of heart transplantation on sirolimus, tacrolimus and prednisone presented to the Emergency Department with abdominal pain, one day following lisinopril initiation. A computer tomography scan demonstrated diffuse bowel wall thickening consistent with pancolitis and edema. She was subsequently diagnosed with angiotensin-converting enzyme inhibitor induced angioedema. Patients on mTOR immunosuppression are at higher risk for this potentially life-threatening side effect.",
+    "gold": {
+      "suspect_drugs": [
+        "LISINOPRIL",
+        "PREDNISONE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "ANGIOEDEMA"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "angioedema",
+          "gold_pt": "ANGIOEDEMA"
+        }
+      ],
+      "serious": true,
+      "age": 36,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-48",
+    "pmid": "31647029",
+    "pmcid": "PMC6813076",
+    "doi": "10.1186/s13256-019-2245-y",
+    "journal": "Journal of medical case reports",
+    "year": "2019",
+    "license": "CC BY 4.0",
+    "title": "Nivolumab-related severe thrombocytopenia in a patient with relapsed lung adenocarcinoma: a case report and review of the literature.",
+    "category": "published_case_report",
+    "text": "An 82-year-old Japanese woman with relapsed lung adenocarcinoma was treated with nivolumab as second-line systemic therapy at our institute. Her laboratory data indicated thrombocytopenia suspected to be an immune-related adverse event following two courses of nivolumab. Subsequently, she developed a massive pulmonary hemorrhage and left cerebral infarction despite intensive treatment including systemic steroid therapy. Although there have been a few reports of thrombocytopenia caused by nivolumab, this is the first report of grade V thrombocytopenia following administration of nivolumab for relapsed non-small cell lung cancer.",
+    "gold": {
+      "suspect_drugs": [
+        "NIVOLUMAB"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "THROMBOCYTOPENIA"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "thrombocytopenia",
+          "gold_pt": "THROMBOCYTOPENIA"
+        }
+      ],
+      "serious": false,
+      "age": 82,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-49",
+    "pmid": "40585748",
+    "pmcid": "PMC12202715",
+    "doi": "10.7759/cureus.84929",
+    "journal": "Cureus",
+    "year": "2025",
+    "license": "CC BY 4.0",
+    "title": "Lamotrigine-Induced Toxic Epidermal Necrolysis (Lyell's Syndrome): A Case Report and Literature Review.",
+    "category": "published_case_report",
+    "text": "We present the case of a 24-year-old female who developed TEN after the recent initiation of lamotrigine for bipolar disorder. The patient exhibited rapidly progressing skin blistering and detachment affecting over 30% of the body surface area, along with mucosal lesions. Lamotrigine was immediately discontinued, and the patient received intensive supportive treatment in a specialized care unit, resulting in a favorable recovery.",
+    "gold": {
+      "suspect_drugs": [
+        "LAMOTRIGINE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "TOXIC EPIDERMAL NECROLYSIS"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "TEN",
+          "gold_pt": "TOXIC EPIDERMAL NECROLYSIS"
+        }
+      ],
+      "serious": true,
+      "age": 24,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": "recovered"
+    }
+  },
+  {
+    "id": "PMC-50",
+    "pmid": "37753064",
+    "pmcid": "PMC10519642",
+    "doi": "10.7759/cureus.45945",
+    "journal": "Cureus",
+    "year": "2023",
+    "license": "CC BY 3.0",
+    "title": "Vancomycin-Induced Thrombocytopenia in a 35-Year-Old Female With Pneumonia: A Case Report.",
+    "category": "published_case_report",
+    "text": "Here, we present a case of severe vancomycin-induced thrombocytopenia in a 35-year-old female with a history of multiple comorbidities who presented with pneumonia. She was undergoing treatment with vancomycin and piperacillin-tazobactam and developed thrombocytopenia within 24 hours of hospitalization. The patient was\u00a0on a loading dose of 1250 mg intravenous\u00a0vancomycin every 24 hours\u00a0and\u00a0piperacillin-tazobactam\u00a03.375 g intravenously every six hours for presumed community-acquired pneumonia.",
+    "gold": {
+      "suspect_drugs": [
+        "VANCOMYCIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "THROMBOCYTOPENIA"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "thrombocytopenia",
+          "gold_pt": "THROMBOCYTOPENIA"
+        }
+      ],
+      "serious": false,
+      "age": 35,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-51",
+    "pmid": "31534873",
+    "pmcid": "PMC6728117",
+    "doi": "10.9740/mhc.2019.09.315",
+    "journal": "The mental health clinician",
+    "year": "2019",
+    "license": "CC BY-NC 3.0",
+    "title": "Cross-reaction of angioedema with clozapine, olanzapine, and quetiapine: A case report.",
+    "category": "negated_or_historical",
+    "text": "A 67-year-old African American male with a past medical history significant for hypertension, coronary artery disease requiring stent placement, mitral insufficiency, hyperlipidemia, tobacco use disorder, and schizophrenia presented with altered mental status and disorientation in the setting of clozapine nonadherence, which prompted acute hospitalization for clozapine reinitiation. During clozapine titration, the patient developed edema, erythema, and pruritus on his face and arms along with lip swelling characteristic of angioedema. Upon discontinuation of clozapine, the patient was trialed on several other antipsychotic medications to help manage acute psychosis and subsequently developed angioedema symptoms with trials of both olanzapine and quetiapine.",
+    "gold": {
+      "suspect_drugs": [
+        "CLOZAPINE",
+        "OLANZAPINE",
+        "QUETIAPINE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "ANGIOEDEMA"
+      ],
+      "negated_or_historical_reactions": [
+        "HYPERTENSION"
+      ],
+      "reaction_mentions": [
+        {
+          "verbatim": "angioedema",
+          "gold_pt": "ANGIOEDEMA"
+        }
+      ],
+      "serious": true,
+      "age": 67,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-52",
+    "pmid": "41393727",
+    "pmcid": "PMC12699284",
+    "doi": "10.7759/cureus.96644",
+    "journal": "Cureus",
+    "year": "2025",
+    "license": "CC BY 4.0",
+    "title": "Idiosyncratic Warfarin-Induced Hepatocellular Injury: A Reversible and Uncommon Occurrence.",
+    "category": "published_case_report",
+    "text": "We describe a 41-year-old man who developed acute hepatocellular injury within 24 hours of initiating warfarin for upper limb deep vein thrombosis (DVT). He had no past medical history, risk factors for liver disease, or exposure to hepatotoxic agents. Baseline liver function was normal, and alternative causes, including viral and autoimmune hepatitis, were excluded. Marked elevations in alanine aminotransferase (ALT) and aspartate aminotransferase (AST) were observed, which improved rapidly after discontinuing warfarin.",
+    "gold": {
+      "suspect_drugs": [
+        "WARFARIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "autoimmune hepatitis",
+          "gold_pt": "HEPATIC FAILURE"
+        }
+      ],
+      "serious": true,
+      "age": 41,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": "recovering"
+    }
+  },
+  {
+    "id": "PMC-53",
+    "pmid": "36505877",
+    "pmcid": "PMC9732564",
+    "doi": "10.3389/fonc.2022.973421",
+    "journal": "Frontiers in oncology",
+    "year": "2022",
+    "license": "CC BY 4.0",
+    "title": "Case report: A rare case of neutropenia caused by pembrolizumab in squamous lung cancer and literature review.",
+    "category": "published_case_report",
+    "text": "A 78-year-old man with squamous lung cancer, with brain metastasis, was treated with pembrolizumab and albumin-bound paclitaxel as first-line treatment for one cycle and changed to pembrolizumab plus anlotinib at the second cycle. After two therapy cycles, grade 4 neutropenia developed, which mainly contributed to irAEs. The patient was started on granulocyte colony-stimulating factor (G-CSF) but did not improve; he was then treated with corticosteroids, and neutrophil counts gradually returned to normal levels. However, the patient eventually died because of neurological problems.",
+    "gold": {
+      "suspect_drugs": [
+        "PEMBROLIZUMAB"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "NEUTROPENIA"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "neutropenia",
+          "gold_pt": "NEUTROPENIA"
+        }
+      ],
+      "serious": true,
+      "age": 78,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": "fatal"
+    }
+  },
+  {
+    "id": "PMC-54",
+    "pmid": "30799364",
+    "pmcid": "PMC6630117",
+    "doi": "10.2169/internalmedicine.2330-18",
+    "journal": "Internal medicine (Tokyo, Japan)",
+    "year": "2019",
+    "license": "CC BY-NC-ND 4.0",
+    "title": "Successful Treatment of Nivolumab-related Cholangitis with Prednisolone: A Case Report and Review of the Literature.",
+    "category": "published_case_report",
+    "text": "The patient was a 76-year-old man who was treated with nivolumab due to recurrent gastric cancer. A blood examination revealed grade 3 alkaline phosphatase (ALP) elevation. A histopathological examination revealed marked portal infiltration, including eosinophils and CD4+ and CD8+ T lymphocytes, suggesting nivolumab-related cholangitis accompanied by the features of both an immune-related adverse event (irAE) and drug-induced liver injury (DILI) with allergic reaction.",
+    "gold": {
+      "suspect_drugs": [
+        "NIVOLUMAB"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "liver injury",
+          "gold_pt": "HEPATIC FAILURE"
+        }
+      ],
+      "serious": true,
+      "age": 76,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-55",
+    "pmid": "34383728",
+    "pmcid": "PMC8369431",
+    "doi": "10.12659/AJCR.931418",
+    "journal": "The American journal of case reports",
+    "year": "2021",
+    "license": "CC BY-NC-ND 4.0",
+    "title": "Hepatotoxicity Induced by Fluvastatin: A Reversible Acute Cholestatic Liver Injury.",
+    "category": "published_case_report",
+    "text": "CASE REPORT We describe the case of a 69-year-old Saudi man with a medical history of diabetes mellitus and hypercholesterolemia for 2 years, on metformin, gliclazide modified release, daily aspirin, and simvastatin. Fluvastatin 40 mg daily was administered instead of simvastatin for 7 weeks before the patient was admitted to the hospital with fatigue, weakness, abdominal pain, loss of appetite, vomiting, itching, and elevated liver enzymes. Discontinuation of fluvastatin and other combined therapies led to a decrease in liver enzymes.",
+    "gold": {
+      "suspect_drugs": [
+        "SIMVASTATIN",
+        "METFORMIN",
+        "FLUVASTATIN",
+        "ASPIRIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE",
+        "FATIGUE",
+        "VOMITING"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "elevated liver enzymes",
+          "gold_pt": "HEPATIC FAILURE"
+        },
+        {
+          "verbatim": "fatigue",
+          "gold_pt": "FATIGUE"
+        },
+        {
+          "verbatim": "vomiting",
+          "gold_pt": "VOMITING"
+        }
+      ],
+      "serious": true,
+      "age": 69,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-56",
+    "pmid": "29312452",
+    "pmcid": "PMC5671695",
+    "doi": "10.1155/2017/1093858",
+    "journal": "Case reports in medicine",
+    "year": "2017",
+    "license": "CC BY 4.0",
+    "title": "A Case of Nivolumab-Induced Severe Mononeuropathy Multiplex and Rhabdomyolysis.",
+    "category": "published_case_report",
+    "text": "We report an 81-year-old man with multiple liver metastases after tumorectomy for primary mediastinal malignant melanoma, who experienced limb weakness and sensory disturbance after nivolumab monotherapy. He was diagnosed with nivolumab-induced mononeuropathy multiplex and rhabdomyolysis based on serologic examination, muscle biopsy, magnetic resonance imaging of the limbs, and a nerve conduction study. A course of intravenous methylprednisolone (mPSL) was initiated at 1\u2009g/day for 3 days.",
+    "gold": {
+      "suspect_drugs": [
+        "NIVOLUMAB"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "RHABDOMYOLYSIS"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "rhabdomyolysis",
+          "gold_pt": "RHABDOMYOLYSIS"
+        }
+      ],
+      "serious": true,
+      "age": 81,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-57",
+    "pmid": "30568157",
+    "pmcid": "PMC6322060",
+    "doi": "10.12659/AJCR.912326",
+    "journal": "The American journal of case reports",
+    "year": "2018",
+    "license": "CC BY-NC-ND 4.0",
+    "title": "Recurrent Torsades with Refractory QT Prolongation in a 54-Year-Old Man.",
+    "category": "published_case_report",
+    "text": "CASE REPORT We present the case of a 54-year-old man who experienced severe QT prolongation after drug administration followed by recurrent episodes of torsade de pointes (TdP) with subsequent ventricular fibrillation (VF) arrest unresponsive to typical therapy. After failing electrolyte repletion, magnesium, amiodarone, and lidocaine, the patient was started on an isoproterenol drip to achieve a heart rate of at least 90 beats per minute (bpm). Isoproterenol resulted in an immediate near-normalization of his QT interval and cessation of his recurrent TdP.",
+    "gold": {
+      "suspect_drugs": [
+        "AMIODARONE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "QT PROLONGATION"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "QT prolongation",
+          "gold_pt": "QT PROLONGATION"
+        }
+      ],
+      "serious": true,
+      "age": 54,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-58",
+    "pmid": "34219515",
+    "pmcid": "PMC8255573",
+    "doi": "10.1177/21501327211028714",
+    "journal": "Journal of primary care & community health",
+    "year": "2021",
+    "license": "CC BY-NC 4.0",
+    "title": "Statin-Induced Autoimmune Necrotizing Myopathy.",
+    "category": "published_case_report",
+    "text": "A 73-year-old female presented to clinic with myalgia and fatigue. She was on atorvastatin 20\u2009mg/day for over 1\u2009year, which she stopped 1\u2009week prior to her initial presentation. Patient did experience rhabdomyolysis as well as a transaminitis. She underwent an autoimmune workup which was positive for HMG-CoA reductase antibodies. Patient was initially treated on a prednisone taper, starting dose 50\u2009mg/day. Without remission of symptoms, methotrexate 15\u2009mg/week was initiated.",
+    "gold": {
+      "suspect_drugs": [
+        "ATORVASTATIN",
+        "PREDNISONE",
+        "METHOTREXATE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "RHABDOMYOLYSIS",
+        "HEPATIC FAILURE",
+        "MYALGIA",
+        "FATIGUE"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "rhabdomyolysis",
+          "gold_pt": "RHABDOMYOLYSIS"
+        },
+        {
+          "verbatim": "transaminitis",
+          "gold_pt": "HEPATIC FAILURE"
+        },
+        {
+          "verbatim": "myalgia",
+          "gold_pt": "MYALGIA"
+        },
+        {
+          "verbatim": "fatigue",
+          "gold_pt": "FATIGUE"
+        }
+      ],
+      "serious": true,
+      "age": 73,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-59",
+    "pmid": "42220794",
+    "pmcid": "PMC13216845",
+    "doi": "10.7759/cureus.107853",
+    "journal": "Cureus",
+    "year": "2026",
+    "license": "CC BY 4.0",
+    "title": "Acute Liver Failure Associated With Intravenous Amiodarone: A Case Report.",
+    "category": "published_case_report",
+    "text": "We report the case of an 80-year-old male who presented with palpitations and was diagnosed with atrial fibrillation with rapid ventricular response. Intravenous amiodarone was initiated for rhythm control. Within 14 hours, the patient developed rapidly progressive hepatocellular injury with marked elevation of transaminases, hyperbilirubinemia, and severe coagulopathy. Liver injury occurred while the patient remained hemodynamically stable, making ischemic hepatitis less likely, although it could not be completely excluded.",
+    "gold": {
+      "suspect_drugs": [
+        "AMIODARONE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "Liver injury",
+          "gold_pt": "HEPATIC FAILURE"
+        }
+      ],
+      "serious": true,
+      "age": 80,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-60",
+    "pmid": "40109651",
+    "pmcid": "PMC11918715",
+    "doi": "10.1097/MS9.0000000000002741",
+    "journal": "Annals of medicine and surgery (2012)",
+    "year": "2025",
+    "license": "CC BY 4.0",
+    "title": "Emerging challenges: clozapine-associated hepatotoxicity in bipolar disorder: a case report.",
+    "category": "published_case_report",
+    "text": "We presented a case of a 42-year-old man with bipolar disorder who presented to our emergency department with a complaint of fatigue, nausea, vomiting, and pain in the upper right abdomen for 1 week. The patient was commenced with clozapine 1 month prior. He appeared jaundiced with a slightly swollen abdomen. Blood tests revealed highly elevated liver enzymes (AST 1679\u00a0U/L, ALT 1752\u00a0U/L) and bilirubin levels (total bilirubin 8.5 mg/dL, direct bilirubin 3.02 mg/dL). Tests for viral hepatitis and autoimmune diseases were negative. Suspecting clozapine-induced liver injury, we stopped the medication and provided supportive care.",
+    "gold": {
+      "suspect_drugs": [
+        "CLOZAPINE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "HEPATIC FAILURE",
+        "FATIGUE",
+        "NAUSEA",
+        "VOMITING"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "elevated liver enzymes",
+          "gold_pt": "HEPATIC FAILURE"
+        },
+        {
+          "verbatim": "fatigue",
+          "gold_pt": "FATIGUE"
+        },
+        {
+          "verbatim": "nausea",
+          "gold_pt": "NAUSEA"
+        },
+        {
+          "verbatim": "vomiting",
+          "gold_pt": "VOMITING"
+        }
+      ],
+      "serious": true,
+      "age": 42,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-61",
+    "pmid": "38292220",
+    "pmcid": "PMC10822778",
+    "doi": "10.1002/ccr3.8311",
+    "journal": "Clinical case reports",
+    "year": "2024",
+    "license": "CC BY-NC-ND 4.0",
+    "title": "Identifying causative medications for agranulocytosis: A case report of an older adult with cerebral infarction.",
+    "category": "published_case_report",
+    "text": "We present the case of a 93-year-old man who was admitted for the treatment of cerebrovascular events. The patient was initially prescribed dual antiplatelet therapy with aspirin and clopidogrel along with lansoprazole, Hange-koboku-toh, and elobixibat. On day 36 after admission, the patient was found to have developed agranulocytosis. To improve his cerebrovascular prognosis, we first discontinued medications other than the anticoagulant medicines and initiated filgrastim.",
+    "gold": {
+      "suspect_drugs": [
+        "CLOPIDOGREL",
+        "ASPIRIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "AGRANULOCYTOSIS"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "agranulocytosis",
+          "gold_pt": "AGRANULOCYTOSIS"
+        }
+      ],
+      "serious": true,
+      "age": 93,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-62",
+    "pmid": "34123387",
+    "pmcid": "PMC8175720",
+    "doi": "10.1002/rcr2.799",
+    "journal": "Respirology case reports",
+    "year": "2021",
+    "license": "CC BY-NC 4.0",
+    "title": "No need to hesitate: immune-related neutropenia and thrombocytopenia that improved by corticosteroids.",
+    "category": "negated_or_historical",
+    "text": "A 67-year-old man was diagnosed with advanced lung squamous cell carcinoma. After 41\u2009cycles of nivolumab as third-line chemotherapy, the patient developed severe neutropenia and thrombocytopenia. The bone marrow biopsy and serum immunological tests indicated no evidence of bone marrow failure and suggested autoimmune mature blood cell destruction. After initiating treatment with prednisolone 50\u2009mg orally and filgrastim 75\u2009\u03bcg subcutaneously once daily, neutropenia and thrombocytopenia recovered within four and nine days, respectively.",
+    "gold": {
+      "suspect_drugs": [
+        "NIVOLUMAB"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "NEUTROPENIA",
+        "THROMBOCYTOPENIA"
+      ],
+      "negated_or_historical_reactions": [
+        "APLASTIC ANAEMIA"
+      ],
+      "reaction_mentions": [
+        {
+          "verbatim": "neutropenia",
+          "gold_pt": "NEUTROPENIA"
+        },
+        {
+          "verbatim": "thrombocytopenia",
+          "gold_pt": "THROMBOCYTOPENIA"
+        }
+      ],
+      "serious": true,
+      "age": 67,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-63",
+    "pmid": "42812648",
+    "pmcid": "PMC13621296",
+    "doi": "10.4329/wjr.125365",
+    "journal": "World journal of radiology",
+    "year": "2026",
+    "license": "CC BY-NC 4.0",
+    "title": "Amiodarone-induced liver injury with bright liver sign: A case report.",
+    "category": "published_case_report",
+    "text": "An 85-year-old woman received oral amiodarone hydrochloride for 5 months for the treatment of atrial fibrillation and subsequently developed recurrent nausea, vomiting, and progressive elevation of liver enzymes. Given the well-documented medication history and a Roussel Uclaf Causality Assessment Method score of 8, AILI secondary to intrahepatic drug deposition was clinically suspected. Non-contrast chest computed tomography (CT) demonstrated diffusely increased hepatic attenuation, and hemochromatosis was initially diagnosed on imaging.",
+    "gold": {
+      "suspect_drugs": [
+        "AMIODARONE"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "NAUSEA",
+        "VOMITING"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "nausea",
+          "gold_pt": "NAUSEA"
+        },
+        {
+          "verbatim": "vomiting",
+          "gold_pt": "VOMITING"
+        }
+      ],
+      "serious": false,
+      "age": 85,
+      "sex": "F",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  },
+  {
+    "id": "PMC-64",
+    "pmid": "33062342",
+    "pmcid": "PMC7545408",
+    "doi": "10.1155/2020/8890335",
+    "journal": "Case reports in critical care",
+    "year": "2020",
+    "license": "CC BY 4.0",
+    "title": "Life-Threatening Intrapulmonary Hemorrhage due to Vancomycin-Induced Thrombocytopenia: A Case Report.",
+    "category": "published_case_report",
+    "text": "A 52-year-old male patient with acute kidney injury was treated with Vancomycin for ventilator-associated pneumonia. Three days later, his platelets decreased from 172 \u00d7 109/L to 3 \u00d7 109/L over a 36-hour period. The patient developed significant intrapulmonary bleeding leading to profound hypoxemia. Workup was negative for thrombotic thrombocytopenic purpura, disseminated intravascular coagulopathy, atypical hemolytic uremic syndrome, heparin-induced thrombocytopenia, and autoimmune diseases.",
+    "gold": {
+      "suspect_drugs": [
+        "VANCOMYCIN"
+      ],
+      "concomitant_drugs": [],
+      "active_reactions": [
+        "ACUTE KIDNEY INJURY",
+        "THROMBOCYTOPENIA"
+      ],
+      "negated_or_historical_reactions": [],
+      "reaction_mentions": [
+        {
+          "verbatim": "acute kidney injury",
+          "gold_pt": "ACUTE KIDNEY INJURY"
+        },
+        {
+          "verbatim": "thrombocytopenia",
+          "gold_pt": "THROMBOCYTOPENIA"
+        }
+      ],
+      "serious": true,
+      "age": 52,
+      "sex": "M",
+      "reporter": null,
+      "dechallenge": null,
+      "outcome": null
+    }
+  }
+]
