@@ -126,8 +126,22 @@ export function MlView() {
           Held-out evaluation vs. single-statistic baselines
         </h2>
         <p className="mt-1 text-xs text-[var(--muted)]">{model.evaluation.protocol}</p>
+        <div className="mt-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-3.5 text-xs text-[var(--fg)]">
+          <strong className="font-semibold text-emerald-800 dark:text-emerald-300">
+            Baseline comparison (&gt; 1 SD rule):
+          </strong>{" "}
+          Across {model.evaluation.n_labelled} labelled reference controls ({model.evaluation.n_positive} positive,{" "}
+          {model.evaluation.n_negative} negative) with ≥ 3 reports in four consecutive FDA FAERS quarters (2023Q3–2024Q2;{" "}
+          {model.training.n_cases.toLocaleString()} deduplicated cases), the selected{" "}
+          <strong>{model.evaluation.selected}</strong> model achieves a drug-grouped cross-validated ROC AUC of{" "}
+          <strong>0.8808 ± 0.0080</strong> (AP <strong>0.9104 ± 0.0093</strong>), beating the best single-statistic
+          baseline (<strong>ROR lower 95% bound</strong>, AUC <strong>0.8185</strong>, AP <strong>0.8439</strong>) by{" "}
+          <strong>+0.0623 AUC (+7.79 standard deviations)</strong>. It also beats the disproportionality-only logistic
+          regression candidate (AUC <strong>0.8360 ± 0.0034</strong>) by <strong>+0.0448 AUC (+5.60 SD)</strong>, so all
+          17 features (6 disproportionality + 11 case-level) are retained.
+        </div>
         <div className="mt-4 overflow-x-auto">
-          <table className="w-full min-w-[640px] text-left text-sm">
+          <table className="w-full min-w-[680px] text-left text-sm">
             <thead className="border-b border-[var(--border)] text-xs uppercase text-[var(--muted)]">
               <tr>
                 <th className="py-2 pr-4">Method</th>
@@ -136,6 +150,7 @@ export function MlView() {
                 <th className="py-2 pr-4">Avg Precision (AP)</th>
                 <th className="py-2 pr-4">P@10</th>
                 <th className="py-2 pr-4">P@25</th>
+                <th className="py-2 pr-4">P@50</th>
                 <th className="py-2">Status</th>
               </tr>
             </thead>
@@ -152,16 +167,19 @@ export function MlView() {
                     <td className="py-2.5 pr-4">{name}</td>
                     <td className="py-2.5 pr-4 text-xs text-[var(--muted)]">ML candidate</td>
                     <td className="py-2.5 pr-4 font-mono">
-                      {m.auc.toFixed(3)} <span className="text-xs text-[var(--muted)]">± {m.auc_sd.toFixed(3)}</span>
+                      {m.auc.toFixed(4)} <span className="text-xs text-[var(--muted)]">± {m.auc_sd.toFixed(4)}</span>
                     </td>
                     <td className="py-2.5 pr-4 font-mono">
-                      {m.ap.toFixed(3)} <span className="text-xs text-[var(--muted)]">± {m.ap_sd.toFixed(3)}</span>
+                      {m.ap.toFixed(4)} <span className="text-xs text-[var(--muted)]">± {m.ap_sd.toFixed(4)}</span>
                     </td>
                     <td className="py-2.5 pr-4 font-mono">
-                      {m.precision_at_k["10"] !== undefined ? m.precision_at_k["10"].toFixed(2) : "—"}
+                      {m.precision_at_k["10"] !== undefined ? m.precision_at_k["10"].toFixed(3) : "—"}
                     </td>
                     <td className="py-2.5 pr-4 font-mono">
-                      {m.precision_at_k["25"] !== undefined ? m.precision_at_k["25"].toFixed(2) : "—"}
+                      {m.precision_at_k["25"] !== undefined ? m.precision_at_k["25"].toFixed(3) : "—"}
+                    </td>
+                    <td className="py-2.5 pr-4 font-mono">
+                      {m.precision_at_k["50"] !== undefined ? m.precision_at_k["50"].toFixed(3) : "—"}
                     </td>
                     <td className="py-2.5">
                       {isSelected ? <Badge tone="ok">Selected model</Badge> : <Badge>Candidate</Badge>}
@@ -173,17 +191,237 @@ export function MlView() {
                 <tr key={name} className="border-b border-[var(--border)]/50">
                   <td className="py-2.5 pr-4">Baseline: {name}</td>
                   <td className="py-2.5 pr-4 text-xs text-[var(--muted)]">Single statistic</td>
-                  <td className="py-2.5 pr-4 font-mono">{m.auc.toFixed(3)}</td>
-                  <td className="py-2.5 pr-4 font-mono">{m.ap.toFixed(3)}</td>
+                  <td className="py-2.5 pr-4 font-mono">{m.auc.toFixed(4)}</td>
+                  <td className="py-2.5 pr-4 font-mono">{m.ap.toFixed(4)}</td>
                   <td className="py-2.5 pr-4 font-mono">
-                    {m.precision_at_k["10"] !== undefined ? m.precision_at_k["10"].toFixed(2) : "—"}
+                    {m.precision_at_k["10"] !== undefined ? m.precision_at_k["10"].toFixed(3) : "—"}
                   </td>
                   <td className="py-2.5 pr-4 font-mono">
-                    {m.precision_at_k["25"] !== undefined ? m.precision_at_k["25"].toFixed(2) : "—"}
+                    {m.precision_at_k["25"] !== undefined ? m.precision_at_k["25"].toFixed(3) : "—"}
+                  </td>
+                  <td className="py-2.5 pr-4 font-mono">
+                    {m.precision_at_k["50"] !== undefined ? m.precision_at_k["50"].toFixed(3) : "—"}
                   </td>
                   <td className="py-2.5">
                     <Badge>Baseline</Badge>
                   </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Drug-Relative Outcome Feature Ablation & Regulatory Sanity List */}
+      <div className="mt-8 grid gap-8 lg:grid-cols-2">
+        <div className="glass rounded-2xl p-6">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="font-display text-lg font-semibold">
+              Ablation: drug-relative outcome features
+            </h2>
+            <Badge tone="warn">Excluded (did not improve CV AUC)</Badge>
+          </div>
+          <p className="mt-1 text-xs text-[var(--muted)]">
+            Tested adding drug-relative versions of the three outcome features (pair outcome fraction minus the drug&apos;s
+            overall outcome fraction across all 2023Q3–2024Q2 reports: <code>frac_death_rel</code>,{" "}
+            <code>frac_hosp_lt_rel</code>, <code>frac_serious_rel</code>) under 5×5-fold drug-grouped cross-validation.
+          </p>
+          <div className="mt-4 overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="border-b border-[var(--border)] uppercase text-[var(--muted)]">
+                <tr>
+                  <th className="py-2 pr-3">Feature configuration</th>
+                  <th className="py-2 pr-3">L2 Logistic AUC</th>
+                  <th className="py-2 pr-3">Grad. Boost AUC</th>
+                  <th className="py-2">Decision</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-[var(--border)]/50 bg-brand-500/10 font-medium">
+                  <td className="py-2 pr-3">17 features (raw outcome fractions)</td>
+                  <td className="py-2 pr-3 font-mono">0.8808 ± 0.0080</td>
+                  <td className="py-2 pr-3 font-mono">0.8800 ± 0.0042</td>
+                  <td className="py-2"><Badge tone="ok">Retained</Badge></td>
+                </tr>
+                <tr className="border-b border-[var(--border)]/50">
+                  <td className="py-2 pr-3">20 features (+3 drug-relative outcomes)</td>
+                  <td className="py-2 pr-3 font-mono">0.8719 ± 0.0067 (−0.0089)</td>
+                  <td className="py-2 pr-3 font-mono">0.8762 ± 0.0060 (−0.0038)</td>
+                  <td className="py-2"><Badge>Dropped</Badge></td>
+                </tr>
+                <tr className="border-b border-[var(--border)]/50">
+                  <td className="py-2 pr-3">17 features (drug-relative replacing raw)</td>
+                  <td className="py-2 pr-3 font-mono">0.8762 ± 0.0089 (−0.0046)</td>
+                  <td className="py-2 pr-3 font-mono">0.8764 ± 0.0072 (−0.0036)</td>
+                  <td className="py-2"><Badge>Dropped</Badge></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="glass rounded-2xl p-6">
+          <h2 className="font-display text-lg font-semibold">
+            Reference-set coverage (2023Q3–2024Q2 FAERS)
+          </h2>
+          <p className="mt-1 text-xs text-[var(--muted)]">
+            Out of 485 unique OMOP + EU-ADR controls across 230 canonical drugs, 475 controls have the drug present in
+            2023Q3–2024Q2 FAERS and 215 have ≥ 3 co-occurrences with the target HOI. The only 5 reference drugs absent
+            from 2023Q3–2024Q2 are discontinued/withdrawn products: <code>ALATROFLOXACIN</code>,{" "}
+            <code>FENOPROFEN</code>, <code>GEMIFLOXACIN</code>, <code>MOEXIPRIL</code>, and <code>TROVAFLOXACIN</code>.
+          </p>
+          <dl className="mt-4 grid grid-cols-2 gap-3 text-xs sm:grid-cols-3">
+            <div className="rounded-xl border border-[var(--border)]/60 p-3">
+              <dt className="text-[var(--muted)]">Quarters pooled</dt>
+              <dd className="mt-1 font-mono text-sm font-semibold">23Q3, 23Q4, 24Q1, 24Q2</dd>
+            </div>
+            <div className="rounded-xl border border-[var(--border)]/60 p-3">
+              <dt className="text-[var(--muted)]">Superseded versions dropped</dt>
+              <dd className="mt-1 font-mono text-sm font-semibold">135,401</dd>
+            </div>
+            <div className="rounded-xl border border-[var(--border)]/60 p-3">
+              <dt className="text-[var(--muted)]">Controls with drug in data</dt>
+              <dd className="mt-1 font-mono text-sm font-semibold">475 / 485 (97.9%)</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      {/* Sanity List: 10 Well-Established Regulatory Pairs on Real FAERS */}
+      <div className="glass mt-8 rounded-2xl p-6">
+        <h2 className="font-display text-lg font-semibold">
+          Sanity check: priority rank of 10 established regulatory safety signals on real FAERS (2024Q2)
+        </h2>
+        <p className="mt-1 text-xs text-[var(--muted)]">
+          Evaluated across N = 397,119 deduplicated cases in FDA FAERS 2024Q2 (35,363 drug–MedDRA PT pairs with ≥ 3
+          reports and full case-level attributes across the 230-drug reference cohort).
+        </p>
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[760px] text-left text-xs">
+            <thead className="border-b border-[var(--border)] uppercase text-[var(--muted)]">
+              <tr>
+                <th className="py-2 pr-3">Drug</th>
+                <th className="py-2 pr-3">Adverse event (MedDRA PT)</th>
+                <th className="py-2 pr-3">Priority rank (percentile)</th>
+                <th className="py-2 pr-3">Score</th>
+                <th className="py-2 pr-3">Cases (a)</th>
+                <th className="py-2 pr-3">PRR</th>
+                <th className="py-2 pr-3">IC025</th>
+                <th className="py-2">Regulatory source</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                {
+                  drug: "METFORMIN",
+                  pt: "LACTIC ACIDOSIS",
+                  rank: "#49 / 35,363 (top 0.14%)",
+                  score: "0.9996",
+                  a: 415,
+                  prr: "272.34",
+                  ic025: "6.20",
+                  src: "FDA Boxed Warning (Glucophage SPL): Metformin-associated lactic acidosis",
+                },
+                {
+                  drug: "LAMOTRIGINE",
+                  pt: "STEVENS-JOHNSON SYNDROME",
+                  rank: "#519 / 35,363 (top 1.47%)",
+                  score: "0.9960",
+                  a: 28,
+                  prr: "35.25",
+                  ic025: "3.39",
+                  src: "FDA Boxed Warning (Lamictal SPL): Serious skin rashes including SJS/TEN",
+                },
+                {
+                  drug: "ALLOPURINOL",
+                  pt: "DRUG REACTION WITH EOSINOPHILIA AND SYSTEMIC SYMPTOMS",
+                  rank: "#917 / 35,363 (top 2.59%)",
+                  score: "0.9924",
+                  a: 79,
+                  prr: "113.76",
+                  ic025: "5.11",
+                  src: "FDA Warnings & Precautions / EMA PRAC (Zyloprim SPL): Severe hypersensitivity / DRESS",
+                },
+                {
+                  drug: "ROSUVASTATIN",
+                  pt: "RHABDOMYOLYSIS",
+                  rank: "#1,107 / 35,363 (top 3.13%)",
+                  score: "0.9907",
+                  a: 134,
+                  prr: "58.95",
+                  ic025: "4.89",
+                  src: "FDA Warnings & Precautions (Crestor SPL): Skeletal muscle effects and rhabdomyolysis",
+                },
+                {
+                  drug: "ATORVASTATIN",
+                  pt: "RHABDOMYOLYSIS",
+                  rank: "#2,152 / 35,363 (top 6.09%)",
+                  score: "0.9793",
+                  a: 89,
+                  prr: "27.28",
+                  ic025: "3.94",
+                  src: "FDA Warnings & Precautions (Lipitor SPL): Myopathy and rhabdomyolysis",
+                },
+                {
+                  drug: "RIVAROXABAN",
+                  pt: "GASTROINTESTINAL HAEMORRHAGE",
+                  rank: "#4,123 / 35,363 (top 11.66%)",
+                  score: "0.9494",
+                  a: 42,
+                  prr: "17.47",
+                  ic025: "3.16",
+                  src: "FDA Boxed Warning (Xarelto SPL): Risk of serious/fatal gastrointestinal haemorrhage",
+                },
+                {
+                  drug: "APIXABAN",
+                  pt: "GASTROINTESTINAL HAEMORRHAGE",
+                  rank: "#5,360 / 35,363 (top 15.16%)",
+                  score: "0.9241",
+                  a: 110,
+                  prr: "12.66",
+                  ic025: "3.08",
+                  src: "FDA Boxed Warning & Warnings (Eliquis SPL): Serious and fatal gastrointestinal bleeding",
+                },
+                {
+                  drug: "CLOZAPINE",
+                  pt: "AGRANULOCYTOSIS",
+                  rank: "#5,387 / 35,363 (top 15.23%)",
+                  score: "0.9237",
+                  a: 21,
+                  prr: "7.14",
+                  ic025: "1.81",
+                  src: "FDA Boxed Warning & REMS (Clozaril SPL): Severe neutropenia / agranulocytosis",
+                },
+                {
+                  drug: "WARFARIN",
+                  pt: "GASTROINTESTINAL HAEMORRHAGE",
+                  rank: "#6,267 / 35,363 (top 17.72%)",
+                  score: "0.9021",
+                  a: 18,
+                  prr: "22.73",
+                  ic025: "2.72",
+                  src: "FDA Boxed Warning (Coumadin SPL): Major or fatal haemorrhage",
+                },
+                {
+                  drug: "CIPROFLOXACIN",
+                  pt: "TENDON RUPTURE",
+                  rank: "#6,545 / 35,363 (top 18.51%)",
+                  score: "0.8944",
+                  a: 17,
+                  prr: "30.65",
+                  ic025: "2.78",
+                  src: "FDA Boxed Warning (Cipro SPL, July 2008 DSC): Tendinitis and tendon rupture",
+                },
+              ].map((row) => (
+                <tr key={`${row.drug}-${row.pt}`} className="border-b border-[var(--border)]/50">
+                  <td className="py-2 pr-3 font-semibold">{row.drug}</td>
+                  <td className="py-2 pr-3">{row.pt}</td>
+                  <td className="py-2 pr-3 font-mono text-brand-600 dark:text-brand-400">{row.rank}</td>
+                  <td className="py-2 pr-3 font-mono">{row.score}</td>
+                  <td className="py-2 pr-3 font-mono">{row.a}</td>
+                  <td className="py-2 pr-3 font-mono">{row.prr}</td>
+                  <td className="py-2 pr-3 font-mono">{row.ic025}</td>
+                  <td className="py-2 text-[var(--muted)]">{row.src}</td>
                 </tr>
               ))}
             </tbody>
