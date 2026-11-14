@@ -335,8 +335,8 @@ export function SignalsView() {
             className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-xs font-medium hover:bg-[var(--border)]/30"
           >
             {showEvalBenchmarks
-              ? "Hide Evaluation Benchmarks"
-              : "View Evaluation Benchmarks (20 Labels · 10 Drafts · 30 NL Queries)"}
+              ? "Hide Live Evaluation Benchmarks"
+              : "View Live Evaluation Benchmarks (40 Live SPLs · 10 Live Drafts · 30 Paraphrased NL Queries)"}
           </button>
         </div>
 
@@ -568,50 +568,68 @@ export function SignalsView() {
           </div>
         )}
 
-        {/* Quantitative Evaluation Benchmarks Panel */}
+        {/* Quantitative Live Evaluation Benchmarks Panel */}
         {showEvalBenchmarks && (
           <div className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--bg)] p-4 text-xs">
-            <h3 className="font-semibold">
-              Offline Evaluation Summary (Label Retrieval, Citation Verification &amp; NL Filter
-              Translation)
-            </h3>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h3 className="font-semibold">
+                Live API Evaluation Summary (openFDA Drug Label API · NCBI PubMed E-utilities ·
+                Paraphrased NL Filter Benchmark)
+              </h3>
+              <span className="font-mono text-[11px] text-[var(--muted)]">
+                Evaluated: {COPILOT_EVALUATION_SUMMARY.evaluatedAt}
+              </span>
+            </div>
             <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
               <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3">
                 <p className="text-[11px] uppercase text-[var(--muted)]">
-                  1. SPL Label-Status Check (20 Pairs)
+                  1. Live openFDA SPL Label Check ({COPILOT_EVALUATION_SUMMARY.labelStatusCheck.nPairs} Pairs)
                 </p>
                 <p className="mt-1 font-mono text-base font-bold text-emerald-600 dark:text-emerald-400">
                   {COPILOT_EVALUATION_SUMMARY.labelStatusCheck.correct}/
-                  {COPILOT_EVALUATION_SUMMARY.labelStatusCheck.nPairs} (100.0% accuracy)
+                  {COPILOT_EVALUATION_SUMMARY.labelStatusCheck.nPairs} (
+                  {(COPILOT_EVALUATION_SUMMARY.labelStatusCheck.accuracy * 100).toFixed(1)}% accuracy)
                 </p>
                 <p className="mt-0.5 text-[11px] text-[var(--muted)]">
-                  10 known labelled (TP=10, FN=0) · 10 known unlabelled (TN=10, FP=0), including
-                  negation guard.
+                  20 labelled (TP={COPILOT_EVALUATION_SUMMARY.labelStatusCheck.tp}, FN=
+                  {COPILOT_EVALUATION_SUMMARY.labelStatusCheck.fn}) · 20 unlabelled (TN=
+                  {COPILOT_EVALUATION_SUMMARY.labelStatusCheck.tn}, FP=
+                  {COPILOT_EVALUATION_SUMMARY.labelStatusCheck.fp}).{" "}
+                  {COPILOT_EVALUATION_SUMMARY.labelStatusCheck.falseNegativesNote}
                 </p>
               </div>
               <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3">
                 <p className="text-[11px] uppercase text-[var(--muted)]">
-                  2. Hand-Checked Draft Citations (10 Drafts)
+                  2. Live openFDA + PubMed Drafts ({COPILOT_EVALUATION_SUMMARY.draftCitationAudit.nDrafts} Drafts)
                 </p>
                 <p className="mt-1 font-mono text-base font-bold text-emerald-600 dark:text-emerald-400">
                   {COPILOT_EVALUATION_SUMMARY.draftCitationAudit.supportedBySource}/
-                  {COPILOT_EVALUATION_SUMMARY.draftCitationAudit.totalSentences} (100.0% supported)
+                  {COPILOT_EVALUATION_SUMMARY.draftCitationAudit.totalSentences} (100.0% deterministic)
+                </p>
+                <p className="mt-0.5 font-mono text-[11px] text-amber-600 dark:text-amber-400">
+                  LLM synthesis ({COPILOT_EVALUATION_SUMMARY.draftCitationAudit.llmModel}):{" "}
+                  {COPILOT_EVALUATION_SUMMARY.draftCitationAudit.llmStatus}
                 </p>
                 <p className="mt-0.5 text-[11px] text-[var(--muted)]">
-                  Every factual sentence cites retrieved [LABEL:...], [PMID:...], or [STATS];
-                  unverified citations are dropped.
+                  Deterministic synthesis (`{COPILOT_EVALUATION_SUMMARY.draftCitationAudit.deterministicModel}`)
+                  verified against live SPL &amp; PubMed retrieval.
                 </p>
               </div>
               <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-3">
                 <p className="text-[11px] uppercase text-[var(--muted)]">
-                  3. NL → JSON Filter (30 Questions)
+                  3. Paraphrased NL → JSON Filter ({COPILOT_EVALUATION_SUMMARY.nlFilterBenchmark.nQuestions} Queries)
                 </p>
-                <p className="mt-1 font-mono text-base font-bold text-emerald-600 dark:text-emerald-400">
+                <p className="mt-1 font-mono text-base font-bold text-amber-600 dark:text-amber-400">
                   {COPILOT_EVALUATION_SUMMARY.nlFilterBenchmark.exactMatches}/
-                  {COPILOT_EVALUATION_SUMMARY.nlFilterBenchmark.nQuestions} (100.0% exact match)
+                  {COPILOT_EVALUATION_SUMMARY.nlFilterBenchmark.nQuestions} (
+                  {(COPILOT_EVALUATION_SUMMARY.nlFilterBenchmark.exactMatchAccuracy * 100).toFixed(1)}% regex parser)
+                </p>
+                <p className="mt-0.5 font-mono text-[11px] text-amber-600 dark:text-amber-400">
+                  LLM translator ({COPILOT_EVALUATION_SUMMARY.nlFilterBenchmark.llmModel}):{" "}
+                  {COPILOT_EVALUATION_SUMMARY.nlFilterBenchmark.llmStatus}
                 </p>
                 <p className="mt-0.5 text-[11px] text-[var(--muted)]">
-                  Exact-match accuracy across clauses, operators, sort fields, and top-K limits.
+                  {COPILOT_EVALUATION_SUMMARY.nlFilterBenchmark.failureAnalysisNote}
                 </p>
               </div>
             </div>
@@ -622,10 +640,11 @@ export function SignalsView() {
                   <tr>
                     <th className="py-1.5 pr-3">Draft</th>
                     <th className="py-1.5 pr-3">Drug → Event Pair</th>
-                    <th className="py-1.5 pr-3">Deterministic Label Status</th>
-                    <th className="py-1.5 pr-3 text-right">PubMed Abstracts</th>
+                    <th className="py-1.5 pr-3">Live openFDA SPL Status</th>
+                    <th className="py-1.5 pr-3 text-right">Live PubMed Hits</th>
                     <th className="py-1.5 pr-3 text-right">Sentences</th>
-                    <th className="py-1.5 text-right">Source-Supported Share</th>
+                    <th className="py-1.5 pr-3 text-right">Deterministic Grounded Share</th>
+                    <th className="py-1.5 text-right">LLM Synthesis Share</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[var(--border)]/40 font-mono">
@@ -636,8 +655,11 @@ export function SignalsView() {
                       <td className="py-1 pr-3">{r.labelled}</td>
                       <td className="py-1 pr-3 text-right">{r.pubmedCount}</td>
                       <td className="py-1 pr-3 text-right">{r.sentences}</td>
-                      <td className="py-1 text-right text-emerald-600 dark:text-emerald-400">
+                      <td className="py-1 pr-3 text-right text-emerald-600 dark:text-emerald-400">
                         {r.share}
+                      </td>
+                      <td className="py-1 text-right text-amber-600 dark:text-amber-400">
+                        {r.llmShare}
                       </td>
                     </tr>
                   ))}

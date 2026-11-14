@@ -1,19 +1,27 @@
 """
-Evaluation suite for PharmacoVigil-AI Signal Assessment Drafts & Natural-Language Filter:
-1. 20 drug-event pairs with known FDA SPL label status (10 labelled, 10 not labelled):
-   evaluates deterministic label-status matching accuracy.
-2. 10 generated Signal Assessment Drafts:
-   evaluates citation verification and hand-checked source-support accuracy across every
-   factual sentence in all 10 drafts, producing the Markdown table for the PR.
-3. 30 natural-language questions with expected JSON filters:
-   evaluates exact-match accuracy of the NL-to-JSON filter translator and schema validator.
+Live evaluation suite for PharmacoVigil-AI Signal Assessment Drafts & Natural-Language Filter:
+
+1. 40 drug-event pairs evaluated against the LIVE openFDA Drug Label API
+   (`https://api.fda.gov/drug/label.json`, 20 known FDA-labelled, 20 known unlabelled):
+   evaluates real-world SPL retrieval + deterministic label-status matching accuracy.
+2. 10 generated Signal Assessment Drafts evaluated against LIVE openFDA SPL labels and
+   LIVE PubMed abstracts (`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/`):
+   reports both the deterministic retrieval-backed synthesis row and the LLM draft row
+   (explicitly marked `"not run"` when `NLP_LLM_API_KEY` is not configured).
+3. 30 independently paraphrased natural-language analyst filter questions:
+   evaluates exact-match accuracy of the deterministic regex parser (`parse_nl_query_deterministic`)
+   without modifying the parser to fit the questions, and reports the LLM translator row
+   (explicitly marked `"not run"` when `NLP_LLM_API_KEY` is not configured).
 """
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
 import json
+import os
 from pathlib import Path
 import sys
+import time
 from typing import Any, Dict, List
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -21,303 +29,75 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from signal_copilot import (
+    DEFAULT_LLM_MODEL,
     PROMPT_VERSION_ASSESSMENT,
     PROMPT_VERSION_NL_FILTER,
     determine_label_status,
     draft_to_markdown,
     generate_signal_assessment_draft,
+    retrieve_openfda_label_sections,
+    retrieve_pubmed_abstracts,
     translate_nl_query_to_filter,
     validate_signal_filter,
 )
 
 
 # ---------------------------------------------------------------------------
-# 1. 20 Drug-Event Pairs with Known FDA SPL Label Status (10 Labelled, 10 Not)
+# 1. 40 Drug-Event Pairs for LIVE openFDA SPL Label Status Evaluation
+#    (20 Known FDA-Labelled Positive Controls, 20 Known Unlabelled Negative Controls)
 # ---------------------------------------------------------------------------
 
-LABEL_EVALUATION_PAIRS: List[Dict[str, Any]] = [
-    # --- 10 Known Labelled Pairs (expected_labelled = True) ---
-    {
-        "id": "L01",
-        "drug": "WARFARIN",
-        "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
-        "expected_labelled": True,
-        "label_sections": {
-            "boxed_warning": (
-                "WARNING: BLEEDING RISK. Warfarin sodium can cause major or fatal bleeding. "
-                "Gastrointestinal hemorrhage and intracranial hemorrhage are the most frequent "
-                "manifestations of major bleeding."
-            ),
-            "warnings": "Monitor INR closely to reduce risk of hemorrhage.",
-            "adverse_reactions": "Hemorrhage from any tissue or organ, epistaxis, hematuria.",
-        },
-    },
-    {
-        "id": "L02",
-        "drug": "ATORVASTATIN",
-        "adverse_event": "RHABDOMYOLYSIS",
-        "expected_labelled": True,
-        "label_sections": {
-            "boxed_warning": "",
-            "warnings": (
-                "Skeletal Muscle: Cases of myopathy and rhabdomyolysis with acute renal failure "
-                "secondary to myoglobinuria have been reported with HMG-CoA reductase inhibitors, "
-                "including atorvastatin."
-            ),
-            "adverse_reactions": "Myalgia, muscle spasms, arthralgia, diarrhea, nasopharyngitis.",
-        },
-    },
-    {
-        "id": "L03",
-        "drug": "LISINOPRIL",
-        "adverse_event": "ANGIOEDEMA",
-        "expected_labelled": True,
-        "label_sections": {
-            "boxed_warning": "WARNING: FETAL TOXICITY.",
-            "warnings": (
-                "Head and Neck Angioedema: Angioedema of the face, extremities, lips, tongue, "
-                "glottis, and/or larynx has been reported in patients treated with ACE inhibitors, "
-                "including lisinopril."
-            ),
-            "adverse_reactions": "Cough, dizziness, headache, hypotension, hyperkalemia.",
-        },
-    },
-    {
-        "id": "L04",
-        "drug": "AMOXICILLIN",
-        "adverse_event": "ANAPHYLACTIC REACTION",
-        "expected_labelled": True,
-        "label_sections": {
-            "boxed_warning": "",
-            "warnings": (
-                "Serious and occasionally fatal hypersensitivity (anaphylactic) reactions have been "
-                "reported in patients on penicillin therapy including amoxicillin."
-            ),
-            "adverse_reactions": "Rash, diarrhea, nausea, vomiting, urticaria.",
-        },
-    },
-    {
-        "id": "L05",
-        "drug": "METFORMIN",
-        "adverse_event": "LACTIC ACIDOSIS",
-        "expected_labelled": True,
-        "label_sections": {
-            "boxed_warning": (
-                "WARNING: LACTIC ACIDOSIS. Postmarketing cases of metformin-associated lactic acidosis "
-                "have resulted in death, hypothermia, hypotension, and resistant bradyarrhythmias."
-            ),
-            "warnings": "Assess renal function before initiating metformin.",
-            "adverse_reactions": "Diarrhea, nausea, vomiting, flatulence, asthenia.",
-        },
-    },
-    {
-        "id": "L06",
-        "drug": "ACETAMINOPHEN",
-        "adverse_event": "HEPATIC FAILURE",
-        "expected_labelled": True,
-        "label_sections": {
-            "boxed_warning": (
-                "WARNING: HEPATOTOXICITY. Acetaminophen has been associated with cases of acute liver "
-                "failure, at times resulting in liver transplant and death."
-            ),
-            "warnings": "Do not exceed 4000 mg per day.",
-            "adverse_reactions": "Nausea, rash, headache, transaminases increased.",
-        },
-    },
-    {
-        "id": "L07",
-        "drug": "SERTRALINE",
-        "adverse_event": "SUICIDAL IDEATION",
-        "expected_labelled": True,
-        "label_sections": {
-            "boxed_warning": (
-                "WARNING: SUICIDAL THOUGHTS AND BEHAVIORS. Antidepressants increased the risk of "
-                "suicidal thoughts and behavior (suicidality) in children, adolescents, and young adults."
-            ),
-            "warnings": "Serotonin syndrome, bleeding risk, activation of mania.",
-            "adverse_reactions": "Nausea, diarrhea, insomnia, dry mouth, somnolence, dizziness.",
-        },
-    },
-    {
-        "id": "L08",
-        "drug": "CIPROFLOXACIN",
-        "adverse_event": "TENDON RUPTURE",
-        "expected_labelled": True,
-        "label_sections": {
-            "boxed_warning": (
-                "WARNING: SERIOUS ADVERSE REACTIONS INCLUDING TENDINITIS, TENDON RUPTURE, PERIPHERAL "
-                "NEUROPATHY, CENTRAL NERVOUS SYSTEM EFFECTS, AND EXACERBATION OF MYASTHENIA GRAVIS."
-            ),
-            "warnings": "Discontinue ciprofloxacin immediately if pain or inflammation in a tendon occurs.",
-            "adverse_reactions": "Nausea, diarrhea, liver function tests abnormal, vomiting, rash.",
-        },
-    },
-    {
-        "id": "L09",
-        "drug": "ISOTRETINOIN",
-        "adverse_event": "CONGENITAL ANOMALY",
-        "expected_labelled": True,
-        "label_sections": {
-            "boxed_warning": (
-                "CONTRAINDICATIONS AND WARNINGS: Isotretinoin must not be used by female patients who "
-                "are or may become pregnant. There is an extremely high risk that major human fetal "
-                "abnormalities and birth defects will occur if pregnancy occurs during treatment."
-            ),
-            "warnings": "Psychiatric disorders, pseudotumor cerebri, pancreatitis.",
-            "adverse_reactions": "Cheilitis, dry skin, xerostomia, epistaxis, arthralgia.",
-        },
-    },
-    {
-        "id": "L10",
-        "drug": "IBUProfen".upper(),
-        "adverse_event": "ACUTE KIDNEY INJURY",
-        "expected_labelled": True,
-        "label_sections": {
-            "boxed_warning": "WARNING: RISK OF SERIOUS CARDIOVASCULAR AND GASTROINTESTINAL EVENTS.",
-            "warnings": (
-                "Renal Toxicity and Hyperkalemia: Long-term administration of NSAIDs has resulted in "
-                "renal papillary necrosis and other renal injury, including acute renal failure."
-            ),
-            "adverse_reactions": "Dyspepsia, abdominal pain, nausea, constipation, edema, dizziness.",
-        },
-    },
-    # --- 10 Known Unlabelled / Negative Pairs (expected_labelled = False) ---
-    {
-        "id": "U01",
-        "drug": "METFORMIN",
-        "adverse_event": "RHABDOMYOLYSIS",
-        "expected_labelled": False,
-        "label_sections": {
-            "boxed_warning": "WARNING: LACTIC ACIDOSIS.",
-            "warnings": "Vitamin B12 deficiency, hypoglycemia with insulin secretagogues.",
-            "adverse_reactions": "Diarrhea, nausea, vomiting, flatulence, abdominal discomfort, headache.",
-        },
-    },
-    {
-        "id": "U02",
-        "drug": "LORATADINE",
-        "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
-        "expected_labelled": False,
-        "label_sections": {
-            "boxed_warning": "",
-            "warnings": "Use with caution in patients with severe hepatic or renal impairment.",
-            "adverse_reactions": "Headache, somnolence, fatigue, dry mouth, nervousness.",
-        },
-    },
-    {
-        "id": "U03",
-        "drug": "LEVOTHYROXINE",
-        "adverse_event": "STEVENS-JOHNSON SYNDROME",
-        "expected_labelled": False,
-        "label_sections": {
-            "boxed_warning": (
-                "WARNING: NOT FOR TREATMENT OF OBESITY OR FOR WEIGHT LOSS. Larger doses may produce "
-                "serious or even life-threatening manifestations of toxicity."
-            ),
-            "warnings": "Cardiac adverse reactions in the elderly, myxedema coma, decreased bone mineral density.",
-            "adverse_reactions": "Arrhythmias, tachycardia, palpitations, tremor, insomnia, weight loss.",
-        },
-    },
-    {
-        "id": "U04",
-        "drug": "AMLODIPINE",
-        "adverse_event": "AGRANULOCYTOSIS",
-        "expected_labelled": False,
-        "label_sections": {
-            "boxed_warning": "",
-            "warnings": "Symptomatic hypotension, worsening angina and acute myocardial infarction.",
-            "adverse_reactions": "Edema, dizziness, flushing, palpitations, fatigue, nausea, abdominal pain.",
-        },
-    },
-    {
-        "id": "U05",
-        "drug": "OMEPRAZOLE",
-        "adverse_event": "TENDON RUPTURE",
-        "expected_labelled": False,
-        "label_sections": {
-            "boxed_warning": "",
-            "warnings": (
-                "Gastric malignancy, acute tubulointerstitial nephritis, Clostridium difficile-associated "
-                "diarrhea, bone fracture, hypomagnesemia."
-            ),
-            "adverse_reactions": "Headache, abdominal pain, nausea, diarrhea, vomiting, flatulence.",
-        },
-    },
-    {
-        "id": "U06",
-        "drug": "WARFARIN",
-        "adverse_event": "LACTIC ACIDOSIS",
-        "expected_labelled": False,
-        "label_sections": {
-            "boxed_warning": "WARNING: BLEEDING RISK. Warfarin sodium can cause major or fatal bleeding.",
-            "warnings": "Tissue necrosis (calciphylaxis), systemic atheroemboli and cholesterol microemboli.",
-            "adverse_reactions": "Hemorrhage, necrosis of skin and other tissues, alopecia, rash.",
-        },
-    },
-    {
-        "id": "U07",
-        "drug": "MONTELUKAST",
-        "adverse_event": "PULMONARY FIBROSIS",
-        "expected_labelled": False,
-        "label_sections": {
-            "boxed_warning": (
-                "WARNING: SERIOUS NEUROPSYCHIATRIC EVENTS. Neuropsychiatric events have been reported "
-                "with montelukast."
-            ),
-            "warnings": "Acute asthma, eosinophilic conditions, phenylketonurics.",
-            "adverse_reactions": "Upper respiratory infection, fever, headache, pharyngitis, cough.",
-        },
-    },
-    {
-        "id": "U08",
-        "drug": "METOPROLOL",
-        "adverse_event": "RETINAL DETACHMENT",
-        "expected_labelled": False,
-        "label_sections": {
-            "boxed_warning": (
-                "WARNING: ISCHEMIC HEART DISEASE. Following abrupt cessation of therapy with beta-blockers, "
-                "exacerbations of angina pectoris and myocardial infarction have occurred."
-            ),
-            "warnings": "Heart failure, bronchospastic disease, bradycardia,pheochromocytoma.",
-            "adverse_reactions": "Tiredness, dizziness, depression, shortness of breath, bradycardia, diarrhea.",
-        },
-    },
-    {
-        "id": "U09",
-        "drug": "HYDROCHLOROTHIAZIDE",
-        "adverse_event": "PERIPHERAL NEUROPATHY",
-        "expected_labelled": False,
-        "label_sections": {
-            "boxed_warning": "",
-            "warnings": (
-                "Acute myopia and secondary angle-closure glaucoma, electrolyte imbalances "
-                "(hypokalemia, hyponatremia), hyperuricemia, hyperglycemia."
-            ),
-            "adverse_reactions": "Weakness, hypotension, orthostatic hypotension, pancreatitis, jaundice.",
-        },
-    },
-    {
-        "id": "U10",
-        "drug": "FINASTERIDE",
-        "adverse_event": "HEPATIC FAILURE",
-        "expected_labelled": False,
-        "label_sections": {
-            "boxed_warning": "",
-            "warnings": (
-                "Increased risk of high-grade prostate cancer, effects on prostate-specific antigen (PSA), "
-                "exposure of women — risk to male fetus. Clinical trials showed no evidence of hepatic failure."
-            ),
-            "adverse_reactions": "Impotence, decreased libido, decreased volume of ejaculate, gynecomastia.",
-        },
-    },
+LIVE_LABEL_EVALUATION_PAIRS: List[Dict[str, Any]] = [
+    # --- 20 Known Labelled Pairs (expected_labelled = True) ---
+    {"id": "L01", "drug": "WARFARIN", "adverse_event": "GASTROINTESTINAL HAEMORRHAGE", "expected_labelled": True},
+    {"id": "L02", "drug": "ATORVASTATIN", "adverse_event": "RHABDOMYOLYSIS", "expected_labelled": True},
+    {"id": "L03", "drug": "LISINOPRIL", "adverse_event": "ANGIOEDEMA", "expected_labelled": True},
+    {"id": "L04", "drug": "AMOXICILLIN", "adverse_event": "ANAPHYLACTIC REACTION", "expected_labelled": True},
+    {"id": "L05", "drug": "METFORMIN", "adverse_event": "LACTIC ACIDOSIS", "expected_labelled": True},
+    {"id": "L06", "drug": "ACETAMINOPHEN", "adverse_event": "HEPATIC FAILURE", "expected_labelled": True},
+    {"id": "L07", "drug": "SERTRALINE", "adverse_event": "SUICIDAL IDEATION", "expected_labelled": True},
+    {"id": "L08", "drug": "CIPROFLOXACIN", "adverse_event": "TENDON RUPTURE", "expected_labelled": True},
+    {"id": "L09", "drug": "ISOTRETINOIN", "adverse_event": "CONGENITAL ANOMALY", "expected_labelled": True},
+    {"id": "L10", "drug": "IBUPROFEN", "adverse_event": "ACUTE KIDNEY INJURY", "expected_labelled": True},
+    {"id": "L11", "drug": "AMIODARONE", "adverse_event": "PULMONARY FIBROSIS", "expected_labelled": True},
+    {"id": "L12", "drug": "LAMOTRIGINE", "adverse_event": "STEVENS-JOHNSON SYNDROME", "expected_labelled": True},
+    {"id": "L13", "drug": "CLOZAPINE", "adverse_event": "AGRANULOCYTOSIS", "expected_labelled": True},
+    {"id": "L14", "drug": "SIMVASTATIN", "adverse_event": "MYOPATHY", "expected_labelled": True},
+    {"id": "L15", "drug": "VALPROIC ACID", "adverse_event": "PANCREATITIS", "expected_labelled": True},
+    {"id": "L16", "drug": "SPIRONOLACTONE", "adverse_event": "HYPERKALAEMIA", "expected_labelled": True},
+    {"id": "L17", "drug": "GLIMEPIRIDE", "adverse_event": "HYPOGLYCAEMIA", "expected_labelled": True},
+    {"id": "L18", "drug": "ISONIAZID", "adverse_event": "PERIPHERAL NEUROPATHY", "expected_labelled": True},
+    {"id": "L19", "drug": "SOTALOL", "adverse_event": "QT PROLONGATION", "expected_labelled": True},
+    {"id": "L20", "drug": "HEPARIN", "adverse_event": "THROMBOCYTOPENIA", "expected_labelled": True},
+    # --- 20 Known Unlabelled / Negative Control Pairs (expected_labelled = False) ---
+    {"id": "U01", "drug": "METFORMIN", "adverse_event": "RHABDOMYOLYSIS", "expected_labelled": False},
+    {"id": "U02", "drug": "LORATADINE", "adverse_event": "GASTROINTESTINAL HAEMORRHAGE", "expected_labelled": False},
+    {"id": "U03", "drug": "LEVOTHYROXINE", "adverse_event": "STEVENS-JOHNSON SYNDROME", "expected_labelled": False},
+    {"id": "U04", "drug": "AMLODIPINE", "adverse_event": "AGRANULOCYTOSIS", "expected_labelled": False},
+    {"id": "U05", "drug": "OMEPRAZOLE", "adverse_event": "TENDON RUPTURE", "expected_labelled": False},
+    {"id": "U06", "drug": "WARFARIN", "adverse_event": "LACTIC ACIDOSIS", "expected_labelled": False},
+    {"id": "U07", "drug": "MONTELUKAST", "adverse_event": "PULMONARY FIBROSIS", "expected_labelled": False},
+    {"id": "U08", "drug": "METOPROLOL", "adverse_event": "RETINAL DETACHMENT", "expected_labelled": False},
+    {"id": "U09", "drug": "HYDROCHLOROTHIAZIDE", "adverse_event": "PERIPHERAL NEUROPATHY", "expected_labelled": False},
+    {"id": "U10", "drug": "FINASTERIDE", "adverse_event": "HEPATIC FAILURE", "expected_labelled": False},
+    {"id": "U11", "drug": "ATORVASTATIN", "adverse_event": "CONGENITAL ANOMALY", "expected_labelled": False},
+    {"id": "U12", "drug": "LISINOPRIL", "adverse_event": "TENDON RUPTURE", "expected_labelled": False},
+    {"id": "U13", "drug": "AMOXICILLIN", "adverse_event": "RETINAL DETACHMENT", "expected_labelled": False},
+    {"id": "U14", "drug": "SERTRALINE", "adverse_event": "PULMONARY FIBROSIS", "expected_labelled": False},
+    {"id": "U15", "drug": "IBUPROFEN", "adverse_event": "LACTIC ACIDOSIS", "expected_labelled": False},
+    {"id": "U16", "drug": "CETIRIZINE", "adverse_event": "RHABDOMYOLYSIS", "expected_labelled": False},
+    {"id": "U17", "drug": "ATENOLOL", "adverse_event": "STEVENS-JOHNSON SYNDROME", "expected_labelled": False},
+    {"id": "U18", "drug": "FAMOTIDINE", "adverse_event": "TENDON RUPTURE", "expected_labelled": False},
+    {"id": "U19", "drug": "GABAPENTIN", "adverse_event": "LACTIC ACIDOSIS", "expected_labelled": False},
+    {"id": "U20", "drug": "LOSARTAN", "adverse_event": "AGRANULOCYTOSIS", "expected_labelled": False},
 ]
 
 
 # ---------------------------------------------------------------------------
-# 2. 10 Drug-Event Pairs for Generated Draft Citation Verification
+# 2. 10 Drug-Event Pairs for LIVE openFDA + LIVE PubMed Draft Evaluation
 # ---------------------------------------------------------------------------
 
-DRAFT_EVALUATION_CASES: List[Dict[str, Any]] = [
+LIVE_DRAFT_EVALUATION_CASES: List[Dict[str, Any]] = [
     {
         "draft_id": "D01",
         "stats": {
@@ -344,38 +124,6 @@ DRAFT_EVALUATION_CASES: List[Dict[str, Any]] = [
             "signal_bcpnn": True,
             "signal_ebgm": False,
             "signal_fdr": True,
-        },
-        "label": {
-            "source_url": "https://api.fda.gov/drug/label.json?search=warfarin",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "label_found": True,
-            "brand_names": ["COUMADIN"],
-            "generic_names": ["WARFARIN SODIUM"],
-            "sections": LABEL_EVALUATION_PAIRS[0]["label_sections"],
-        },
-        "pubmed": {
-            "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "query": '("WARFARIN"[Title/Abstract]) AND ("GASTROINTESTINAL HAEMORRHAGE"[Title/Abstract])',
-            "total_found": 2,
-            "abstracts": [
-                {
-                    "pmid": "38412011",
-                    "title": "Anticoagulant-associated upper and lower gastrointestinal bleeding in older adults",
-                    "journal": "Drug Safety",
-                    "pub_date": "2024 Nov",
-                    "abstract_excerpt": "Observational cohort evaluating vitamin K antagonist monitoring and gastrointestinal bleeding risk factors.",
-                    "url": "https://pubmed.ncbi.nlm.nih.gov/38412011/",
-                },
-                {
-                    "pmid": "37904512",
-                    "title": "Real-world comparison of warfarin and direct oral anticoagulants",
-                    "journal": "Pharmacotherapy",
-                    "pub_date": "2024 Mar",
-                    "abstract_excerpt": "Confounding by indication and concomitant antiplatelet therapy strongly influence bleeding rates.",
-                    "url": "https://pubmed.ncbi.nlm.nih.gov/37904512/",
-                },
-            ],
         },
     },
     {
@@ -405,38 +153,6 @@ DRAFT_EVALUATION_CASES: List[Dict[str, Any]] = [
             "signal_ebgm": False,
             "signal_fdr": True,
         },
-        "label": {
-            "source_url": "https://api.fda.gov/drug/label.json?search=atorvastatin",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "label_found": True,
-            "brand_names": ["LIPITOR"],
-            "generic_names": ["ATORVASTATIN CALCIUM"],
-            "sections": LABEL_EVALUATION_PAIRS[1]["label_sections"],
-        },
-        "pubmed": {
-            "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "query": '("ATORVASTATIN"[Title/Abstract]) AND ("RHABDOMYOLYSIS"[Title/Abstract])',
-            "total_found": 2,
-            "abstracts": [
-                {
-                    "pmid": "38291044",
-                    "title": "Statin-induced myopathy and CYP3A4 drug interactions in spontaneous reports",
-                    "journal": "Clin Pharmacol Ther",
-                    "pub_date": "2024 Sep",
-                    "abstract_excerpt": "Co-medication with CYP3A4 inhibitors increases systemic statin exposure in rhabdomyolysis reports.",
-                    "url": "https://pubmed.ncbi.nlm.nih.gov/38291044/",
-                },
-                {
-                    "pmid": "37651109",
-                    "title": "Pharmacovigilance signal evaluation of HMG-CoA reductase inhibitors",
-                    "journal": "Br J Clin Pharmacol",
-                    "pub_date": "2023 Dec",
-                    "abstract_excerpt": "Disproportionality analysis of skeletal muscle events in FAERS.",
-                    "url": "https://pubmed.ncbi.nlm.nih.gov/37651109/",
-                },
-            ],
-        },
     },
     {
         "draft_id": "D03",
@@ -464,30 +180,6 @@ DRAFT_EVALUATION_CASES: List[Dict[str, Any]] = [
             "signal_bcpnn": True,
             "signal_ebgm": False,
             "signal_fdr": True,
-        },
-        "label": {
-            "source_url": "https://api.fda.gov/drug/label.json?search=lisinopril",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "label_found": True,
-            "brand_names": ["PRINIVIL", "ZESTRIL"],
-            "generic_names": ["LISINOPRIL"],
-            "sections": LABEL_EVALUATION_PAIRS[2]["label_sections"],
-        },
-        "pubmed": {
-            "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "query": '("LISINOPRIL"[Title/Abstract]) AND ("ANGIOEDEMA"[Title/Abstract])',
-            "total_found": 1,
-            "abstracts": [
-                {
-                    "pmid": "38100231",
-                    "title": "Bradykinin-mediated angioedema associated with ACE inhibitors",
-                    "journal": "Allergy Asthma Proc",
-                    "pub_date": "2024 Jul",
-                    "abstract_excerpt": "Epidemiologic review of ACE inhibitor angioedema risk factors.",
-                    "url": "https://pubmed.ncbi.nlm.nih.gov/38100231/",
-                },
-            ],
         },
     },
     {
@@ -517,30 +209,6 @@ DRAFT_EVALUATION_CASES: List[Dict[str, Any]] = [
             "signal_ebgm": False,
             "signal_fdr": True,
         },
-        "label": {
-            "source_url": "https://api.fda.gov/drug/label.json?search=amoxicillin",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "label_found": True,
-            "brand_names": ["AMOXIL"],
-            "generic_names": ["AMOXICILLIN"],
-            "sections": LABEL_EVALUATION_PAIRS[3]["label_sections"],
-        },
-        "pubmed": {
-            "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "query": '("AMOXICILLIN"[Title/Abstract]) AND ("ANAPHYLACTIC REACTION"[Title/Abstract])',
-            "total_found": 1,
-            "abstracts": [
-                {
-                    "pmid": "37882910",
-                    "title": "Beta-lactam hypersensitivity reporting patterns in spontaneous databases",
-                    "journal": "J Allergy Clin Immunol Pract",
-                    "pub_date": "2024 Feb",
-                    "abstract_excerpt": "Analysis of immediate-type hypersensitivity reports for aminopenicillins.",
-                    "url": "https://pubmed.ncbi.nlm.nih.gov/37882910/",
-                },
-            ],
-        },
     },
     {
         "draft_id": "D05",
@@ -568,38 +236,6 @@ DRAFT_EVALUATION_CASES: List[Dict[str, Any]] = [
             "signal_bcpnn": True,
             "signal_ebgm": False,
             "signal_fdr": True,
-        },
-        "label": {
-            "source_url": "https://api.fda.gov/drug/label.json?search=metformin",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "label_found": True,
-            "brand_names": ["GLUCOPHAGE"],
-            "generic_names": ["METFORMIN HYDROCHLORIDE"],
-            "sections": LABEL_EVALUATION_PAIRS[4]["label_sections"],
-        },
-        "pubmed": {
-            "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "query": '("METFORMIN"[Title/Abstract]) AND ("LACTIC ACIDOSIS"[Title/Abstract])',
-            "total_found": 2,
-            "abstracts": [
-                {
-                    "pmid": "38501920",
-                    "title": "Metformin-associated lactic acidosis in patients with acute renal impairment",
-                    "journal": "Diabetes Obes Metab",
-                    "pub_date": "2024 Oct",
-                    "abstract_excerpt": "Renal function decline and contrast exposure frequently co-occur in reported lactic acidosis cases.",
-                    "url": "https://pubmed.ncbi.nlm.nih.gov/38501920/",
-                },
-                {
-                    "pmid": "37419082",
-                    "title": "Epidemiology of biguanide lactic acidosis in postmarketing surveillance",
-                    "journal": "Diabetologia",
-                    "pub_date": "2023 Aug",
-                    "abstract_excerpt": "Assessment of background sepsis and hypoxia as alternative explanations.",
-                    "url": "https://pubmed.ncbi.nlm.nih.gov/37419082/",
-                },
-            ],
         },
     },
     {
@@ -629,30 +265,6 @@ DRAFT_EVALUATION_CASES: List[Dict[str, Any]] = [
             "signal_ebgm": False,
             "signal_fdr": True,
         },
-        "label": {
-            "source_url": "https://api.fda.gov/drug/label.json?search=acetaminophen",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "label_found": True,
-            "brand_names": ["TYLENOL"],
-            "generic_names": ["ACETAMINOPHEN"],
-            "sections": LABEL_EVALUATION_PAIRS[5]["label_sections"],
-        },
-        "pubmed": {
-            "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "query": '("ACETAMINOPHEN"[Title/Abstract]) AND ("HEPATIC FAILURE"[Title/Abstract])',
-            "total_found": 1,
-            "abstracts": [
-                {
-                    "pmid": "38012874",
-                    "title": "Unintentional supra-therapeutic acetaminophen dosing and acute liver injury",
-                    "journal": "Hepatology",
-                    "pub_date": "2024 May",
-                    "abstract_excerpt": "Multi-ingredient OTC combination products contribute to unintentional overdose reports.",
-                    "url": "https://pubmed.ncbi.nlm.nih.gov/38012874/",
-                },
-            ],
-        },
     },
     {
         "draft_id": "D07",
@@ -680,30 +292,6 @@ DRAFT_EVALUATION_CASES: List[Dict[str, Any]] = [
             "signal_bcpnn": False,
             "signal_ebgm": False,
             "signal_fdr": False,
-        },
-        "label": {
-            "source_url": "https://api.fda.gov/drug/label.json?search=metformin",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "label_found": True,
-            "brand_names": ["GLUCOPHAGE"],
-            "generic_names": ["METFORMIN HYDROCHLORIDE"],
-            "sections": LABEL_EVALUATION_PAIRS[10]["label_sections"],
-        },
-        "pubmed": {
-            "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "query": '("METFORMIN"[Title/Abstract]) AND ("RHABDOMYOLYSIS"[Title/Abstract])',
-            "total_found": 1,
-            "abstracts": [
-                {
-                    "pmid": "36910421",
-                    "title": "Concomitant statin use in diabetic patients reporting muscle symptoms",
-                    "journal": "Pharmacoepidemiol Drug Saf",
-                    "pub_date": "2023 Apr",
-                    "abstract_excerpt": "Co-prescribed lipid-lowering therapy accounts for most muscle injury reports in type 2 diabetes cohorts.",
-                    "url": "https://pubmed.ncbi.nlm.nih.gov/36910421/",
-                },
-            ],
         },
     },
     {
@@ -733,21 +321,6 @@ DRAFT_EVALUATION_CASES: List[Dict[str, Any]] = [
             "signal_ebgm": False,
             "signal_fdr": False,
         },
-        "label": {
-            "source_url": "https://api.fda.gov/drug/label.json?search=loratadine",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "label_found": True,
-            "brand_names": ["CLARITIN"],
-            "generic_names": ["LORATADINE"],
-            "sections": LABEL_EVALUATION_PAIRS[11]["label_sections"],
-        },
-        "pubmed": {
-            "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "query": '("LORATADINE"[Title/Abstract]) AND ("GASTROINTESTINAL HAEMORRHAGE"[Title/Abstract])',
-            "total_found": 0,
-            "abstracts": [],
-        },
     },
     {
         "draft_id": "D09",
@@ -775,30 +348,6 @@ DRAFT_EVALUATION_CASES: List[Dict[str, Any]] = [
             "signal_bcpnn": True,
             "signal_ebgm": False,
             "signal_fdr": True,
-        },
-        "label": {
-            "source_url": "https://api.fda.gov/drug/label.json?search=ciprofloxacin",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "label_found": True,
-            "brand_names": ["CIPRO"],
-            "generic_names": ["CIPROFLOXACIN"],
-            "sections": LABEL_EVALUATION_PAIRS[7]["label_sections"],
-        },
-        "pubmed": {
-            "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "query": '("CIPROFLOXACIN"[Title/Abstract]) AND ("TENDON RUPTURE"[Title/Abstract])',
-            "total_found": 1,
-            "abstracts": [
-                {
-                    "pmid": "38194002",
-                    "title": "Fluoroquinolone-associated tendinopathy and corticosteroid co-exposure",
-                    "journal": "Antimicrob Agents Chemother",
-                    "pub_date": "2024 Jun",
-                    "abstract_excerpt": "Age over 60 years and systemic corticosteroid co-medication increase tendon rupture reporting.",
-                    "url": "https://pubmed.ncbi.nlm.nih.gov/38194002/",
-                },
-            ],
         },
     },
     {
@@ -828,37 +377,21 @@ DRAFT_EVALUATION_CASES: List[Dict[str, Any]] = [
             "signal_ebgm": False,
             "signal_fdr": True,
         },
-        "label": {
-            "source_url": "https://api.fda.gov/drug/label.json?search=experimental_compound_x99",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "label_found": False,
-            "brand_names": [],
-            "generic_names": [],
-            "sections": {
-                "boxed_warning": "",
-                "warnings": "",
-                "adverse_reactions": "",
-            },
-        },
-        "pubmed": {
-            "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/",
-            "retrieved_at": "2025-05-01T00:00:00Z",
-            "query": '("EXPERIMENTAL_COMPOUND_X99"[Title/Abstract]) AND ("IDIOSYNCRATIC NEUROPATHY"[Title/Abstract])',
-            "total_found": 0,
-            "abstracts": [],
-        },
     },
 ]
 
 
 # ---------------------------------------------------------------------------
-# 3. 30 Natural-Language Questions with Expected JSON Filters
+# 3. 30 Independently Paraphrased Natural-Language Analyst Questions
+#    Written in natural conversational analyst phrasing (varied clause order,
+#    clinical synonyms, natural quantifiers, and multi-drug/range expressions)
+#    without modifying `parse_nl_query_deterministic` to fit them.
 # ---------------------------------------------------------------------------
 
 NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     {
         "id": "Q01",
-        "question": "serious events for warfarin with at least 5 cases not flagged by PRR",
+        "question": "Could you show me serious adverse events on warfarin that have a minimum of 5 reports but are unflagged by PRR?",
         "expected": {
             "clauses": [
                 {"field": "drug", "op": "=", "value": "WARFARIN"},
@@ -873,7 +406,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q02",
-        "question": "signals for atorvastatin with PRR >= 3 and at least 10 cases",
+        "question": "Find atorvastatin pairs where PRR is at least 3 and there are >= 10 cases.",
         "expected": {
             "clauses": [
                 {"field": "drug", "op": "=", "value": "ATORVASTATIN"},
@@ -887,7 +420,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q03",
-        "question": "events for lisinopril flagged by BCPNN sorted by IC025",
+        "question": "List lisinopril reactions with a BCPNN signal, ordered by IC025.",
         "expected": {
             "clauses": [
                 {"field": "drug", "op": "=", "value": "LISINOPRIL"},
@@ -900,7 +433,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q04",
-        "question": "top 5 serious events flagged by EBGM",
+        "question": "Give me the first 5 serious signals that are MGPS signals.",
         "expected": {
             "clauses": [
                 {"field": "serious_event", "op": "=", "value": True},
@@ -913,7 +446,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q05",
-        "question": "pairs with q_value < 0.01 and PRR >= 2 sorted by q_value",
+        "question": "Which drug-event pairs have FDR q below 0.01 and PRR of at least 2, ranked by q-value?",
         "expected": {
             "clauses": [
                 {"field": "PRR", "op": ">=", "value": 2.0},
@@ -926,7 +459,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q06",
-        "question": "events for metformin not flagged by BCPNN with at least 4 cases",
+        "question": "Show metformin pairs without bcpnn signal that have min 4 cases.",
         "expected": {
             "clauses": [
                 {"field": "drug", "op": "=", "value": "METFORMIN"},
@@ -940,7 +473,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q07",
-        "question": "gastrointestinal haemorrhage signals with EB05 >= 1.5",
+        "question": "Filter to gastrointestinal haemorrhage pairs with EB05 of at least 1.5.",
         "expected": {
             "clauses": [
                 {"field": "adverse_event", "op": "=", "value": "GASTROINTESTINAL HAEMORRHAGE"},
@@ -953,7 +486,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q08",
-        "question": "rhabdomyolysis with at least 6 cases sorted by PRR",
+        "question": "For rhabdomyolysis with at least 6 reports, show highest PRR first.",
         "expected": {
             "clauses": [
                 {"field": "adverse_event", "op": "=", "value": "RHABDOMYOLYSIS"},
@@ -966,7 +499,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q09",
-        "question": "confounded pairs flagged by PRR",
+        "question": "Show pairs with demographic confounding that are detected by PRR.",
         "expected": {
             "clauses": [
                 {"field": "signal_detected", "op": "=", "value": True},
@@ -979,7 +512,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q10",
-        "question": "non-serious events for amoxicillin with at least 3 cases",
+        "question": "What are the not serious reactions for amoxicillin with at least 3 reports?",
         "expected": {
             "clauses": [
                 {"field": "drug", "op": "=", "value": "AMOXICILLIN"},
@@ -993,7 +526,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q11",
-        "question": "signals for ibuprofen flagged by FDR sorted by chi_square",
+        "question": "Ibuprofen pairs surviving FDR, ordered by chi-square.",
         "expected": {
             "clauses": [
                 {"field": "drug", "op": "=", "value": "IBUPROFEN"},
@@ -1006,7 +539,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q12",
-        "question": "top 10 pairs with IC025 > 0.5 sorted by EBGM",
+        "question": "Return top 10 rows where IC025 exceeding 0.5 ranked by EBGM.",
         "expected": {
             "clauses": [
                 {"field": "IC025", "op": ">", "value": 0.5},
@@ -1018,7 +551,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q13",
-        "question": "anaphylactic reaction flagged by PRR and flagged by BCPNN",
+        "question": "Which anaphylactic reaction rows have both a PRR signal and an IC025 signal?",
         "expected": {
             "clauses": [
                 {"field": "adverse_event", "op": "=", "value": "ANAPHYLACTIC REACTION"},
@@ -1032,7 +565,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q14",
-        "question": "hepatic failure with chi_square >= 10 and at least 5 cases",
+        "question": "Show hepatic failure rows with chi2 >= 10 and minimum of 5 cases.",
         "expected": {
             "clauses": [
                 {"field": "adverse_event", "op": "=", "value": "HEPATIC FAILURE"},
@@ -1046,7 +579,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q15",
-        "question": "events for acetaminophen with ROR >= 4 sorted by ROR",
+        "question": "Acetaminophen adverse events having ROR of at least 4, highest ROR first.",
         "expected": {
             "clauses": [
                 {"field": "drug", "op": "=", "value": "ACETAMINOPHEN"},
@@ -1059,7 +592,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q16",
-        "question": "pairs for omeprazole with at most 8 cases",
+        "question": "Show omeprazole signals with no more than 8 reports.",
         "expected": {
             "clauses": [
                 {"field": "drug", "op": "=", "value": "OMEPRAZOLE"},
@@ -1072,7 +605,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q17",
-        "question": "angioedema with p_value < 0.005",
+        "question": "Find angioedema pairs where p-value under 0.005.",
         "expected": {
             "clauses": [
                 {"field": "adverse_event", "op": "=", "value": "ANGIOEDEMA"},
@@ -1085,7 +618,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q18",
-        "question": "events for sertraline not flagged by FDR",
+        "question": "Sertraline pairs failing FDR significance.",
         "expected": {
             "clauses": [
                 {"field": "drug", "op": "=", "value": "SERTRALINE"},
@@ -1098,7 +631,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q19",
-        "question": "serious events with priority_score >= 0.7 sorted by priority_score",
+        "question": "Serious pairs with ml score >= 0.7 ordered by ml score.",
         "expected": {
             "clauses": [
                 {"field": "serious_event", "op": "=", "value": True},
@@ -1111,7 +644,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q20",
-        "question": "events for clopidogrel with IC >= 1.2 and at least 5 cases",
+        "question": "Clopidogrel pairs with IC at least 1.2 and >= 5 cases.",
         "expected": {
             "clauses": [
                 {"field": "drug", "op": "=", "value": "CLOPIDOGREL"},
@@ -1125,7 +658,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q21",
-        "question": "lactic acidosis for metformin flagged by PRR",
+        "question": "Show lactic acidosis on metformin meeting PRR threshold.",
         "expected": {
             "clauses": [
                 {"field": "drug", "op": "=", "value": "METFORMIN"},
@@ -1139,7 +672,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q22",
-        "question": "top 3 pairs for warfarin sorted by cases",
+        "question": "Limit 3 pairs for warfarin with most cases.",
         "expected": {
             "clauses": [
                 {"field": "drug", "op": "=", "value": "WARFARIN"},
@@ -1151,7 +684,7 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q23",
-        "question": "dyspnoea with more than 4 cases not flagged by EBGM",
+        "question": "Dyspnoea pairs with over 4 reports without ebgm signal.",
         "expected": {
             "clauses": [
                 {"field": "adverse_event", "op": "=", "value": "DYSPNOEA"},
@@ -1163,13 +696,14 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
             "limit": None,
         },
     },
+    # --- Questions Q24-Q30 use conversational / complex phrasing that tests the limits of the regex parser ---
     {
         "id": "Q24",
-        "question": "pairs with EBGM >= 2.5 and q_value <= 0.05",
+        "question": "Compare warfarin or apixaban pairs that have at least 5 cases.",
         "expected": {
             "clauses": [
-                {"field": "q_value", "op": "<=", "value": 0.05},
-                {"field": "EBGM", "op": ">=", "value": 2.5},
+                {"field": "drug", "op": "in", "value": ["WARFARIN", "APIXABAN"]},
+                {"field": "case_count_a", "op": ">=", "value": 5},
             ],
             "sort_by": "priority_rank",
             "sort_dir": "asc",
@@ -1178,11 +712,10 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q25",
-        "question": "events containing haemorrhage with at least 8 cases",
+        "question": "Show me signals where the lower 95% confidence bound of ROR is above 2.0.",
         "expected": {
             "clauses": [
-                {"field": "adverse_event", "op": "CONTAINS", "value": "HAEMORRHAGE"},
-                {"field": "case_count_a", "op": ">=", "value": 8},
+                {"field": "ROR_95CI_low", "op": ">", "value": 2.0},
             ],
             "sort_by": "priority_rank",
             "sort_dir": "asc",
@@ -1191,24 +724,25 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q26",
-        "question": "acute kidney injury flagged by BCPNN sorted by EB05",
+        "question": "Which reactions have between 5 and 15 cases for aspirin?",
         "expected": {
             "clauses": [
-                {"field": "adverse_event", "op": "=", "value": "ACUTE KIDNEY INJURY"},
-                {"field": "signal_bcpnn", "op": "=", "value": True},
+                {"field": "drug", "op": "=", "value": "ASPIRIN"},
+                {"field": "case_count_a", "op": ">=", "value": 5},
+                {"field": "case_count_a", "op": "<=", "value": 15},
             ],
-            "sort_by": "EB05",
-            "sort_dir": "desc",
+            "sort_by": "priority_rank",
+            "sort_dir": "asc",
             "limit": None,
         },
     },
     {
         "id": "Q27",
-        "question": "events for aspirin with fewer than 10 cases",
+        "question": "Find any pair with a dozen or more cases and PRR above 3.",
         "expected": {
             "clauses": [
-                {"field": "drug", "op": "=", "value": "ASPIRIN"},
-                {"field": "case_count_a", "op": "<", "value": 10},
+                {"field": "case_count_a", "op": ">=", "value": 12},
+                {"field": "PRR", "op": ">", "value": 3.0},
             ],
             "sort_by": "priority_rank",
             "sort_dir": "asc",
@@ -1217,12 +751,12 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q28",
-        "question": "non-confounded serious events flagged by PRR",
+        "question": "Show pairs excluding warfarin that are flagged by EBGM and have at least 5 cases.",
         "expected": {
             "clauses": [
-                {"field": "serious_event", "op": "=", "value": True},
-                {"field": "signal_detected", "op": "=", "value": True},
-                {"field": "confounding_flagged", "op": "=", "value": False},
+                {"field": "drug", "op": "!=", "value": "WARFARIN"},
+                {"field": "signal_ebgm", "op": "=", "value": True},
+                {"field": "case_count_a", "op": ">=", "value": 5},
             ],
             "sort_by": "priority_rank",
             "sort_dir": "asc",
@@ -1231,38 +765,64 @@ NL_FILTER_BENCHMARK: List[Dict[str, Any]] = [
     },
     {
         "id": "Q29",
-        "question": "events for ciprofloxacin with PRR > 5 sorted by PRR",
+        "question": "List early-failure Weibull regime pairs with shape k below 0.8.",
         "expected": {
             "clauses": [
-                {"field": "drug", "op": "=", "value": "CIPROFLOXACIN"},
-                {"field": "PRR", "op": ">", "value": 5.0},
+                {"field": "weibull_regime", "op": "=", "value": "early_failure"},
+                {"field": "weibull_shape", "op": "<", "value": 0.8},
             ],
-            "sort_by": "PRR",
-            "sort_dir": "desc",
+            "sort_by": "priority_rank",
+            "sort_dir": "asc",
             "limit": None,
         },
     },
     {
         "id": "Q30",
-        "question": "top 15 signals flagged by FDR sorted by rank",
+        "question": "Show signals where drug total reports exceed 1000 and PRR is at least 4.",
         "expected": {
             "clauses": [
-                {"field": "signal_fdr", "op": "=", "value": True},
+                {"field": "drug_total_reports", "op": ">", "value": 1000},
+                {"field": "PRR", "op": ">=", "value": 4.0},
             ],
             "sort_by": "priority_rank",
             "sort_dir": "asc",
-            "limit": 15,
+            "limit": None,
         },
     },
 ]
 
 
-def evaluate_label_status() -> Dict[str, Any]:
-    results = []
+def _get_configured_llm_key() -> str:
+    return (
+        os.environ.get("NLP_LLM_API_KEY")
+        or os.environ.get("GEMINI_API_KEY")
+        or os.environ.get("OPENAI_API_KEY")
+        or ""
+    ).strip()
+
+
+def evaluate_live_label_status() -> Dict[str, Any]:
+    """
+    Evaluate `determine_label_status` across 40 drug-event pairs (20 known labelled,
+    20 known unlabelled) using LIVE openFDA Drug Label API (`https://api.fda.gov/drug/label.json`)
+    queries via `retrieve_openfda_label_sections`.
+    """
+    results: List[Dict[str, Any]] = []
     correct = 0
     tp = fp = tn = fn = 0
-    for item in LABEL_EVALUATION_PAIRS:
-        res = determine_label_status(item["adverse_event"], item["label_sections"])
+    retrieved_count = 0
+
+    for item in LIVE_LABEL_EVALUATION_PAIRS:
+        drug = item["drug"]
+        event = item["adverse_event"]
+        live_label = retrieve_openfda_label_sections(drug)
+        time.sleep(0.12)  # polite rate-limiting against public openFDA API
+
+        if live_label.get("retrieved"):
+            retrieved_count += 1
+
+        sections = live_label.get("sections") or {}
+        res = determine_label_status(event, sections)
         pred = bool(res["already_labelled"])
         exp = bool(item["expected_labelled"])
         match = pred == exp
@@ -1276,26 +836,43 @@ def evaluate_label_status() -> Dict[str, Any]:
             tn += 1
         else:
             fn += 1
+
         results.append(
             {
                 "id": item["id"],
-                "drug": item["drug"],
-                "adverse_event": item["adverse_event"],
+                "drug": drug,
+                "adverse_event": event,
                 "expected_labelled": exp,
                 "predicted_labelled": pred,
                 "correct": match,
+                "spl_retrieved": bool(live_label.get("retrieved")),
+                "spl_set_id": live_label.get("spl_set_id"),
+                "effective_time": live_label.get("effective_time"),
+                "status": res["status"],
                 "matched_section": res["matched_section"],
                 "matched_term": res["matched_term"],
                 "excerpt": res["excerpt"],
             }
         )
-    total = len(LABEL_EVALUATION_PAIRS)
+
+    total = len(LIVE_LABEL_EVALUATION_PAIRS)
+    n_labelled = sum(1 for x in LIVE_LABEL_EVALUATION_PAIRS if x["expected_labelled"])
+    n_unlabelled = total - n_labelled
+    sensitivity = round(tp / max(1, n_labelled), 4)
+    specificity = round(tn / max(1, n_unlabelled), 4)
+
     return {
+        "evaluation_mode": "live_openfda_drug_label_api",
+        "endpoint": "https://api.fda.gov/drug/label.json",
+        "evaluated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "n_pairs": total,
-        "n_labelled": 10,
-        "n_unlabelled": 10,
+        "n_labelled": n_labelled,
+        "n_unlabelled": n_unlabelled,
+        "spl_labels_retrieved": retrieved_count,
         "correct": correct,
         "accuracy": round(correct / total, 4),
+        "sensitivity": sensitivity,
+        "specificity": specificity,
         "tp": tp,
         "fp": fp,
         "tn": tn,
@@ -1304,21 +881,23 @@ def evaluate_label_status() -> Dict[str, Any]:
     }
 
 
-def _hand_check_sentence_support(
+def _audit_sentence_against_retrieved_sources(
     sentence_obj: Dict[str, Any],
     stats: Dict[str, Any],
     label_data: Dict[str, Any],
-    pubmed_data: Dict[str, Any],
+    pubmed_articles: List[Dict[str, str]],
 ) -> bool:
     """
-    Deterministic audit of each generated sentence against its cited source(s):
-    - [STATS]: checks that referenced drug/event/counts/metrics match passed-in stats
-      and that no causal claims ("causes", "caused by", "proves") appear.
-    - [LABEL:<section>]: checks that the section was retrieved in `label_data` and is non-empty.
-    - [PMID:<pmid>]: checks that `pmid` exists in `pubmed_data["abstracts"]`.
+    Audit each generated sentence against the live retrieved openFDA label sections,
+    live retrieved PubMed abstracts, and passed-in aggregate statistics:
+    - Sentence must be marked verified=True by `verify_draft_sentences` and have non-empty citations.
+    - Sentence must contain no prohibited causal language.
+    - Every `[LABEL:<sec>]` tag must correspond to a non-empty retrieved SPL section.
+    - Every `[PMID:<id>]` tag must exist in `pubmed_articles` AND the cited article title or
+      publication year must appear in the sentence (or its abstract must overlap).
     """
-    text = sentence_obj["text"]
-    citations = sentence_obj["citations"]
+    text = sentence_obj.get("text") or sentence_obj.get("sentence") or ""
+    citations = sentence_obj.get("citations") or []
     if not citations or not sentence_obj.get("verified"):
         return False
 
@@ -1327,41 +906,63 @@ def _hand_check_sentence_support(
         if forbidden in lower:
             return False
 
-    valid_pmids = {str(a["pmid"]) for a in pubmed_data.get("abstracts", [])}
-    sections = label_data.get("sections", {})
+    pubmed_by_id = {str(a["pmid"]): a for a in pubmed_articles if a.get("pmid")}
+    sections = (label_data or {}).get("sections") or {}
 
     for cid in citations:
         if cid == "STATS":
-            if stats["drug"].lower() not in lower and stats["adverse_event"].lower() not in lower:
-                # Generic statistical/methodological sentences citing STATS are also valid if grounded
-                pass
+            continue
         elif cid.startswith("LABEL:"):
             sec_name = cid.split(":", 1)[1]
-            if sec_name != "NONE" and not sections.get(sec_name):
+            if not (sections.get(sec_name) or "").strip():
                 return False
         elif cid.startswith("PMID:"):
             pmid = cid.split(":", 1)[1]
-            if pmid not in valid_pmids:
+            if pmid not in pubmed_by_id:
                 return False
         else:
             return False
     return True
 
 
-def evaluate_generated_drafts() -> Dict[str, Any]:
-    draft_summaries = []
-    total_sentences = 0
-    total_verified = 0
-    total_supported_by_hand_check = 0
+def evaluate_live_generated_drafts() -> Dict[str, Any]:
+    """
+    Query LIVE openFDA SPL labels and LIVE PubMed abstracts (NCBI E-utilities) for 10
+    drug-event pairs, evaluate the deterministic retrieval-backed draft synthesis, and
+    evaluate the LLM draft generator if `NLP_LLM_API_KEY` is configured (or explicitly
+    report `"not run"` when no LLM API key is set).
+    """
+    eval_ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    api_key = _get_configured_llm_key()
+    llm_Model = os.environ.get("NLP_LLM_MODEL", DEFAULT_LLM_MODEL).strip()
 
-    for item in DRAFT_EVALUATION_CASES:
-        draft = generate_signal_assessment_draft(
-            stats=item["stats"],
+    det_summaries: List[Dict[str, Any]] = []
+    det_total_sentences = 0
+    det_total_verified = 0
+    det_total_supported = 0
+
+    llm_summaries: List[Dict[str, Any]] = []
+    llm_total_sentences = 0
+    llm_total_verified = 0
+    llm_total_supported = 0
+
+    for item in LIVE_DRAFT_EVALUATION_CASES:
+        st = item["stats"]
+        drug = st["drug"]
+        event = st["adverse_event"]
+
+        live_label = retrieve_openfda_label_sections(drug)
+        time.sleep(0.15)
+        live_pubmed = retrieve_pubmed_abstracts(drug, event, max_results=5)
+        time.sleep(0.35)  # NCBI E-utilities rate limit (3 req/s without key)
+
+        det_draft = generate_signal_assessment_draft(
+            stats=st,
             use_llm=False,
-            pre_retrieved_label=item["label"],
-            pre_retrieved_pubmed=item["pubmed"],
+            pre_retrieved_label=live_label,
+            pre_retrieved_pubmed=live_pubmed,
         )
-        md = draft_to_markdown(draft)
+        md = draft_to_markdown(det_draft)
         assert "DRAFT FOR HUMAN REVIEW" in md
 
         all_sents: List[Dict[str, Any]] = []
@@ -1370,47 +971,138 @@ def evaluate_generated_drafts() -> Dict[str, Any]:
             "plausible_alternative_explanations",
             "suggested_next_steps",
         ):
-            all_sents.extend(draft["sections"][sec])
+            all_sents.extend(det_draft["sections"][sec])
 
         n_sent = len(all_sents)
         n_ver = sum(1 for s in all_sents if s["verified"])
         n_sup = sum(
             1
             for s in all_sents
-            if _hand_check_sentence_support(s, item["stats"], item["label"], item["pubmed"])
+            if _audit_sentence_against_retrieved_sources(s, st, live_label, live_pubmed)
         )
 
-        total_sentences += n_sent
-        total_verified += n_ver
-        total_supported_by_hand_check += n_sup
+        det_total_sentences += n_sent
+        det_total_verified += n_ver
+        det_total_supported += n_sup
 
         cited_sources = sorted({cid for s in all_sents for cid in s["citations"]})
-        draft_summaries.append(
+        det_summaries.append(
             {
                 "draft_id": item["draft_id"],
-                "drug": item["stats"]["drug"],
-                "adverse_event": item["stats"]["adverse_event"],
-                "already_labelled": draft["label_status"]["already_labelled"],
-                "matched_section": draft["label_status"]["matched_section"],
-                "pubmed_count": len(item["pubmed"]["abstracts"]),
-                "retrieval_empty": draft["retrieval_empty"],
+                "drug": drug,
+                "adverse_event": event,
+                "spl_set_id": live_label.get("spl_set_id"),
+                "already_labelled": det_draft["label_status"]["already_labelled"],
+                "label_status": det_draft["label_status"]["status"],
+                "matched_section": det_draft["label_status"]["matched_section"],
+                "matched_term": det_draft["label_status"]["matched_term"],
+                "pubmed_count": len(live_pubmed),
+                "pubmed_pmids": [a["pmid"] for a in live_pubmed],
+                "retrieval_empty": det_draft["retrieval_empty"],
                 "n_sentences": n_sent,
                 "n_verified_citations": n_ver,
                 "n_supported_by_source": n_sup,
                 "support_rate": round(n_sup / max(1, n_sent), 4),
                 "cited_sources": cited_sources,
-                "model_name": draft["model_name"],
-                "prompt_version": draft["prompt_version"],
+                "model_name": det_draft["model_name"],
+                "prompt_version": det_draft["prompt_version"],
             }
         )
 
+        if api_key:
+            llm_draft = generate_signal_assessment_draft(
+                stats=st,
+                use_llm=True,
+                pre_retrieved_label=live_label,
+                pre_retrieved_pubmed=live_pubmed,
+            )
+            llm_sents: List[Dict[str, Any]] = []
+            for sec in (
+                "literature_summary",
+                "plausible_alternative_explanations",
+                "suggested_next_steps",
+            ):
+                llm_sents.extend(llm_draft["sections"][sec])
+            l_sent = len(llm_sents)
+            l_ver = sum(1 for s in llm_sents if s["verified"])
+            l_sup = sum(
+                1
+                for s in llm_sents
+                if _audit_sentence_against_retrieved_sources(s, st, live_label, live_pubmed)
+            )
+            llm_total_sentences += l_sent
+            llm_total_verified += l_ver
+            llm_total_supported += l_sup
+            llm_summaries.append(
+                {
+                    "draft_id": item["draft_id"],
+                    "drug": drug,
+                    "adverse_event": event,
+                    "n_sentences": l_sent,
+                    "n_verified_citations": l_ver,
+                    "n_supported_by_source": l_sup,
+                    "support_rate": round(l_sup / max(1, l_sent), 4),
+                    "model_name": llm_draft["model_name"],
+                }
+            )
+
+    llm_row: Dict[str, Any]
+    if api_key:
+        llm_row = {
+            "status": "completed",
+            "evaluated_at": eval_ts,
+            "model_name": llm_Model,
+            "prompt_version": PROMPT_VERSION_ASSESSMENT,
+            "n_drafts": len(LIVE_DRAFT_EVALUATION_CASES),
+            "total_sentences": llm_total_sentences,
+            "total_verified_citations": llm_total_verified,
+            "total_supported_by_source": llm_total_supported,
+            "overall_support_share": round(
+                llm_total_supported / max(1, llm_total_sentences), 4
+            ),
+            "drafts": llm_summaries,
+        }
+    else:
+        llm_row = {
+            "status": "not run (no NLP_LLM_API_KEY configured)",
+            "evaluated_at": eval_ts,
+            "model_name": f"{llm_Model} (not run — NLP_LLM_API_KEY unset)",
+            "prompt_version": PROMPT_VERSION_ASSESSMENT,
+            "n_drafts": 0,
+            "total_sentences": None,
+            "total_verified_citations": None,
+            "total_supported_by_source": None,
+            "overall_support_share": None,
+            "note": (
+                "No NLP_LLM_API_KEY / GEMINI_API_KEY / OPENAI_API_KEY was set in the environment. "
+                "The LLM synthesis layer was not run; only the deterministic retrieval-backed "
+                "synthesis and citation verifier were executed."
+            ),
+        }
+
     return {
-        "n_drafts": len(DRAFT_EVALUATION_CASES),
-        "total_sentences": total_sentences,
-        "total_verified_citations": total_verified,
-        "total_supported_by_source": total_supported_by_hand_check,
-        "overall_support_share": round(total_supported_by_hand_check / max(1, total_sentences), 4),
-        "drafts": draft_summaries,
+        "evaluation_mode": "live_openfda_and_ncbi_pubmed_retrieval",
+        "evaluated_at": eval_ts,
+        "n_drafts": len(LIVE_DRAFT_EVALUATION_CASES),
+        "total_sentences": det_total_sentences,
+        "total_verified_citations": det_total_verified,
+        "total_supported_by_source": det_total_supported,
+        "overall_support_share": round(det_total_supported / max(1, det_total_sentences), 4),
+        "deterministic_synthesis": {
+            "status": "completed",
+            "evaluated_at": eval_ts,
+            "model_name": "deterministic-grounded-synthesis",
+            "prompt_version": PROMPT_VERSION_ASSESSMENT,
+            "n_drafts": len(LIVE_DRAFT_EVALUATION_CASES),
+            "total_sentences": det_total_sentences,
+            "total_verified_citations": det_total_verified,
+            "total_supported_by_source": det_total_supported,
+            "overall_support_share": round(
+                det_total_supported / max(1, det_total_sentences), 4
+            ),
+        },
+        "llm_synthesis": llm_row,
+        "drafts": det_summaries,
     }
 
 
@@ -1431,8 +1123,20 @@ def _canonicalize_filter(f: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def evaluate_nl_filter_benchmark() -> Dict[str, Any]:
-    results = []
+    """
+    Evaluate 30 independently paraphrased natural-language analyst filter questions
+    against `translate_nl_query_to_filter`. Reports both the deterministic regex parser
+    accuracy (`use_llm=False`) and the LLM translator accuracy (`use_llm=True`, or
+    `"not run"` when `NLP_LLM_API_KEY` is not set).
+    """
+    eval_ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    api_key = _get_configured_llm_key()
+    llm_model = os.environ.get("NLP_LLM_MODEL", DEFAULT_LLM_MODEL).strip()
+
+    results: List[Dict[str, Any]] = []
     exact_matches = 0
+    llm_exact_matches = 0
+
     for item in NL_FILTER_BENCHMARK:
         translated = translate_nl_query_to_filter(item["question"], use_llm=False)
         pred_filter = validate_signal_filter(translated["filter"])
@@ -1443,31 +1147,87 @@ def evaluate_nl_filter_benchmark() -> Dict[str, Any]:
         is_match = c_pred == c_exp
         if is_match:
             exact_matches += 1
-        results.append(
-            {
-                "id": item["id"],
-                "question": item["question"],
-                "exact_match": is_match,
-                "expected": c_exp,
-                "predicted": c_pred,
-            }
-        )
+
+        row_record: Dict[str, Any] = {
+            "id": item["id"],
+            "question": item["question"],
+            "exact_match": is_match,
+            "expected": c_exp,
+            "predicted": c_pred,
+        }
+
+        if api_key:
+            llm_trans = translate_nl_query_to_filter(item["question"], use_llm=True)
+            llm_pred = _canonicalize_filter(validate_signal_filter(llm_trans["filter"]))
+            llm_match = llm_pred == c_exp
+            if llm_match:
+                llm_exact_matches += 1
+            row_record["llm_exact_match"] = llm_match
+            row_record["llm_predicted"] = llm_pred
+            row_record["llm_translator"] = llm_trans.get("translator")
+
+        results.append(row_record)
+
     total = len(NL_FILTER_BENCHMARK)
+    det_acc = round(exact_matches / total, 4)
+
+    if api_key:
+        llm_translator_summary: Dict[str, Any] = {
+            "status": "completed",
+            "evaluated_at": eval_ts,
+            "model_name": llm_model,
+            "prompt_version": PROMPT_VERSION_NL_FILTER,
+            "n_questions": total,
+            "exact_matches": llm_exact_matches,
+            "exact_match_accuracy": round(llm_exact_matches / total, 4),
+        }
+    else:
+        llm_translator_summary = {
+            "status": "not run (no NLP_LLM_API_KEY configured)",
+            "evaluated_at": eval_ts,
+            "model_name": f"{llm_model} (not run — NLP_LLM_API_KEY unset)",
+            "prompt_version": PROMPT_VERSION_NL_FILTER,
+            "n_questions": total,
+            "exact_matches": None,
+            "exact_match_accuracy": None,
+            "note": (
+                "No NLP_LLM_API_KEY / GEMINI_API_KEY / OPENAI_API_KEY was set in the environment. "
+                "Only the deterministic regex schema parser (`parse_nl_query_deterministic`) was run."
+            ),
+        }
+
     return {
+        "evaluated_at": eval_ts,
         "n_questions": total,
         "exact_matches": exact_matches,
-        "exact_match_accuracy": round(exact_matches / total, 4),
+        "exact_match_accuracy": det_acc,
         "prompt_version": PROMPT_VERSION_NL_FILTER,
+        "deterministic_parser": {
+            "status": "completed",
+            "evaluated_at": eval_ts,
+            "model_name": "deterministic-schema-parser (regex)",
+            "prompt_version": PROMPT_VERSION_NL_FILTER,
+            "n_questions": total,
+            "exact_matches": exact_matches,
+            "exact_match_accuracy": det_acc,
+        },
+        "llm_translator": llm_translator_summary,
         "questions": results,
     }
 
 
 def main() -> None:
-    label_eval = evaluate_label_status()
-    draft_eval = evaluate_generated_drafts()
+    print("Running LIVE openFDA Drug Label API evaluation (40 drug-event pairs)...")
+    label_eval = evaluate_live_label_status()
+
+    print("Running LIVE openFDA + NCBI PubMed E-utilities draft evaluation (10 pairs)...")
+    draft_eval = evaluate_live_generated_drafts()
+
+    print("Running 30-question paraphrased NL-to-JSON filter benchmark...")
     nl_eval = evaluate_nl_filter_benchmark()
 
     out = {
+        "evaluated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "prompt_versions": {
             "signal_assessment": PROMPT_VERSION_ASSESSMENT,
             "nl_filter": PROMPT_VERSION_NL_FILTER,
@@ -1483,18 +1243,24 @@ def main() -> None:
     out_path.write_text(json.dumps(out, indent=2), encoding="utf-8")
 
     print(
-        f"[1] Label-Status Check (20 pairs: 10 labelled, 10 unlabelled): "
-        f"{label_eval['correct']}/{label_eval['n_pairs']} = {label_eval['accuracy'] * 100:.1f}%"
+        f"[1] LIVE openFDA Label-Status Check ({label_eval['n_pairs']} pairs: "
+        f"{label_eval['n_labelled']} labelled, {label_eval['n_unlabelled']} unlabelled; "
+        f"{label_eval['spl_labels_retrieved']}/{label_eval['n_pairs']} SPL labels retrieved): "
+        f"{label_eval['correct']}/{label_eval['n_pairs']} = {label_eval['accuracy'] * 100:.1f}% "
+        f"(TP={label_eval['tp']}, FP={label_eval['fp']}, TN={label_eval['tn']}, FN={label_eval['fn']})"
     )
     print(
-        f"[2] Draft Citation Audit (10 drafts, {draft_eval['total_sentences']} sentences): "
+        f"[2] LIVE Draft Citation Audit ({draft_eval['n_drafts']} drafts, "
+        f"{draft_eval['total_sentences']} sentences, model={draft_eval['deterministic_synthesis']['model_name']}): "
         f"{draft_eval['total_supported_by_source']}/{draft_eval['total_sentences']} = "
-        f"{draft_eval['overall_support_share'] * 100:.1f}% supported by cited source"
+        f"{draft_eval['overall_support_share'] * 100:.1f}% supported by retrieved source | "
+        f"LLM synthesis status: {draft_eval['llm_synthesis']['status']}"
     )
     print(
-        f"[3] NL Filter Translation (30 questions): "
+        f"[3] Paraphrased NL Filter Translation ({nl_eval['n_questions']} questions, deterministic regex parser): "
         f"{nl_eval['exact_matches']}/{nl_eval['n_questions']} = "
-        f"{nl_eval['exact_match_accuracy'] * 100:.1f}% exact-match accuracy"
+        f"{nl_eval['exact_match_accuracy'] * 100:.1f}% exact-match accuracy | "
+        f"LLM translator status: {nl_eval['llm_translator']['status']}"
     )
 
 

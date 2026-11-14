@@ -1,18 +1,25 @@
 {
+  "evaluated_at": "2026-11-14T07:36:48Z",
   "prompt_versions": {
     "signal_assessment": "signal-assessment-v1.2",
     "nl_filter": "nl-signal-filter-v1.1"
   },
   "label_status_evaluation": {
-    "n_pairs": 20,
-    "n_labelled": 10,
-    "n_unlabelled": 10,
-    "correct": 20,
-    "accuracy": 1.0,
-    "tp": 10,
+    "evaluation_mode": "live_openfda_drug_label_api",
+    "endpoint": "https://api.fda.gov/drug/label.json",
+    "evaluated_at": "2026-11-14T07:36:07Z",
+    "n_pairs": 40,
+    "n_labelled": 20,
+    "n_unlabelled": 20,
+    "spl_labels_retrieved": 40,
+    "correct": 37,
+    "accuracy": 0.925,
+    "sensitivity": 0.85,
+    "specificity": 1.0,
+    "tp": 17,
     "fp": 0,
-    "tn": 10,
-    "fn": 0,
+    "tn": 20,
+    "fn": 3,
     "pairs": [
       {
         "id": "L01",
@@ -21,9 +28,13 @@
         "expected_labelled": true,
         "predicted_labelled": true,
         "correct": true,
-        "matched_section": "boxed_warning",
-        "matched_term": "Gastrointestinal hemorrhage",
-        "excerpt": "WARNING: BLEEDING RISK. Warfarin sodium can cause major or fatal bleeding. Gastrointestinal hemorrhage and intracranial hemorrhage are the most frequent manifestations of major bleeding."
+        "spl_retrieved": true,
+        "spl_set_id": "0cbce382-9c88-4f58-ae0f-532a841e8f95",
+        "effective_time": "20250617",
+        "status": "already_labelled",
+        "matched_section": "warnings",
+        "matched_term": "gastrointestinal bleeding",
+        "excerpt": "...ty of anticoagulation (INR > 4), age greater than or equal to 65, history of highly variable INRs, history of gastrointestinal bleeding, hypertension, cerebrovascular disease, anemia, malignancy, trauma, renal impairment, certain genetic factors [see Clinical Pharmacology ( 12.5 )] ,..."
       },
       {
         "id": "L02",
@@ -32,9 +43,13 @@
         "expected_labelled": true,
         "predicted_labelled": true,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "00afce9b-48c9-487a-a738-e359c005c707",
+        "effective_time": "20250828",
+        "status": "already_labelled",
         "matched_section": "warnings",
-        "matched_term": "rhabdomyolysis",
-        "excerpt": "Skeletal Muscle: Cases of myopathy and rhabdomyolysis with acute renal failure secondary to myoglobinuria have been reported with HMG-CoA reductase inhibitors, including atorvastatin."
+        "matched_term": "Rhabdomyolysis",
+        "excerpt": "5 WARNINGS AND PRECAUTIONS Myopathy and Rhabdomyolysis: Risk factors include age 65 years or greater, uncontrolled hypothyroidism, renal impairment, concomitant use with certain other drugs, and higher at..."
       },
       {
         "id": "L03",
@@ -43,9 +58,13 @@
         "expected_labelled": true,
         "predicted_labelled": true,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "00b266d9-ac4a-e931-e063-6294a90a6a0b",
+        "effective_time": "20261001",
+        "status": "already_labelled",
         "matched_section": "warnings",
         "matched_term": "Angioedema",
-        "excerpt": "Head and Neck Angioedema: Angioedema of the face, extremities, lips, tongue, glottis, and/or larynx has been reported in patients treated with ACE inhibitors, including lisin..."
+        "excerpt": "...chlorothiazide tablets) may be subject to a variety of adverse reactions, some of them serious. Head and Neck Angioedema: Angioedema of the face, extremities, lips, tongue, glottis and/or larynx has been reported rarely in patients treated with angiotensin converting en..."
       },
       {
         "id": "L04",
@@ -54,9 +73,13 @@
         "expected_labelled": true,
         "predicted_labelled": true,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "00b86913-50c8-443f-8467-f4f499d358af",
+        "effective_time": "20260723",
+        "status": "already_labelled",
         "matched_section": "warnings",
         "matched_term": "anaphylactic",
-        "excerpt": "Serious and occasionally fatal hypersensitivity (anaphylactic) reactions have been reported in patients on penicillin therapy including amoxicillin."
+        "excerpt": "...5.6 ) 5.1 Serious Allergic Reactions, including Anaphylaxis Serious and occasionally fatal hypersensitivity (anaphylactic) reactions have been reported in patients receiving beta-lactam antibacterials, including amoxicillin and clavulanate potassium for oral suspension,..."
       },
       {
         "id": "L05",
@@ -65,20 +88,28 @@
         "expected_labelled": true,
         "predicted_labelled": true,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "0098dec4-f0e5-45d5-8aa4-5d0faf9ab142",
+        "effective_time": "20260812",
+        "status": "already_labelled",
         "matched_section": "boxed_warning",
         "matched_term": "LACTIC ACIDOSIS",
-        "excerpt": "WARNING: LACTIC ACIDOSIS. Postmarketing cases of metformin-associated lactic acidosis have resulted in death, hypothermia, hypotension, and resistant bradyarrhythmias."
+        "excerpt": "WARNING: LACTIC ACIDOSIS WARNING: LACTIC ACIDOSIS See full prescribing information for complete boxed warning . Postmarketing cases of metformin-associated lactic acidosis ha..."
       },
       {
         "id": "L06",
         "drug": "ACETAMINOPHEN",
         "adverse_event": "HEPATIC FAILURE",
         "expected_labelled": true,
-        "predicted_labelled": true,
-        "correct": true,
-        "matched_section": "boxed_warning",
-        "matched_term": "liver failure",
-        "excerpt": "WARNING: HEPATOTOXICITY. Acetaminophen has been associated with cases of acute liver failure, at times resulting in liver transplant and death."
+        "predicted_labelled": false,
+        "correct": false,
+        "spl_retrieved": true,
+        "spl_set_id": "0005aafa-08f8-4990-a54d-cc097195708f",
+        "effective_time": "20260102",
+        "status": "not_found_in_label",
+        "matched_section": null,
+        "matched_term": null,
+        "excerpt": null
       },
       {
         "id": "L07",
@@ -87,20 +118,28 @@
         "expected_labelled": true,
         "predicted_labelled": true,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "00179766-980b-44b0-99d3-1fee2bb27e37",
+        "effective_time": "20191101",
+        "status": "already_labelled",
         "matched_section": "boxed_warning",
-        "matched_term": "SUICIDAL THOUGHTS",
-        "excerpt": "WARNING: SUICIDAL THOUGHTS AND BEHAVIORS. Antidepressants increased the risk of suicidal thoughts and behavior (suicidality) in children, adolescents, and young adults."
+        "matched_term": "Suicidality",
+        "excerpt": "BOXED WARNING Suicidality and Antidepressant Drugs Antidepressants increased the risk compared to placebo of suicidal thinking and behavior (suicidality) in children, adolesce..."
       },
       {
         "id": "L08",
         "drug": "CIPROFLOXACIN",
         "adverse_event": "TENDON RUPTURE",
         "expected_labelled": true,
-        "predicted_labelled": true,
-        "correct": true,
-        "matched_section": "boxed_warning",
-        "matched_term": "TENDON RUPTURE",
-        "excerpt": "WARNING: SERIOUS ADVERSE REACTIONS INCLUDING TENDINITIS, TENDON RUPTURE, PERIPHERAL NEUROPATHY, CENTRAL NERVOUS SYSTEM EFFECTS, AND EXACERBATION OF MYASTHENIA GRAVIS."
+        "predicted_labelled": false,
+        "correct": false,
+        "spl_retrieved": true,
+        "spl_set_id": "05b2836d-cd3d-4d7f-970c-66ec2d788667",
+        "effective_time": "20220502",
+        "status": "not_found_in_label",
+        "matched_section": null,
+        "matched_term": null,
+        "excerpt": null
       },
       {
         "id": "L09",
@@ -109,20 +148,178 @@
         "expected_labelled": true,
         "predicted_labelled": true,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "0114567b-3bac-490d-b9eb-03a6c5d90935",
+        "effective_time": "20240626",
+        "status": "already_labelled",
         "matched_section": "boxed_warning",
         "matched_term": "birth defects",
-        "excerpt": "...ents who are or may become pregnant. There is an extremely high risk that major human fetal abnormalities and birth defects will occur if pregnancy occurs during treatment."
+        "excerpt": "...not be used by patients who are or may become pregnant. There is an extremely high risk that life-threatening birth defects will result if pregnancy occurs while taking isotretinoin capsules in any amount, even for short periods of time. Potentially any fetus exposed durin..."
       },
       {
         "id": "L10",
         "drug": "IBUPROFEN",
         "adverse_event": "ACUTE KIDNEY INJURY",
         "expected_labelled": true,
+        "predicted_labelled": false,
+        "correct": false,
+        "spl_retrieved": true,
+        "spl_set_id": "00653b7c-7099-487e-9a01-e89781c21323",
+        "effective_time": "20260429",
+        "status": "not_found_in_label",
+        "matched_section": null,
+        "matched_term": null,
+        "excerpt": null
+      },
+      {
+        "id": "L11",
+        "drug": "AMIODARONE",
+        "adverse_event": "PULMONARY FIBROSIS",
+        "expected_labelled": true,
         "predicted_labelled": true,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "02f4a736-63ed-4ad4-a1f1-b21a71e928bd",
+        "effective_time": "20240202",
+        "status": "already_labelled",
+        "matched_section": "boxed_warning",
+        "matched_term": "pneumonitis",
+        "excerpt": "...bstantial toxicity [see Indications and Usage (1) ] . Pacerone can cause pulmonary toxicity (hypersensitivity pneumonitis or interstitial/alveolar pneumonitis) that has resulted in clinically manifest disease at rates as high as 17% in some series of patients. Pulmonary..."
+      },
+      {
+        "id": "L12",
+        "drug": "LAMOTRIGINE",
+        "adverse_event": "STEVENS-JOHNSON SYNDROME",
+        "expected_labelled": true,
+        "predicted_labelled": true,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "003663e5-c0c7-4fc1-a64d-313f2a5b10d2",
+        "effective_time": "20260422",
+        "status": "already_labelled",
+        "matched_section": "boxed_warning",
+        "matched_term": "Stevens-Johnson syndrome",
+        "excerpt": "...equiring hospitalization and discontinuation of treatment. The incidence of these rashes, which have included Stevens-Johnson syndrome, is approximately 0.3% to 0.8% in pediatric patients (aged 2 to 17 years) and 0.08% to 0.3% in adults receiving lamotrigine. One rash-related death w..."
+      },
+      {
+        "id": "L13",
+        "drug": "CLOZAPINE",
+        "adverse_event": "AGRANULOCYTOSIS",
+        "expected_labelled": true,
+        "predicted_labelled": true,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "09231d80-6343-4a34-bd5b-100c547fd3c9",
+        "effective_time": "20260313",
+        "status": "already_labelled",
+        "matched_section": "boxed_warning",
+        "matched_term": "SEVERE NEUTROPENIA",
+        "excerpt": "WARNING: SEVERE NEUTROPENIA; ORTHOSTATIC HYPOTENSION, BRADYCARDIA, AND SYNCOPE; SEIZURE; MYOCARDITIS, PERICARDITIS, AND CARDIOMYOPATHY; INCREASED MORTALITY IN ELDERLY PATIENTS W..."
+      },
+      {
+        "id": "L14",
+        "drug": "SIMVASTATIN",
+        "adverse_event": "MYOPATHY",
+        "expected_labelled": true,
+        "predicted_labelled": true,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "00896fff-081d-4553-be8c-1999a8a73dda",
+        "effective_time": "20260226",
+        "status": "already_labelled",
         "matched_section": "warnings",
-        "matched_term": "acute renal failure",
-        "excerpt": "...Long-term administration of NSAIDs has resulted in renal papillary necrosis and other renal injury, including acute renal failure."
+        "matched_term": "Myopathy",
+        "excerpt": "5 WARNINGS AND PRECAUTIONS Myopathy and Rhabdomyolysis: Risk factors include age 65 years or greater, uncontrolled hypothyroidism, renal impairment, concomitant use with certain other d..."
+      },
+      {
+        "id": "L15",
+        "drug": "VALPROIC ACID",
+        "adverse_event": "PANCREATITIS",
+        "expected_labelled": true,
+        "predicted_labelled": true,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "3dfb6da1-f66a-4618-9f74-d2d6c16c0b58",
+        "effective_time": "20241215",
+        "status": "already_labelled",
+        "matched_section": "boxed_warning",
+        "matched_term": "Pancreatitis",
+        "excerpt": "...tal Risk, particularly neural tube defects, other major malformations, and decreased IQ ( 5.2 , 5.3 , 5.4 ) \u2022 Pancreatitis, including fatal hemorrhagic cases ( 5.5 ) Hepatotoxicity General Population: Hepatic failure resulting in fatalities has occurred in patients receiv..."
+      },
+      {
+        "id": "L16",
+        "drug": "SPIRONOLACTONE",
+        "adverse_event": "HYPERKALAEMIA",
+        "expected_labelled": true,
+        "predicted_labelled": true,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "08738ad4-1607-4d55-af71-6790477353bd",
+        "effective_time": "20261008",
+        "status": "already_labelled",
+        "matched_section": "warnings",
+        "matched_term": "Hyperkalemia",
+        "excerpt": "5 WARNINGS AND PRECAUTIONS Hyperkalemia: Monitor serum potassium within one week of initiation and regularly thereafter ( 5.1 ). Hypotension and Worsening Renal Function: Monitor volume sta..."
+      },
+      {
+        "id": "L17",
+        "drug": "GLIMEPIRIDE",
+        "adverse_event": "HYPOGLYCAEMIA",
+        "expected_labelled": true,
+        "predicted_labelled": true,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "0003458f-352a-46fa-9d99-230daa76ae29",
+        "effective_time": "20241113",
+        "status": "already_labelled",
+        "matched_section": "warnings",
+        "matched_term": "Hypoglycemia",
+        "excerpt": "5 WARNINGS AND PRECAUTIONS Hypoglycemia: May be severe. Ensure proper patient selection, dosing, and instructions, particularly in at-risk populations (e.g., elderly, renally impaired) and..."
+      },
+      {
+        "id": "L18",
+        "drug": "ISONIAZID",
+        "adverse_event": "PERIPHERAL NEUROPATHY",
+        "expected_labelled": true,
+        "predicted_labelled": true,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "03bf3bd5-64f9-4491-89fd-96c5c10d0129",
+        "effective_time": "20260216",
+        "status": "already_labelled",
+        "matched_section": "adverse_reactions",
+        "matched_term": "Peripheral neuropathy",
+        "excerpt": "...NS The most frequent reactions are those affecting the nervous system and the liver. Nervous System Reactions Peripheral neuropathy is the most common toxic effect. It is dose-related, occurs most often in the malnourished and in those predisposed to neuritis (e.g., alcoholics and..."
+      },
+      {
+        "id": "L19",
+        "drug": "SOTALOL",
+        "adverse_event": "QT PROLONGATION",
+        "expected_labelled": true,
+        "predicted_labelled": true,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "0fd4afc7-dbf8-46be-9657-aa83bbb2c026",
+        "effective_time": "20240403",
+        "status": "already_labelled",
+        "matched_section": "warnings",
+        "matched_term": "QT prolongation",
+        "excerpt": "5 WARNINGS AND PRECAUTIONS QT prolongation, bradycardia, AV block, hypotension, worsening heart failure: Reduce dose or discontinue ( 5.1 ) Acute exacerbation of coronary artery disease upon c..."
+      },
+      {
+        "id": "L20",
+        "drug": "HEPARIN",
+        "adverse_event": "THROMBOCYTOPENIA",
+        "expected_labelled": true,
+        "predicted_labelled": true,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "02fb700d-a28c-4d45-b78d-382dc0d5986c",
+        "effective_time": "20250926",
+        "status": "already_labelled",
+        "matched_section": "warnings",
+        "matched_term": "thrombocytopenia",
+        "excerpt": "...nal cord, or eye. Hematologic - Conditions associated with increased bleeding tendencies, such as hemophilia, thrombocytopenia and some vascular purpuras. Patients with hereditary antithrombin III deficiency receiving concurrent antithrombin III therapy - The anticoagulant ef..."
       },
       {
         "id": "U01",
@@ -131,6 +328,10 @@
         "expected_labelled": false,
         "predicted_labelled": false,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "0098dec4-f0e5-45d5-8aa4-5d0faf9ab142",
+        "effective_time": "20260812",
+        "status": "not_found_in_label",
         "matched_section": null,
         "matched_term": null,
         "excerpt": null
@@ -142,6 +343,10 @@
         "expected_labelled": false,
         "predicted_labelled": false,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "0038bc38-c205-4d8d-ab78-1abbcd76829e",
+        "effective_time": "20260225",
+        "status": "not_found_in_label",
         "matched_section": null,
         "matched_term": null,
         "excerpt": null
@@ -153,6 +358,10 @@
         "expected_labelled": false,
         "predicted_labelled": false,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "008de8fd-150f-4022-8ccb-c8bfa94875c7",
+        "effective_time": "20260324",
+        "status": "not_found_in_label",
         "matched_section": null,
         "matched_term": null,
         "excerpt": null
@@ -164,6 +373,10 @@
         "expected_labelled": false,
         "predicted_labelled": false,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "003dd1ec-16f8-4f96-b6a8-c4689d35892a",
+        "effective_time": "20260420",
+        "status": "not_found_in_label",
         "matched_section": null,
         "matched_term": null,
         "excerpt": null
@@ -175,6 +388,10 @@
         "expected_labelled": false,
         "predicted_labelled": false,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "015b1c8f-9d5b-4afc-a55c-1a731b5fc72a",
+        "effective_time": "20251208",
+        "status": "not_found_in_label",
         "matched_section": null,
         "matched_term": null,
         "excerpt": null
@@ -186,6 +403,10 @@
         "expected_labelled": false,
         "predicted_labelled": false,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "0cbce382-9c88-4f58-ae0f-532a841e8f95",
+        "effective_time": "20250617",
+        "status": "not_found_in_label",
         "matched_section": null,
         "matched_term": null,
         "excerpt": null
@@ -197,6 +418,10 @@
         "expected_labelled": false,
         "predicted_labelled": false,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "04b3faff-1ea1-4d2a-aa31-9d6e742e1759",
+        "effective_time": "20260305",
+        "status": "not_found_in_label",
         "matched_section": null,
         "matched_term": null,
         "excerpt": null
@@ -208,6 +433,10 @@
         "expected_labelled": false,
         "predicted_labelled": false,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "00940cc5-d2eb-4841-9138-de97d7b1c674",
+        "effective_time": "20260727",
+        "status": "not_found_in_label",
         "matched_section": null,
         "matched_term": null,
         "excerpt": null
@@ -219,6 +448,10 @@
         "expected_labelled": false,
         "predicted_labelled": false,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "00b266d9-ac4a-e931-e063-6294a90a6a0b",
+        "effective_time": "20261001",
+        "status": "not_found_in_label",
         "matched_section": null,
         "matched_term": null,
         "excerpt": null
@@ -230,6 +463,160 @@
         "expected_labelled": false,
         "predicted_labelled": false,
         "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "00e934bb-c15b-490a-a852-839689a1231a",
+        "effective_time": "20260921",
+        "status": "not_found_in_label",
+        "matched_section": null,
+        "matched_term": null,
+        "excerpt": null
+      },
+      {
+        "id": "U11",
+        "drug": "ATORVASTATIN",
+        "adverse_event": "CONGENITAL ANOMALY",
+        "expected_labelled": false,
+        "predicted_labelled": false,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "00afce9b-48c9-487a-a738-e359c005c707",
+        "effective_time": "20250828",
+        "status": "not_found_in_label",
+        "matched_section": null,
+        "matched_term": null,
+        "excerpt": null
+      },
+      {
+        "id": "U12",
+        "drug": "LISINOPRIL",
+        "adverse_event": "TENDON RUPTURE",
+        "expected_labelled": false,
+        "predicted_labelled": false,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "00b266d9-ac4a-e931-e063-6294a90a6a0b",
+        "effective_time": "20261001",
+        "status": "not_found_in_label",
+        "matched_section": null,
+        "matched_term": null,
+        "excerpt": null
+      },
+      {
+        "id": "U13",
+        "drug": "AMOXICILLIN",
+        "adverse_event": "RETINAL DETACHMENT",
+        "expected_labelled": false,
+        "predicted_labelled": false,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "00b86913-50c8-443f-8467-f4f499d358af",
+        "effective_time": "20260723",
+        "status": "not_found_in_label",
+        "matched_section": null,
+        "matched_term": null,
+        "excerpt": null
+      },
+      {
+        "id": "U14",
+        "drug": "SERTRALINE",
+        "adverse_event": "PULMONARY FIBROSIS",
+        "expected_labelled": false,
+        "predicted_labelled": false,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "00179766-980b-44b0-99d3-1fee2bb27e37",
+        "effective_time": "20191101",
+        "status": "not_found_in_label",
+        "matched_section": null,
+        "matched_term": null,
+        "excerpt": null
+      },
+      {
+        "id": "U15",
+        "drug": "IBUPROFEN",
+        "adverse_event": "LACTIC ACIDOSIS",
+        "expected_labelled": false,
+        "predicted_labelled": false,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "00653b7c-7099-487e-9a01-e89781c21323",
+        "effective_time": "20260429",
+        "status": "not_found_in_label",
+        "matched_section": null,
+        "matched_term": null,
+        "excerpt": null
+      },
+      {
+        "id": "U16",
+        "drug": "CETIRIZINE",
+        "adverse_event": "RHABDOMYOLYSIS",
+        "expected_labelled": false,
+        "predicted_labelled": false,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "013ce40e-37c9-4b84-b530-ed895f60ce0e",
+        "effective_time": "20250407",
+        "status": "not_found_in_label",
+        "matched_section": null,
+        "matched_term": null,
+        "excerpt": null
+      },
+      {
+        "id": "U17",
+        "drug": "ATENOLOL",
+        "adverse_event": "STEVENS-JOHNSON SYNDROME",
+        "expected_labelled": false,
+        "predicted_labelled": false,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "09b21985-1818-449d-9b29-98f733cf7b9f",
+        "effective_time": "20241126",
+        "status": "not_found_in_label",
+        "matched_section": null,
+        "matched_term": null,
+        "excerpt": null
+      },
+      {
+        "id": "U18",
+        "drug": "FAMOTIDINE",
+        "adverse_event": "TENDON RUPTURE",
+        "expected_labelled": false,
+        "predicted_labelled": false,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "002875d2-8c30-2d2e-e063-6294a90ae01e",
+        "effective_time": "20261028",
+        "status": "not_found_in_label",
+        "matched_section": null,
+        "matched_term": null,
+        "excerpt": null
+      },
+      {
+        "id": "U19",
+        "drug": "GABAPENTIN",
+        "adverse_event": "LACTIC ACIDOSIS",
+        "expected_labelled": false,
+        "predicted_labelled": false,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "01b810b7-f4c8-4412-bbc5-b9220d8770d8",
+        "effective_time": "20240402",
+        "status": "not_found_in_label",
+        "matched_section": null,
+        "matched_term": null,
+        "excerpt": null
+      },
+      {
+        "id": "U20",
+        "drug": "LOSARTAN",
+        "adverse_event": "AGRANULOCYTOSIS",
+        "expected_labelled": false,
+        "predicted_labelled": false,
+        "correct": true,
+        "spl_retrieved": true,
+        "spl_set_id": "021cd76a-b093-4704-8410-5e7d01e20a54",
+        "effective_time": "20260827",
+        "status": "not_found_in_label",
         "matched_section": null,
         "matched_term": null,
         "excerpt": null
@@ -237,29 +624,66 @@
     ]
   },
   "draft_citation_evaluation": {
+    "evaluation_mode": "live_openfda_and_ncbi_pubmed_retrieval",
+    "evaluated_at": "2026-11-14T07:36:07Z",
     "n_drafts": 10,
-    "total_sentences": 71,
-    "total_verified_citations": 71,
-    "total_supported_by_source": 71,
+    "total_sentences": 99,
+    "total_verified_citations": 99,
+    "total_supported_by_source": 99,
     "overall_support_share": 1.0,
+    "deterministic_synthesis": {
+      "status": "completed",
+      "evaluated_at": "2026-11-14T07:36:07Z",
+      "model_name": "deterministic-grounded-synthesis",
+      "prompt_version": "signal-assessment-v1.2",
+      "n_drafts": 10,
+      "total_sentences": 99,
+      "total_verified_citations": 99,
+      "total_supported_by_source": 99,
+      "overall_support_share": 1.0
+    },
+    "llm_synthesis": {
+      "status": "not run (no NLP_LLM_API_KEY configured)",
+      "evaluated_at": "2026-11-14T07:36:07Z",
+      "model_name": "gemini-2.5-flash (not run \u2014 NLP_LLM_API_KEY unset)",
+      "prompt_version": "signal-assessment-v1.2",
+      "n_drafts": 0,
+      "total_sentences": null,
+      "total_verified_citations": null,
+      "total_supported_by_source": null,
+      "overall_support_share": null,
+      "note": "No NLP_LLM_API_KEY / GEMINI_API_KEY / OPENAI_API_KEY was set in the environment. The LLM synthesis layer was not run; only the deterministic retrieval-backed synthesis and citation verifier were executed."
+    },
     "drafts": [
       {
         "draft_id": "D01",
         "drug": "WARFARIN",
         "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+        "spl_set_id": "0cbce382-9c88-4f58-ae0f-532a841e8f95",
         "already_labelled": true,
-        "matched_section": "boxed_warning",
-        "pubmed_count": 2,
+        "label_status": "already_labelled",
+        "matched_section": "warnings",
+        "matched_term": "gastrointestinal bleeding",
+        "pubmed_count": 5,
+        "pubmed_pmids": [
+          "31054085",
+          "29723207",
+          "28272736",
+          "28071818",
+          "27532451"
+        ],
         "retrieval_empty": false,
-        "n_sentences": 8,
-        "n_verified_citations": 8,
-        "n_supported_by_source": 8,
+        "n_sentences": 11,
+        "n_verified_citations": 11,
+        "n_supported_by_source": 11,
         "support_rate": 1.0,
         "cited_sources": [
-          "LABEL:boxed_warning",
           "LABEL:warnings",
-          "PMID:37904512",
-          "PMID:38412011",
+          "PMID:27532451",
+          "PMID:28071818",
+          "PMID:28272736",
+          "PMID:29723207",
+          "PMID:31054085",
           "STATS"
         ],
         "model_name": "deterministic-grounded-synthesis",
@@ -269,18 +693,31 @@
         "draft_id": "D02",
         "drug": "ATORVASTATIN",
         "adverse_event": "RHABDOMYOLYSIS",
+        "spl_set_id": "00afce9b-48c9-487a-a738-e359c005c707",
         "already_labelled": true,
+        "label_status": "already_labelled",
         "matched_section": "warnings",
-        "pubmed_count": 2,
+        "matched_term": "Rhabdomyolysis",
+        "pubmed_count": 5,
+        "pubmed_pmids": [
+          "42830339",
+          "42702544",
+          "42629683",
+          "42473504",
+          "42440952"
+        ],
         "retrieval_empty": false,
-        "n_sentences": 8,
-        "n_verified_citations": 8,
-        "n_supported_by_source": 8,
+        "n_sentences": 11,
+        "n_verified_citations": 11,
+        "n_supported_by_source": 11,
         "support_rate": 1.0,
         "cited_sources": [
           "LABEL:warnings",
-          "PMID:37651109",
-          "PMID:38291044",
+          "PMID:42440952",
+          "PMID:42473504",
+          "PMID:42629683",
+          "PMID:42702544",
+          "PMID:42830339",
           "STATS"
         ],
         "model_name": "deterministic-grounded-synthesis",
@@ -290,17 +727,31 @@
         "draft_id": "D03",
         "drug": "LISINOPRIL",
         "adverse_event": "ANGIOEDEMA",
+        "spl_set_id": "00b266d9-ac4a-e931-e063-6294a90a6a0b",
         "already_labelled": true,
+        "label_status": "already_labelled",
         "matched_section": "warnings",
-        "pubmed_count": 1,
+        "matched_term": "Angioedema",
+        "pubmed_count": 5,
+        "pubmed_pmids": [
+          "42829677",
+          "42226836",
+          "42194666",
+          "42077598",
+          "41945136"
+        ],
         "retrieval_empty": false,
-        "n_sentences": 7,
-        "n_verified_citations": 7,
-        "n_supported_by_source": 7,
+        "n_sentences": 11,
+        "n_verified_citations": 11,
+        "n_supported_by_source": 11,
         "support_rate": 1.0,
         "cited_sources": [
           "LABEL:warnings",
-          "PMID:38100231",
+          "PMID:41945136",
+          "PMID:42077598",
+          "PMID:42194666",
+          "PMID:42226836",
+          "PMID:42829677",
           "STATS"
         ],
         "model_name": "deterministic-grounded-synthesis",
@@ -310,17 +761,31 @@
         "draft_id": "D04",
         "drug": "AMOXICILLIN",
         "adverse_event": "ANAPHYLACTIC REACTION",
+        "spl_set_id": "00b86913-50c8-443f-8467-f4f499d358af",
         "already_labelled": true,
+        "label_status": "already_labelled",
         "matched_section": "warnings",
-        "pubmed_count": 1,
+        "matched_term": "anaphylactic",
+        "pubmed_count": 5,
+        "pubmed_pmids": [
+          "41152681",
+          "40756538",
+          "40336762",
+          "34268268",
+          "31011140"
+        ],
         "retrieval_empty": false,
-        "n_sentences": 7,
-        "n_verified_citations": 7,
-        "n_supported_by_source": 7,
+        "n_sentences": 11,
+        "n_verified_citations": 11,
+        "n_supported_by_source": 11,
         "support_rate": 1.0,
         "cited_sources": [
           "LABEL:warnings",
-          "PMID:37882910",
+          "PMID:31011140",
+          "PMID:34268268",
+          "PMID:40336762",
+          "PMID:40756538",
+          "PMID:41152681",
           "STATS"
         ],
         "model_name": "deterministic-grounded-synthesis",
@@ -330,19 +795,32 @@
         "draft_id": "D05",
         "drug": "METFORMIN",
         "adverse_event": "LACTIC ACIDOSIS",
+        "spl_set_id": "0098dec4-f0e5-45d5-8aa4-5d0faf9ab142",
         "already_labelled": true,
+        "label_status": "already_labelled",
         "matched_section": "boxed_warning",
-        "pubmed_count": 2,
+        "matched_term": "LACTIC ACIDOSIS",
+        "pubmed_count": 5,
+        "pubmed_pmids": [
+          "42998045",
+          "42903999",
+          "42834623",
+          "42789768",
+          "42730466"
+        ],
         "retrieval_empty": false,
-        "n_sentences": 8,
-        "n_verified_citations": 8,
-        "n_supported_by_source": 8,
+        "n_sentences": 11,
+        "n_verified_citations": 11,
+        "n_supported_by_source": 11,
         "support_rate": 1.0,
         "cited_sources": [
           "LABEL:boxed_warning",
           "LABEL:warnings",
-          "PMID:37419082",
-          "PMID:38501920",
+          "PMID:42730466",
+          "PMID:42789768",
+          "PMID:42834623",
+          "PMID:42903999",
+          "PMID:42998045",
           "STATS"
         ],
         "model_name": "deterministic-grounded-synthesis",
@@ -352,18 +830,31 @@
         "draft_id": "D06",
         "drug": "ACETAMINOPHEN",
         "adverse_event": "HEPATIC FAILURE",
-        "already_labelled": true,
-        "matched_section": "boxed_warning",
-        "pubmed_count": 1,
+        "spl_set_id": "0005aafa-08f8-4990-a54d-cc097195708f",
+        "already_labelled": false,
+        "label_status": "not_found_in_label",
+        "matched_section": null,
+        "matched_term": null,
+        "pubmed_count": 5,
+        "pubmed_pmids": [
+          "43006675",
+          "42992364",
+          "42828994",
+          "42327869",
+          "41938310"
+        ],
         "retrieval_empty": false,
-        "n_sentences": 7,
-        "n_verified_citations": 7,
-        "n_supported_by_source": 7,
+        "n_sentences": 11,
+        "n_verified_citations": 11,
+        "n_supported_by_source": 11,
         "support_rate": 1.0,
         "cited_sources": [
-          "LABEL:boxed_warning",
           "LABEL:warnings",
-          "PMID:38012874",
+          "PMID:41938310",
+          "PMID:42327869",
+          "PMID:42828994",
+          "PMID:42992364",
+          "PMID:43006675",
           "STATS"
         ],
         "model_name": "deterministic-grounded-synthesis",
@@ -373,18 +864,30 @@
         "draft_id": "D07",
         "drug": "METFORMIN",
         "adverse_event": "RHABDOMYOLYSIS",
+        "spl_set_id": "0098dec4-f0e5-45d5-8aa4-5d0faf9ab142",
         "already_labelled": false,
+        "label_status": "not_found_in_label",
         "matched_section": null,
-        "pubmed_count": 1,
+        "matched_term": null,
+        "pubmed_count": 4,
+        "pubmed_pmids": [
+          "42545324",
+          "42440952",
+          "41898617",
+          "41269930"
+        ],
         "retrieval_empty": false,
-        "n_sentences": 7,
-        "n_verified_citations": 7,
-        "n_supported_by_source": 7,
+        "n_sentences": 10,
+        "n_verified_citations": 10,
+        "n_supported_by_source": 10,
         "support_rate": 1.0,
         "cited_sources": [
           "LABEL:boxed_warning",
           "LABEL:warnings",
-          "PMID:36910421",
+          "PMID:41269930",
+          "PMID:41898617",
+          "PMID:42440952",
+          "PMID:42545324",
           "STATS"
         ],
         "model_name": "deterministic-grounded-synthesis",
@@ -394,9 +897,13 @@
         "draft_id": "D08",
         "drug": "LORATADINE",
         "adverse_event": "GASTROINTESTINAL HAEMORRHAGE",
+        "spl_set_id": "0038bc38-c205-4d8d-ab78-1abbcd76829e",
         "already_labelled": false,
+        "label_status": "not_found_in_label",
         "matched_section": null,
+        "matched_term": null,
         "pubmed_count": 0,
+        "pubmed_pmids": [],
         "retrieval_empty": false,
         "n_sentences": 7,
         "n_verified_citations": 7,
@@ -413,18 +920,31 @@
         "draft_id": "D09",
         "drug": "CIPROFLOXACIN",
         "adverse_event": "TENDON RUPTURE",
-        "already_labelled": true,
-        "matched_section": "boxed_warning",
-        "pubmed_count": 1,
+        "spl_set_id": "05b2836d-cd3d-4d7f-970c-66ec2d788667",
+        "already_labelled": false,
+        "label_status": "not_found_in_label",
+        "matched_section": null,
+        "matched_term": null,
+        "pubmed_count": 5,
+        "pubmed_pmids": [
+          "42976576",
+          "42631285",
+          "41988992",
+          "41152671",
+          "41089142"
+        ],
         "retrieval_empty": false,
-        "n_sentences": 7,
-        "n_verified_citations": 7,
-        "n_supported_by_source": 7,
+        "n_sentences": 11,
+        "n_verified_citations": 11,
+        "n_supported_by_source": 11,
         "support_rate": 1.0,
         "cited_sources": [
-          "LABEL:boxed_warning",
           "LABEL:warnings",
-          "PMID:38194002",
+          "PMID:41089142",
+          "PMID:41152671",
+          "PMID:41988992",
+          "PMID:42631285",
+          "PMID:42976576",
           "STATS"
         ],
         "model_name": "deterministic-grounded-synthesis",
@@ -434,9 +954,13 @@
         "draft_id": "D10",
         "drug": "EXPERIMENTAL_COMPOUND_X99",
         "adverse_event": "IDIOSYNCRATIC NEUROPATHY",
+        "spl_set_id": null,
         "already_labelled": false,
+        "label_status": "no_label_retrieved",
         "matched_section": null,
+        "matched_term": null,
         "pubmed_count": 0,
+        "pubmed_pmids": [],
         "retrieval_empty": true,
         "n_sentences": 5,
         "n_verified_citations": 5,
@@ -451,14 +975,34 @@
     ]
   },
   "nl_filter_evaluation": {
+    "evaluated_at": "2026-11-14T07:36:47Z",
     "n_questions": 30,
-    "exact_matches": 30,
-    "exact_match_accuracy": 1.0,
+    "exact_matches": 23,
+    "exact_match_accuracy": 0.7667,
     "prompt_version": "nl-signal-filter-v1.1",
+    "deterministic_parser": {
+      "status": "completed",
+      "evaluated_at": "2026-11-14T07:36:47Z",
+      "model_name": "deterministic-schema-parser (regex)",
+      "prompt_version": "nl-signal-filter-v1.1",
+      "n_questions": 30,
+      "exact_matches": 23,
+      "exact_match_accuracy": 0.7667
+    },
+    "llm_translator": {
+      "status": "not run (no NLP_LLM_API_KEY configured)",
+      "evaluated_at": "2026-11-14T07:36:47Z",
+      "model_name": "gemini-2.5-flash (not run \u2014 NLP_LLM_API_KEY unset)",
+      "prompt_version": "nl-signal-filter-v1.1",
+      "n_questions": 30,
+      "exact_matches": null,
+      "exact_match_accuracy": null,
+      "note": "No NLP_LLM_API_KEY / GEMINI_API_KEY / OPENAI_API_KEY was set in the environment. Only the deterministic regex schema parser (`parse_nl_query_deterministic`) was run."
+    },
     "questions": [
       {
         "id": "Q01",
-        "question": "serious events for warfarin with at least 5 cases not flagged by PRR",
+        "question": "Could you show me serious adverse events on warfarin that have a minimum of 5 reports but are unflagged by PRR?",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -517,8 +1061,8 @@
       },
       {
         "id": "Q02",
-        "question": "signals for atorvastatin with PRR >= 3 and at least 10 cases",
-        "exact_match": true,
+        "question": "Find atorvastatin pairs where PRR is at least 3 and there are >= 10 cases.",
+        "exact_match": false,
         "expected": {
           "clauses": [
             {
@@ -544,11 +1088,6 @@
         "predicted": {
           "clauses": [
             {
-              "field": "PRR",
-              "op": "gte",
-              "value": 3
-            },
-            {
               "field": "case_count_a",
               "op": "gte",
               "value": 10
@@ -566,7 +1105,7 @@
       },
       {
         "id": "Q03",
-        "question": "events for lisinopril flagged by BCPNN sorted by IC025",
+        "question": "List lisinopril reactions with a BCPNN signal, ordered by IC025.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -605,7 +1144,7 @@
       },
       {
         "id": "Q04",
-        "question": "top 5 serious events flagged by EBGM",
+        "question": "Give me the first 5 serious signals that are MGPS signals.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -644,7 +1183,7 @@
       },
       {
         "id": "Q05",
-        "question": "pairs with q_value < 0.01 and PRR >= 2 sorted by q_value",
+        "question": "Which drug-event pairs have FDR q below 0.01 and PRR of at least 2, ranked by q-value?",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -683,7 +1222,7 @@
       },
       {
         "id": "Q06",
-        "question": "events for metformin not flagged by BCPNN with at least 4 cases",
+        "question": "Show metformin pairs without bcpnn signal that have min 4 cases.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -732,7 +1271,7 @@
       },
       {
         "id": "Q07",
-        "question": "gastrointestinal haemorrhage signals with EB05 >= 1.5",
+        "question": "Filter to gastrointestinal haemorrhage pairs with EB05 of at least 1.5.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -771,7 +1310,7 @@
       },
       {
         "id": "Q08",
-        "question": "rhabdomyolysis with at least 6 cases sorted by PRR",
+        "question": "For rhabdomyolysis with at least 6 reports, show highest PRR first.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -810,7 +1349,7 @@
       },
       {
         "id": "Q09",
-        "question": "confounded pairs flagged by PRR",
+        "question": "Show pairs with demographic confounding that are detected by PRR.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -849,7 +1388,7 @@
       },
       {
         "id": "Q10",
-        "question": "non-serious events for amoxicillin with at least 3 cases",
+        "question": "What are the not serious reactions for amoxicillin with at least 3 reports?",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -898,7 +1437,7 @@
       },
       {
         "id": "Q11",
-        "question": "signals for ibuprofen flagged by FDR sorted by chi_square",
+        "question": "Ibuprofen pairs surviving FDR, ordered by chi-square.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -937,7 +1476,7 @@
       },
       {
         "id": "Q12",
-        "question": "top 10 pairs with IC025 > 0.5 sorted by EBGM",
+        "question": "Return top 10 rows where IC025 exceeding 0.5 ranked by EBGM.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -966,7 +1505,7 @@
       },
       {
         "id": "Q13",
-        "question": "anaphylactic reaction flagged by PRR and flagged by BCPNN",
+        "question": "Which anaphylactic reaction rows have both a PRR signal and an IC025 signal?",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -1015,7 +1554,7 @@
       },
       {
         "id": "Q14",
-        "question": "hepatic failure with chi_square >= 10 and at least 5 cases",
+        "question": "Show hepatic failure rows with chi2 >= 10 and minimum of 5 cases.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -1064,7 +1603,7 @@
       },
       {
         "id": "Q15",
-        "question": "events for acetaminophen with ROR >= 4 sorted by ROR",
+        "question": "Acetaminophen adverse events having ROR of at least 4, highest ROR first.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -1103,8 +1642,8 @@
       },
       {
         "id": "Q16",
-        "question": "pairs for omeprazole with at most 8 cases",
-        "exact_match": true,
+        "question": "Show omeprazole signals with no more than 8 reports.",
+        "exact_match": false,
         "expected": {
           "clauses": [
             {
@@ -1126,6 +1665,11 @@
           "clauses": [
             {
               "field": "case_count_a",
+              "op": "gt",
+              "value": 8
+            },
+            {
+              "field": "case_count_a",
               "op": "lte",
               "value": 8
             },
@@ -1142,7 +1686,7 @@
       },
       {
         "id": "Q17",
-        "question": "angioedema with p_value < 0.005",
+        "question": "Find angioedema pairs where p-value under 0.005.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -1181,7 +1725,7 @@
       },
       {
         "id": "Q18",
-        "question": "events for sertraline not flagged by FDR",
+        "question": "Sertraline pairs failing FDR significance.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -1220,7 +1764,7 @@
       },
       {
         "id": "Q19",
-        "question": "serious events with priority_score >= 0.7 sorted by priority_score",
+        "question": "Serious pairs with ml score >= 0.7 ordered by ml score.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -1259,7 +1803,7 @@
       },
       {
         "id": "Q20",
-        "question": "events for clopidogrel with IC >= 1.2 and at least 5 cases",
+        "question": "Clopidogrel pairs with IC at least 1.2 and >= 5 cases.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -1308,7 +1852,7 @@
       },
       {
         "id": "Q21",
-        "question": "lactic acidosis for metformin flagged by PRR",
+        "question": "Show lactic acidosis on metformin meeting PRR threshold.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -1357,7 +1901,7 @@
       },
       {
         "id": "Q22",
-        "question": "top 3 pairs for warfarin sorted by cases",
+        "question": "Limit 3 pairs for warfarin with most cases.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -1386,7 +1930,7 @@
       },
       {
         "id": "Q23",
-        "question": "dyspnoea with more than 4 cases not flagged by EBGM",
+        "question": "Dyspnoea pairs with over 4 reports without ebgm signal.",
         "exact_match": true,
         "expected": {
           "clauses": [
@@ -1435,19 +1979,22 @@
       },
       {
         "id": "Q24",
-        "question": "pairs with EBGM >= 2.5 and q_value <= 0.05",
-        "exact_match": true,
+        "question": "Compare warfarin or apixaban pairs that have at least 5 cases.",
+        "exact_match": false,
         "expected": {
           "clauses": [
             {
-              "field": "EBGM",
+              "field": "case_count_a",
               "op": "gte",
-              "value": 2.5
+              "value": 5
             },
             {
-              "field": "q_value",
-              "op": "lte",
-              "value": 0.05
+              "field": "drug",
+              "op": "in",
+              "value": [
+                "WARFARIN",
+                "APIXABAN"
+              ]
             }
           ],
           "sort_by": "priority_rank",
@@ -1457,14 +2004,14 @@
         "predicted": {
           "clauses": [
             {
-              "field": "EBGM",
+              "field": "case_count_a",
               "op": "gte",
-              "value": 2.5
+              "value": 5
             },
             {
-              "field": "q_value",
-              "op": "lte",
-              "value": 0.05
+              "field": "drug",
+              "op": "eq",
+              "value": "WARFARIN"
             }
           ],
           "sort_by": "priority_rank",
@@ -1474,19 +2021,14 @@
       },
       {
         "id": "Q25",
-        "question": "events containing haemorrhage with at least 8 cases",
-        "exact_match": true,
+        "question": "Show me signals where the lower 95% confidence bound of ROR is above 2.0.",
+        "exact_match": false,
         "expected": {
           "clauses": [
             {
-              "field": "adverse_event",
-              "op": "contains",
-              "value": "HAEMORRHAGE"
-            },
-            {
-              "field": "case_count_a",
-              "op": "gte",
-              "value": 8
+              "field": "ROR_95CI_low",
+              "op": "gt",
+              "value": 2
             }
           ],
           "sort_by": "priority_rank",
@@ -1494,18 +2036,7 @@
           "limit": null
         },
         "predicted": {
-          "clauses": [
-            {
-              "field": "adverse_event",
-              "op": "contains",
-              "value": "HAEMORRHAGE"
-            },
-            {
-              "field": "case_count_a",
-              "op": "gte",
-              "value": 8
-            }
-          ],
+          "clauses": [],
           "sort_by": "priority_rank",
           "sort_dir": "asc",
           "limit": null
@@ -1513,53 +2044,19 @@
       },
       {
         "id": "Q26",
-        "question": "acute kidney injury flagged by BCPNN sorted by EB05",
-        "exact_match": true,
-        "expected": {
-          "clauses": [
-            {
-              "field": "adverse_event",
-              "op": "eq",
-              "value": "ACUTE KIDNEY INJURY"
-            },
-            {
-              "field": "signal_bcpnn",
-              "op": "eq",
-              "value": true
-            }
-          ],
-          "sort_by": "EB05",
-          "sort_dir": "desc",
-          "limit": null
-        },
-        "predicted": {
-          "clauses": [
-            {
-              "field": "adverse_event",
-              "op": "eq",
-              "value": "ACUTE KIDNEY INJURY"
-            },
-            {
-              "field": "signal_bcpnn",
-              "op": "eq",
-              "value": true
-            }
-          ],
-          "sort_by": "EB05",
-          "sort_dir": "desc",
-          "limit": null
-        }
-      },
-      {
-        "id": "Q27",
-        "question": "events for aspirin with fewer than 10 cases",
-        "exact_match": true,
+        "question": "Which reactions have between 5 and 15 cases for aspirin?",
+        "exact_match": false,
         "expected": {
           "clauses": [
             {
               "field": "case_count_a",
-              "op": "lt",
-              "value": 10
+              "op": "gte",
+              "value": 5
+            },
+            {
+              "field": "case_count_a",
+              "op": "lte",
+              "value": 15
             },
             {
               "field": "drug",
@@ -1574,14 +2071,43 @@
         "predicted": {
           "clauses": [
             {
-              "field": "case_count_a",
-              "op": "lt",
-              "value": 10
-            },
-            {
               "field": "drug",
               "op": "eq",
               "value": "ASPIRIN"
+            }
+          ],
+          "sort_by": "priority_rank",
+          "sort_dir": "asc",
+          "limit": null
+        }
+      },
+      {
+        "id": "Q27",
+        "question": "Find any pair with a dozen or more cases and PRR above 3.",
+        "exact_match": false,
+        "expected": {
+          "clauses": [
+            {
+              "field": "PRR",
+              "op": "gt",
+              "value": 3
+            },
+            {
+              "field": "case_count_a",
+              "op": "gte",
+              "value": 12
+            }
+          ],
+          "sort_by": "priority_rank",
+          "sort_dir": "asc",
+          "limit": null
+        },
+        "predicted": {
+          "clauses": [
+            {
+              "field": "PRR",
+              "op": "gt",
+              "value": 3
             }
           ],
           "sort_by": "priority_rank",
@@ -1591,22 +2117,22 @@
       },
       {
         "id": "Q28",
-        "question": "non-confounded serious events flagged by PRR",
+        "question": "Show pairs excluding warfarin that are flagged by EBGM and have at least 5 cases.",
         "exact_match": true,
         "expected": {
           "clauses": [
             {
-              "field": "confounding_flagged",
-              "op": "eq",
-              "value": false
+              "field": "case_count_a",
+              "op": "gte",
+              "value": 5
             },
             {
-              "field": "serious_event",
-              "op": "eq",
-              "value": true
+              "field": "drug",
+              "op": "neq",
+              "value": "WARFARIN"
             },
             {
-              "field": "signal_detected",
+              "field": "signal_ebgm",
               "op": "eq",
               "value": true
             }
@@ -1618,17 +2144,17 @@
         "predicted": {
           "clauses": [
             {
-              "field": "confounding_flagged",
-              "op": "eq",
-              "value": false
+              "field": "case_count_a",
+              "op": "gte",
+              "value": 5
             },
             {
-              "field": "serious_event",
-              "op": "eq",
-              "value": true
+              "field": "drug",
+              "op": "neq",
+              "value": "WARFARIN"
             },
             {
-              "field": "signal_detected",
+              "field": "signal_ebgm",
               "op": "eq",
               "value": true
             }
@@ -1640,70 +2166,69 @@
       },
       {
         "id": "Q29",
-        "question": "events for ciprofloxacin with PRR > 5 sorted by PRR",
+        "question": "List early-failure Weibull regime pairs with shape k below 0.8.",
         "exact_match": true,
         "expected": {
           "clauses": [
             {
-              "field": "PRR",
-              "op": "gt",
-              "value": 5
+              "field": "weibull_regime",
+              "op": "eq",
+              "value": "early_failure"
             },
             {
-              "field": "drug",
-              "op": "eq",
-              "value": "CIPROFLOXACIN"
+              "field": "weibull_shape",
+              "op": "lt",
+              "value": 0.8
             }
           ],
-          "sort_by": "PRR",
-          "sort_dir": "desc",
+          "sort_by": "priority_rank",
+          "sort_dir": "asc",
           "limit": null
         },
         "predicted": {
           "clauses": [
             {
-              "field": "PRR",
-              "op": "gt",
-              "value": 5
+              "field": "weibull_regime",
+              "op": "eq",
+              "value": "early_failure"
             },
             {
-              "field": "drug",
-              "op": "eq",
-              "value": "CIPROFLOXACIN"
+              "field": "weibull_shape",
+              "op": "lt",
+              "value": 0.8
             }
           ],
-          "sort_by": "PRR",
-          "sort_dir": "desc",
+          "sort_by": "priority_rank",
+          "sort_dir": "asc",
           "limit": null
         }
       },
       {
         "id": "Q30",
-        "question": "top 15 signals flagged by FDR sorted by rank",
-        "exact_match": true,
+        "question": "Show signals where drug total reports exceed 1000 and PRR is at least 4.",
+        "exact_match": false,
         "expected": {
           "clauses": [
             {
-              "field": "signal_fdr",
-              "op": "eq",
-              "value": true
+              "field": "PRR",
+              "op": "gte",
+              "value": 4
+            },
+            {
+              "field": "drug_total_reports",
+              "op": "gt",
+              "value": 1000
             }
           ],
           "sort_by": "priority_rank",
           "sort_dir": "asc",
-          "limit": 15
+          "limit": null
         },
         "predicted": {
-          "clauses": [
-            {
-              "field": "signal_fdr",
-              "op": "eq",
-              "value": true
-            }
-          ],
+          "clauses": [],
           "sort_by": "priority_rank",
           "sort_dir": "asc",
-          "limit": 15
+          "limit": null
         }
       }
     ]
