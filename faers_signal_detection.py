@@ -162,36 +162,38 @@ def build_case_level_table(
     _require_columns(drug, {"primaryid", "drugname"}, "DRUG")
     _require_columns(reac, {"primaryid", "pt"}, "REAC")
 
-    demo_clean = deduplicate_demo_by_caseid(demo)[0] if deduplicate_cases else demo.copy()
-    drug = drug.copy()
-    reac = reac.copy()
-
-    for frame in (demo_clean, drug, reac):
-        frame["primaryid"] = frame["primaryid"].astype("string").str.strip()
-
+    demo_clean = deduplicate_demo_by_caseid(demo)[0] if deduplicate_cases else demo
+    demo_pids = demo_clean["primaryid"].fillna("").astype(str).str.strip()
+    valid_cases = set(demo_pids[demo_pids != ""])
     if exclude_primaryids:
-        demo_clean = demo_clean[~demo_clean["primaryid"].isin(exclude_primaryids)]
+        valid_cases -= set(exclude_primaryids)
 
-    valid_cases = set(demo_clean["primaryid"].dropna())
-    drug = drug[drug["primaryid"].isin(valid_cases)].copy()
-    reac = reac[reac["primaryid"].isin(valid_cases)].copy()
+    drug_pids = drug["primaryid"].fillna("").astype(str).str.strip()
+    drug_mask = drug_pids.isin(valid_cases)
+    if "role_cod" in drug.columns:
+        roles = drug["role_cod"].fillna("").astype(str).str.strip().str.upper()
+        drug_mask = drug_mask & roles.isin(["PS", "SS"])
+    drug = drug.loc[drug_mask, [c for c in ("primaryid", "drugname", "role_cod", "drug_seq") if c in drug.columns]].copy()
+    drug["primaryid"] = drug_pids.loc[drug_mask]
 
-    drug["drugname"] = drug["drugname"].apply(normalize_drug_name)
-    reac["pt"] = reac["pt"].apply(normalize_pt)
+    reac_pids = reac["primaryid"].fillna("").astype(str).str.strip()
+    reac_mask = reac_pids.isin(valid_cases)
+    reac = reac.loc[reac_mask, ["primaryid", "pt"]].copy()
+    reac["primaryid"] = reac_pids.loc[reac_mask]
+
+    uniq_drugs = drug["drugname"].dropna().unique()
+    drug["drugname"] = drug["drugname"].map({u: normalize_drug_name(u) for u in uniq_drugs})
+    uniq_pts = reac["pt"].dropna().unique()
+    reac["pt"] = reac["pt"].map({u: normalize_pt(u) for u in uniq_pts})
 
     drug = drug.dropna(subset=["primaryid", "drugname"])
     reac = reac.dropna(subset=["primaryid", "pt"])
-    drug = drug[drug["drugname"] != ""]
-    reac = reac[reac["pt"] != ""]
+    drug = drug[drug["drugname"] != ""].drop_duplicates(subset=["primaryid", "drugname"])
+    reac = reac[reac["pt"] != ""].drop_duplicates(subset=["primaryid", "pt"])
 
-    if "role_cod" in drug.columns:
-        roles = drug["role_cod"].astype("string").str.strip().str.upper()
-        drug = drug[roles.isin(["PS", "SS"])]
-
-    merged = drug.merge(reac, on="primaryid", how="inner", suffixes=("_drug", "_reac"))
-    deduped = merged.drop_duplicates(subset=["primaryid", "drugname", "pt"]).copy()
+    deduped = drug.merge(reac, on="primaryid", how="inner", suffixes=("_drug", "_reac"))
     if "event_dt" in demo_clean.columns:
-        ev_map = demo_clean.set_index("primaryid")["event_dt"].to_dict()
+        ev_map = pd.Series(demo_clean["event_dt"].to_numpy(), index=demo_pids).to_dict()
         deduped["event_dt"] = deduped["primaryid"].map(ev_map)
     return deduped
 
@@ -421,43 +423,13 @@ def detect_probable_duplicates(
     }
 
 
-def compute_disproportionality(
-    pairs: pd.DataFrame,
-    min_cases: int = 3,
+def _compute_signals_from_pair_counts(
+    pair_counts: pd.DataFrame,
+    total_reports: int,
+    min_cases: int,
     *,
-    case_context: "CaseContext | None" = None,
     restrict_to: "set[tuple[str, str]] | None" = None,
-    score: bool = True,
 ) -> pd.DataFrame:
-    """
-    Compute PRR, ROR, chi-square, p_value, Benjamini-Hochberg q_value,
-    BCPNN, EBGM, signal flags and ML priority.
-    """
-    if min_cases < 1:
-        raise ValueError("min_cases must be at least 1")
-
-    if pairs.empty:
-        return pd.DataFrame(columns=SIGNAL_COLUMNS)
-
-    total_reports = pairs["primaryid"].nunique()
-    drug_totals = pairs.groupby("drugname")["primaryid"].nunique()
-    event_totals = pairs.groupby("pt")["primaryid"].nunique()
-
-    pair_counts = (
-        pairs.groupby(["drugname", "pt"])["primaryid"]
-        .nunique()
-        .reset_index(name="a")
-    )
-    pair_counts = pair_counts[pair_counts["a"] >= min_cases].copy()
-    pair_counts["drug_total"] = pair_counts["drugname"].map(drug_totals).astype(int)
-    pair_counts["event_total"] = pair_counts["pt"].map(event_totals).astype(int)
-    pair_counts["b"] = pair_counts["drug_total"] - pair_counts["a"]
-    pair_counts["c"] = pair_counts["event_total"] - pair_counts["a"]
-    pair_counts["d"] = (
-        total_reports - pair_counts["drug_total"] - pair_counts["event_total"] + pair_counts["a"]
-    )
-    pair_counts = pair_counts[(pair_counts["b"] > 0) & (pair_counts["c"] > 0) & (pair_counts["d"] > 0)]
-
     if pair_counts.empty:
         return pd.DataFrame(columns=SIGNAL_COLUMNS)
 
@@ -546,7 +518,222 @@ def compute_disproportionality(
             (qv < 0.05) and (results[idx]["PRR"] >= 2.0) and (results[idx]["case_count_a"] >= min_cases)
         )
 
-    output = pd.DataFrame(results)
+    return pd.DataFrame(results).reindex(columns=SIGNAL_COLUMNS)
+
+
+def compute_disproportionality_from_tables(
+    demo: pd.DataFrame,
+    drug: pd.DataFrame,
+    reac: pd.DataFrame,
+    min_cases: int = 3,
+    *,
+    restrict_to: "set[tuple[str, str]] | None" = None,
+    already_normalized: bool = False,
+) -> tuple[pd.DataFrame, int, set[str]]:
+    """
+    Memory-efficient disproportionality computation directly from deduplicated
+    (demo, drug, reac) tables without materialising the full Cartesian product
+    of multi-quarter string pairs in memory.
+    """
+    import gc
+
+    demo_pids = np.unique(demo["primaryid"].fillna("").astype(str).str.strip().to_numpy())
+    demo_pids = demo_pids[demo_pids != ""]
+    del demo
+    if len(demo_pids) == 0:
+        return pd.DataFrame(columns=SIGNAL_COLUMNS), 0, set()
+
+    if not already_normalized:
+        uniq_d = drug["drugname"].dropna().unique()
+        d_names = drug["drugname"].map({u: normalize_drug_name(u) for u in uniq_d})
+    else:
+        d_names = drug["drugname"]
+
+    d_mask = d_names.notna() & (d_names != "")
+    if "role_cod" in drug.columns:
+        roles = drug["role_cod"].fillna("").astype(str).str.strip().str.upper()
+        d_mask = d_mask & roles.isin(["PS", "SS"])
+
+    d_pid_str = drug.loc[d_mask, "primaryid"].fillna("").astype(str).str.strip().to_numpy()
+    d_name_arr = d_names.loc[d_mask].to_numpy()
+    del drug, d_names, d_mask
+    gc.collect()
+
+    d_idx_raw = np.searchsorted(demo_pids, d_pid_str)
+    d_valid = (d_idx_raw < len(demo_pids)) & (
+        demo_pids[np.minimum(d_idx_raw, len(demo_pids) - 1)] == d_pid_str
+    )
+    del d_pid_str
+    d_pid_codes = d_idx_raw[d_valid].astype(np.int64)
+    d_name_arr = d_name_arr[d_valid]
+    del d_idx_raw, d_valid
+    drug_cats, d_codes = np.unique(d_name_arr, return_inverse=True)
+    del d_name_arr
+    dk = np.unique((d_pid_codes << 20) | d_codes.astype(np.int64))
+    del d_pid_codes, d_codes
+    d_pid_codes = (dk >> 20).astype(np.int32)
+    d_codes = (dk & 0xFFFFF).astype(np.int32)
+    del dk
+    gc.collect()
+
+    if not already_normalized:
+        uniq_p = reac["pt"].dropna().unique()
+        r_names = reac["pt"].map({u: normalize_pt(u) for u in uniq_p})
+    else:
+        r_names = reac["pt"]
+
+    r_mask = r_names.notna() & (r_names != "")
+    r_pid_str = reac.loc[r_mask, "primaryid"].fillna("").astype(str).str.strip().to_numpy()
+    r_name_arr = r_names.loc[r_mask].to_numpy()
+    del reac, r_names, r_mask
+    gc.collect()
+
+    r_idx_raw = np.searchsorted(demo_pids, r_pid_str)
+    r_valid = (r_idx_raw < len(demo_pids)) & (
+        demo_pids[np.minimum(r_idx_raw, len(demo_pids) - 1)] == r_pid_str
+    )
+    n_demo = len(demo_pids)
+    del r_pid_str, demo_pids
+    r_pid_codes = r_idx_raw[r_valid].astype(np.int64)
+    r_name_arr = r_name_arr[r_valid]
+    del r_idx_raw, r_valid
+    pt_cats, r_codes = np.unique(r_name_arr, return_inverse=True)
+    del r_name_arr
+    rk = np.unique((r_pid_codes << 20) | r_codes.astype(np.int64))
+    del r_pid_codes, r_codes
+    r_pid_codes = (rk >> 20).astype(np.int32)
+    r_codes = (rk & 0xFFFFF).astype(np.int32)
+    del rk
+    gc.collect()
+
+    has_d = np.zeros(n_demo, dtype=bool)
+    has_d[d_pid_codes] = True
+    has_r = np.zeros(n_demo, dtype=bool)
+    has_r[r_pid_codes] = True
+    active = has_d & has_r
+    del has_d, has_r
+    total_reports = int(active.sum())
+    if total_reports == 0:
+        return pd.DataFrame(columns=SIGNAL_COLUMNS), 0, set()
+
+    d_keep = active[d_pid_codes]
+    d_pid_codes = d_pid_codes[d_keep]
+    d_codes = d_codes[d_keep]
+    r_keep = active[r_pid_codes]
+    r_pid_codes = r_pid_codes[r_keep]
+    r_codes = r_codes[r_keep]
+    del active, d_keep, r_keep
+
+    drug_totals_arr = np.bincount(d_codes, minlength=len(drug_cats))
+    event_totals_arr = np.bincount(r_codes, minlength=len(pt_cats))
+    seen_drugs = set(drug_cats[drug_totals_arr > 0])
+
+    d_int = pd.DataFrame({"pid": d_pid_codes, "d": d_codes})
+    r_int = pd.DataFrame({"pid": r_pid_codes, "e": r_codes})
+    del d_pid_codes, r_pid_codes, d_codes, r_codes
+    gc.collect()
+
+    chunk_size = 100_000
+    n_chunks = max(1, (n_demo + chunk_size - 1) // chunk_size)
+    accum_keys: list[np.ndarray] = []
+    accum_counts: list[np.ndarray] = []
+
+    for c_idx in range(n_chunks):
+        lo = c_idx * chunk_size
+        hi = (c_idx + 1) * chunk_size
+        d_sub = d_int[(d_int["pid"] >= lo) & (d_int["pid"] < hi)]
+        r_sub = r_int[(r_int["pid"] >= lo) & (r_int["pid"] < hi)]
+        if d_sub.empty or r_sub.empty:
+            continue
+        merged = d_sub.merge(r_sub, on="pid", how="inner")
+        keys = (merged["d"].to_numpy(dtype=np.int64) << 24) | merged["e"].to_numpy(dtype=np.int64)
+        del merged
+        u_keys, u_cnts = np.unique(keys, return_counts=True)
+        del keys
+        accum_keys.append(u_keys)
+        accum_counts.append(u_cnts)
+
+    del d_int, r_int
+    if not accum_keys:
+        return pd.DataFrame(columns=SIGNAL_COLUMNS), total_reports, seen_drugs
+
+    all_k = np.concatenate(accum_keys)
+    all_c = np.concatenate(accum_counts)
+    del accum_keys, accum_counts
+    s_series = pd.Series(all_c, index=all_k).groupby(level=0, sort=True).sum()
+    del all_k, all_c
+    s_series = s_series[s_series >= min_cases]
+    if s_series.empty:
+        return pd.DataFrame(columns=SIGNAL_COLUMNS), total_reports, seen_drugs
+
+    final_keys = s_series.index.to_numpy(dtype=np.int64)
+    final_a = s_series.to_numpy(dtype=int)
+    del s_series
+
+    d_idx = final_keys >> 24
+    e_idx = final_keys & 0xFFFFFF
+    pair_counts = pd.DataFrame({
+        "drugname": drug_cats[d_idx],
+        "pt": pt_cats[e_idx],
+        "a": final_a,
+        "drug_total": drug_totals_arr[d_idx].astype(int),
+        "event_total": event_totals_arr[e_idx].astype(int),
+    })
+    pair_counts["b"] = pair_counts["drug_total"] - pair_counts["a"]
+    pair_counts["c"] = pair_counts["event_total"] - pair_counts["a"]
+    pair_counts["d"] = (
+        total_reports - pair_counts["drug_total"] - pair_counts["event_total"] + pair_counts["a"]
+    )
+    pair_counts = pair_counts[(pair_counts["b"] > 0) & (pair_counts["c"] > 0) & (pair_counts["d"] > 0)]
+
+    signals = _compute_signals_from_pair_counts(
+        pair_counts, total_reports, min_cases, restrict_to=restrict_to
+    )
+    return signals, total_reports, seen_drugs
+
+
+def compute_disproportionality(
+    pairs: pd.DataFrame,
+    min_cases: int = 3,
+    *,
+    case_context: "CaseContext | None" = None,
+    restrict_to: "set[tuple[str, str]] | None" = None,
+    score: bool = True,
+) -> pd.DataFrame:
+    """
+    Compute PRR, ROR, chi-square, p_value, Benjamini-Hochberg q_value,
+    BCPNN, EBGM, signal flags and ML priority.
+    """
+    if min_cases < 1:
+        raise ValueError("min_cases must be at least 1")
+
+    if pairs.empty:
+        return pd.DataFrame(columns=SIGNAL_COLUMNS)
+
+    total_reports = pairs["primaryid"].nunique()
+    drug_totals = pairs.groupby("drugname")["primaryid"].nunique()
+    event_totals = pairs.groupby("pt")["primaryid"].nunique()
+
+    pair_counts = (
+        pairs.groupby(["drugname", "pt"])["primaryid"]
+        .nunique()
+        .reset_index(name="a")
+    )
+    pair_counts = pair_counts[pair_counts["a"] >= min_cases].copy()
+    pair_counts["drug_total"] = pair_counts["drugname"].map(drug_totals).astype(int)
+    pair_counts["event_total"] = pair_counts["pt"].map(event_totals).astype(int)
+    pair_counts["b"] = pair_counts["drug_total"] - pair_counts["a"]
+    pair_counts["c"] = pair_counts["event_total"] - pair_counts["a"]
+    pair_counts["d"] = (
+        total_reports - pair_counts["drug_total"] - pair_counts["event_total"] + pair_counts["a"]
+    )
+    pair_counts = pair_counts[(pair_counts["b"] > 0) & (pair_counts["c"] > 0) & (pair_counts["d"] > 0)]
+
+    output = _compute_signals_from_pair_counts(
+        pair_counts, total_reports, min_cases, restrict_to=restrict_to
+    )
+    if output.empty:
+        return output
     if score:
         from ml_prioritization import apply_prioritization, load_model
         from pair_features import case_level_features

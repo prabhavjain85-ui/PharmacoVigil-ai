@@ -1,276 +1,281 @@
 {
   "schema_version": 1,
   "model_type": "L2 logistic regression",
-  "created": "2026-11-11",
-  "feature_set": "disproportionality",
+  "created": "2026-11-14",
+  "feature_set": "all",
   "training": {
-    "data": "synthetic",
-    "description": "Synthetic FAERS-shaped benchmark built around the reference-set drugs. Placeholder weights: retrain on real FAERS before relying on the ranking.",
-    "quarters": [],
+    "data": "faers",
+    "description": "FDA FAERS quarterly extracts, latest version of each case.",
+    "quarters": [
+      "23Q3",
+      "23Q4",
+      "24Q1",
+      "24Q2"
+    ],
     "reference_sets": [
       "OMOP (Ryan et al. 2013)",
       "EU-ADR (Coloma et al. 2013)"
     ],
     "label_unit": "drug x health outcome of interest",
     "min_cases": 3,
-    "n_cases": 60000,
-    "superseded_versions_dropped": 1790,
+    "n_cases": 1490754,
+    "superseded_versions_dropped": 135401,
     "controls_total": 485,
-    "controls_scored": 415
+    "controls_scored": 215
   },
   "evaluation": {
     "protocol": "5x repeated 5-fold cross-validation grouped by drug; mean and SD across repeats. Baselines rank the same controls by one statistic.",
-    "n_labelled": 415,
-    "n_positive": 186,
-    "n_negative": 229,
-    "prevalence": 0.4482,
+    "n_labelled": 215,
+    "n_positive": 127,
+    "n_negative": 88,
+    "prevalence": 0.5907,
     "candidates": {
       "Logistic regression, all features": {
-        "auc": 0.8384,
-        "auc_sd": 0.0047,
-        "ap": 0.8464,
-        "ap_sd": 0.0021,
+        "auc": 0.8808,
+        "auc_sd": 0.008,
+        "ap": 0.9104,
+        "ap_sd": 0.0093,
         "precision_at_k": {
-          "10": 1.0,
-          "25": 1.0,
-          "50": 0.988
+          "10": 0.98,
+          "25": 0.976,
+          "50": 0.956
         }
       },
       "Logistic regression, disproportionality only": {
-        "auc": 0.854,
-        "auc_sd": 0.0016,
-        "ap": 0.8585,
-        "ap_sd": 0.0016,
+        "auc": 0.836,
+        "auc_sd": 0.0034,
+        "ap": 0.8796,
+        "ap_sd": 0.0035,
         "precision_at_k": {
           "10": 1.0,
-          "25": 1.0,
-          "50": 0.992
+          "25": 0.936,
+          "50": 0.94
         }
       },
       "Gradient boosting, all features": {
-        "auc": 0.817,
-        "auc_sd": 0.0052,
-        "ap": 0.8129,
-        "ap_sd": 0.0068,
+        "auc": 0.88,
+        "auc_sd": 0.0042,
+        "ap": 0.9145,
+        "ap_sd": 0.0043,
         "precision_at_k": {
-          "10": 0.94,
-          "25": 0.952,
+          "10": 1.0,
+          "25": 0.992,
           "50": 0.968
         }
       }
     },
     "baselines": {
       "PRR": {
-        "auc": 0.8523,
-        "ap": 0.8481,
+        "auc": 0.787,
+        "ap": 0.809,
         "precision_at_k": {
-          "10": 1.0,
-          "25": 1.0,
-          "50": 0.96
+          "10": 0.8,
+          "25": 0.84,
+          "50": 0.86
         }
       },
       "ROR lower 95% bound": {
-        "auc": 0.8609,
-        "ap": 0.8645,
+        "auc": 0.8185,
+        "ap": 0.8439,
         "precision_at_k": {
-          "10": 1.0,
-          "25": 1.0,
-          "50": 1.0
+          "10": 0.8,
+          "25": 0.92,
+          "50": 0.9
         }
       },
       "IC025 (BCPNN)": {
-        "auc": 0.8591,
-        "ap": 0.8621,
+        "auc": 0.8148,
+        "ap": 0.8399,
         "precision_at_k": {
-          "10": 1.0,
-          "25": 1.0,
-          "50": 1.0
+          "10": 0.8,
+          "25": 0.88,
+          "50": 0.9
         }
       },
       "EB05 (EBGM)": {
-        "auc": 0.8587,
-        "ap": 0.8518,
+        "auc": 0.8177,
+        "ap": 0.8428,
         "precision_at_k": {
-          "10": 1.0,
-          "25": 1.0,
-          "50": 0.98
+          "10": 0.8,
+          "25": 0.88,
+          "50": 0.9
         }
       },
       "Chi-square": {
-        "auc": 0.7865,
-        "ap": 0.8156,
+        "auc": 0.799,
+        "ap": 0.8717,
         "precision_at_k": {
           "10": 1.0,
-          "25": 1.0,
-          "50": 1.0
+          "25": 0.96,
+          "50": 0.94
         }
       },
       "Case count": {
-        "auc": 0.7409,
-        "ap": 0.7131,
+        "auc": 0.7922,
+        "ap": 0.8601,
         "precision_at_k": {
-          "10": 0.9,
-          "25": 0.96,
-          "50": 0.88
+          "10": 1.0,
+          "25": 1.0,
+          "50": 0.94
         }
       }
     },
-    "selected": "Logistic regression, disproportionality only"
+    "selected": "Logistic regression, all features"
   },
-  "intercept": 0.084078,
+  "intercept": 0.345003,
   "features": [
     {
       "name": "ic",
       "label": "IC (BCPNN)",
       "group": "disproportionality",
-      "weight": 0.164764,
-      "mean": 0.516492,
-      "std": 0.901223,
+      "weight": 0.373538,
+      "mean": 1.48361,
+      "std": 1.852713,
       "used": true
     },
     {
       "name": "ic025",
       "label": "IC025 (lower bound)",
       "group": "disproportionality",
-      "weight": 0.145631,
-      "mean": -0.388336,
-      "std": 1.091692,
+      "weight": 0.312508,
+      "mean": 0.817899,
+      "std": 2.042584,
       "used": true
     },
     {
       "name": "log_prr",
       "label": "log PRR",
       "group": "disproportionality",
-      "weight": 0.477001,
-      "mean": 0.309933,
-      "std": 0.65057,
+      "weight": 0.321378,
+      "mean": 0.999822,
+      "std": 1.312096,
       "used": true
     },
     {
       "name": "log_ror_ci_low",
       "label": "log ROR lower 95% bound",
       "group": "disproportionality",
-      "weight": 0.85927,
-      "mean": -0.309892,
-      "std": 0.858643,
+      "weight": 0.257614,
+      "mean": 0.565728,
+      "std": 1.512739,
       "used": true
     },
     {
       "name": "log_chi2",
       "label": "log(1 + chi-square)",
       "group": "disproportionality",
-      "weight": 0.416764,
-      "mean": 1.426158,
-      "std": 1.569211,
+      "weight": -0.197409,
+      "mean": 3.748773,
+      "std": 2.577201,
       "used": true
     },
     {
       "name": "log_cases",
       "label": "log(1 + case count)",
       "group": "disproportionality",
-      "weight": 0.025245,
-      "mean": 2.585492,
-      "std": 0.879596,
+      "weight": 1.031005,
+      "mean": 3.463323,
+      "std": 1.471311,
       "used": true
     },
     {
       "name": "frac_death",
       "label": "Fatal outcome fraction",
       "group": "case",
-      "weight": 0.0,
-      "mean": 0.0,
-      "std": 1.0,
-      "used": false
+      "weight": 0.002806,
+      "mean": 0.212368,
+      "std": 0.256604,
+      "used": true
     },
     {
       "name": "frac_hosp_lt",
       "label": "Hospitalised / life-threatening fraction",
       "group": "case",
-      "weight": 0.0,
-      "mean": 0.0,
-      "std": 1.0,
-      "used": false
+      "weight": -0.430246,
+      "mean": 0.614014,
+      "std": 0.27829,
+      "used": true
     },
     {
       "name": "frac_serious",
       "label": "Any serious outcome fraction",
       "group": "case",
-      "weight": 0.0,
-      "mean": 0.0,
-      "std": 1.0,
-      "used": false
+      "weight": 0.569684,
+      "mean": 0.703425,
+      "std": 0.253442,
+      "used": true
     },
     {
       "name": "frac_hcp",
       "label": "Health-professional reporter fraction",
       "group": "case",
-      "weight": 0.0,
-      "mean": 0.0,
-      "std": 1.0,
-      "used": false
+      "weight": 0.618239,
+      "mean": 0.798657,
+      "std": 0.249161,
+      "used": true
     },
     {
       "name": "frac_female",
       "label": "Female fraction",
       "group": "case",
-      "weight": 0.0,
-      "mean": 0.0,
-      "std": 1.0,
-      "used": false
+      "weight": 0.190393,
+      "mean": 0.539744,
+      "std": 0.300711,
+      "used": true
     },
     {
       "name": "mean_age",
       "label": "Mean age (years)",
       "group": "case",
-      "weight": 0.0,
-      "mean": 0.0,
-      "std": 1.0,
-      "used": false
+      "weight": -1.039163,
+      "mean": 56.822142,
+      "std": 12.591759,
+      "used": true
     },
     {
       "name": "log_median_tto",
       "label": "log(1 + median days to onset)",
       "group": "case",
-      "weight": 0.0,
-      "mean": 0.0,
-      "std": 1.0,
-      "used": false
+      "weight": 0.064958,
+      "mean": 3.483603,
+      "std": 1.827354,
+      "used": true
     },
     {
       "name": "frac_tto_30d",
       "label": "Onset within 30 days fraction",
       "group": "case",
-      "weight": 0.0,
-      "mean": 0.0,
-      "std": 1.0,
-      "used": false
+      "weight": 0.300008,
+      "mean": 0.545093,
+      "std": 0.31889,
+      "used": true
     },
     {
       "name": "log_mean_drugs",
       "label": "log mean drugs per report",
       "group": "case",
-      "weight": 0.0,
-      "mean": 0.0,
-      "std": 1.0,
-      "used": false
+      "weight": -0.406997,
+      "mean": 2.388064,
+      "std": 0.79478,
+      "used": true
     },
     {
       "name": "frac_primary_suspect",
       "label": "Primary-suspect fraction",
       "group": "case",
-      "weight": 0.0,
-      "mean": 0.0,
-      "std": 1.0,
-      "used": false
+      "weight": 0.940836,
+      "mean": 0.368018,
+      "std": 0.287733,
+      "used": true
     },
     {
       "name": "frac_event_is_indication",
       "label": "Event reported as indication fraction",
       "group": "case",
-      "weight": 0.0,
-      "mean": 0.0,
-      "std": 1.0,
-      "used": false
+      "weight": -0.086416,
+      "mean": 0.010481,
+      "std": 0.056275,
+      "used": true
     }
   ]
 }

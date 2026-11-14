@@ -94,27 +94,32 @@ def disproportionality_features(signals: pd.DataFrame, total_reports: int) -> pd
 
 
 def _clean_id(series: pd.Series) -> pd.Series:
-    return series.astype("string").str.strip()
+    return series.fillna("").astype(str).str.strip()
 
 
 def _clean_code(series: pd.Series) -> pd.Series:
-    return series.astype("string").str.strip().str.upper()
+    return series.fillna("").astype(str).str.strip().str.upper()
 
 
 def _parse_date(series: pd.Series) -> pd.Series:
     """FAERS dates are YYYYMMDD; partial dates (YYYY, YYYYMM) are treated as missing."""
-    text = series.astype("string").str.strip()
+    text = series.fillna("").astype(str).str.strip()
     text = text.where(text.str.fullmatch(r"\d{8}").fillna(False))
     return pd.to_datetime(text, format="%Y%m%d", errors="coerce")
 
 
-def _case_table(context: CaseContext) -> pd.DataFrame:
+def _case_table(context: CaseContext, active_pids: Optional[set[str]] = None) -> pd.DataFrame:
     """One row per report with the report-level attributes that are available."""
     parts: list[pd.DataFrame] = []
 
     demo = context.demo
     if demo is not None and "primaryid" in demo.columns:
-        d = pd.DataFrame({"primaryid": _clean_id(demo["primaryid"])})
+        pids = _clean_id(demo["primaryid"])
+        if active_pids is not None:
+            mask = pids.isin(active_pids)
+            demo = demo.loc[mask]
+            pids = pids.loc[mask]
+        d = pd.DataFrame({"primaryid": pids})
         if "sex" in demo.columns:
             sex = _clean_code(demo["sex"])
             d["female"] = sex.map({"F": 1.0, "M": 0.0}).astype(float)
@@ -133,9 +138,15 @@ def _case_table(context: CaseContext) -> pd.DataFrame:
         parts.append(d.dropna(subset=["primaryid"]).drop_duplicates("primaryid").set_index("primaryid"))
 
     outc = context.outc
-    if outc is not None and {"primaryid", "outc_cod"} <= set(outc.columns):
+    has_outc_table = outc is not None and {"primaryid", "outc_cod"} <= set(outc.columns) and not outc.empty
+    if has_outc_table:
+        pids = _clean_id(outc["primaryid"])
+        if active_pids is not None:
+            mask = pids.isin(active_pids)
+            outc = outc.loc[mask]
+            pids = pids.loc[mask]
         o = pd.DataFrame({
-            "primaryid": _clean_id(outc["primaryid"]),
+            "primaryid": pids,
             "code": _clean_code(outc["outc_cod"]),
         }).dropna()
         flags = pd.DataFrame({
@@ -144,13 +155,17 @@ def _case_table(context: CaseContext) -> pd.DataFrame:
             "hosp_lt": o["code"].isin({"HO", "LT"}).astype(float),
             "serious": o["code"].isin(SERIOUS_OUTCOMES).astype(float),
         }).groupby("primaryid").max()
-        flags["_has_outc"] = 1.0
         parts.append(flags)
 
     drug = context.drug
     if drug is not None and {"primaryid", "drugname"} <= set(drug.columns):
+        pids = _clean_id(drug["primaryid"])
+        if active_pids is not None:
+            mask = pids.isin(active_pids)
+            drug = drug.loc[mask]
+            pids = pids.loc[mask]
         g = pd.DataFrame({
-            "primaryid": _clean_id(drug["primaryid"]),
+            "primaryid": pids,
             "name": _clean_code(drug["drugname"]),
         }).dropna()
         parts.append(g.groupby("primaryid")["name"].nunique().astype(float).rename("n_drugs").to_frame())
@@ -158,21 +173,30 @@ def _case_table(context: CaseContext) -> pd.DataFrame:
     if not parts:
         return pd.DataFrame()
     table = pd.concat(parts, axis=1)
-    if "_has_outc" in table.columns:
+    if has_outc_table:
         # A report absent from a supplied OUTC table had no serious outcome recorded.
         for name in ("death", "hosp_lt", "serious"):
-            table[name] = table[name].fillna(0.0)
-        table = table.drop(columns="_has_outc")
+            if name not in table.columns:
+                table[name] = 0.0
+            else:
+                table[name] = table[name].fillna(0.0)
     return table
 
 
-def _therapy_start(context: CaseContext) -> tuple[Optional[pd.DataFrame], Optional[pd.Series]]:
+def _therapy_start(
+    context: CaseContext, active_pids: Optional[set[str]] = None
+) -> tuple[Optional[pd.DataFrame], Optional[pd.Series]]:
     """Earliest therapy start per (report, drug_seq) and per report."""
     ther = context.ther
     if ther is None or not {"primaryid", "start_dt"} <= set(ther.columns):
         return None, None
+    pids = _clean_id(ther["primaryid"])
+    if active_pids is not None:
+        mask = pids.isin(active_pids)
+        ther = ther.loc[mask]
+        pids = pids.loc[mask]
     t = pd.DataFrame({
-        "primaryid": _clean_id(ther["primaryid"]),
+        "primaryid": pids,
         "start": _parse_date(ther["start_dt"]),
     })
     if "dsg_drug_seq" in ther.columns:
@@ -210,6 +234,7 @@ def case_level_features(
 
     work = pairs[["primaryid", "drugname", "pt"]].copy()
     work["primaryid"] = _clean_id(work["primaryid"])
+    active_pids = set(work["primaryid"].dropna())
     if "role_cod" in pairs.columns:
         role = _clean_code(pairs["role_cod"])
         work["primary"] = (role == "PS").astype(float).where(role.notna() & (role != "")).to_numpy()
@@ -217,11 +242,11 @@ def case_level_features(
         work["drug_seq"] = _clean_id(pairs["drug_seq"]).to_numpy()
 
     context = context or CaseContext()
-    cases = _case_table(context)
+    cases = _case_table(context, active_pids)
     if not cases.empty:
         work = work.join(cases, on="primaryid")
 
-    per_drug, per_case = _therapy_start(context)
+    per_drug, per_case = _therapy_start(context, active_pids)
     if per_case is not None and "event_date" in work.columns:
         work = work.join(per_case.rename("start_case"), on="primaryid")
         start = work["start_case"]
@@ -234,12 +259,16 @@ def case_level_features(
 
     indi = context.indi
     if indi is not None and {"primaryid", "indi_pt"} <= set(indi.columns):
-        terms = indi["indi_pt"].astype("string").str.strip().str.upper().str.split().str.join(" ")
+        indi_pids = _clean_id(indi["primaryid"])
+        mask = indi_pids.isin(active_pids)
+        indi_sub = indi.loc[mask]
+        indi_pids = indi_pids.loc[mask]
+        terms = indi_sub["indi_pt"].fillna("").astype(str).str.strip().str.upper().str.split().str.join(" ")
         if event_mapper is not None:
-            lookup = {t: event_mapper(t) for t in terms.dropna().unique()}
+            lookup = {t: event_mapper(t) for t in terms[terms != ""].unique()}
             terms = terms.map(lookup)
-        ind = pd.DataFrame({"primaryid": _clean_id(indi["primaryid"]), "pt": terms}).dropna()
-        ind = ind.drop_duplicates().assign(event_is_indication=1.0)
+        ind = pd.DataFrame({"primaryid": indi_pids, "pt": terms}).dropna()
+        ind = ind[(ind["primaryid"] != "") & (ind["pt"] != "")].drop_duplicates().assign(event_is_indication=1.0)
         work = work.merge(ind, on=["primaryid", "pt"], how="left")
         work["event_is_indication"] = work["event_is_indication"].fillna(0.0)
 
