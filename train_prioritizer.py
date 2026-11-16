@@ -38,7 +38,10 @@ from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.preprocessing import StandardScaler
 
 from faers_loader import FaersTables, load_faers
-from faers_signal_detection import build_case_level_table, compute_disproportionality
+from faers_signal_detection import (
+    build_case_level_table,
+    compute_disproportionality_from_tables,
+)
 from ml_prioritization import MODEL_PATH
 from pair_features import (
     ALL_FEATURES,
@@ -66,29 +69,48 @@ PRECISION_KS = (10, 25, 50)
 
 def build_training_frame(tables: FaersTables, min_cases: int) -> tuple[pd.DataFrame, dict]:
     """Labelled feature matrix: one row per reference control with enough reports."""
+    import gc
+
     controls = load_reference_controls()
 
-    drug = tables.drug.copy()
-    names = drug["drugname"].astype("string")
-    drug["drugname"] = names.map({n: reference_drug_name(n) for n in names.dropna().unique()})
-    reac = tables.reac.copy()
-    terms = reac["pt"].astype("string")
-    reac["pt"] = terms.map({t: map_event_to_hoi(t) for t in terms.dropna().unique()})
+    drug = tables.drug
+    uniq_names = drug["drugname"].dropna().unique()
+    drug["drugname"] = drug["drugname"].map({n: reference_drug_name(n) for n in uniq_names})
+    reac = tables.reac
+    uniq_terms = reac["pt"].dropna().unique()
+    reac["pt"] = reac["pt"].map({t: map_event_to_hoi(t) for t in uniq_terms})
 
-    pairs = build_case_level_table(tables.demo, drug, reac)
-    total_reports = int(pairs["primaryid"].nunique())
-    wanted = set(zip(controls["drug"], controls["adverse_event"]))
-    signals = compute_disproportionality(pairs, min_cases=min_cases, restrict_to=wanted, score=False)
-
+    ctrl_drugs = set(controls["drug"])
+    ctrl_events = set(controls["adverse_event"])
+    subset = build_case_level_table(
+        tables.demo,
+        drug[drug["drugname"].isin(ctrl_drugs)],
+        reac[reac["pt"].isin(ctrl_events)],
+        deduplicate_cases=False,
+    )
     context = CaseContext(demo=tables.demo, drug=drug, outc=tables.outc, indi=tables.indi, ther=tables.ther)
-    subset = pairs[pairs["drugname"].isin(set(controls["drug"])) & pairs["pt"].isin(set(controls["adverse_event"]))]
     case_features = case_level_features(subset, context, event_mapper=map_event_to_hoi)
+    del subset, context
+    tables.outc = None
+    tables.indi = None
+    tables.ther = None
+    gc.collect()
+
+    wanted = set(zip(controls["drug"], controls["adverse_event"]))
+    demo = tables.demo
+    tables.demo = None
+    tables.drug = None
+    tables.reac = None
+    signals, total_reports, seen_drugs = compute_disproportionality_from_tables(
+        demo, drug, reac, min_cases=min_cases, restrict_to=wanted, already_normalized=True,
+    )
+    del demo, drug, reac
+    gc.collect()
 
     features = build_feature_frame(signals, total_reports, case_features)
     frame = pd.concat([signals.reset_index(drop=True), features.reset_index(drop=True)], axis=1)
     frame = frame.merge(controls, on=["drug", "adverse_event"], how="inner")
 
-    seen_drugs = set(pairs["drugname"].unique())
     coverage = {
         "n_cases": total_reports,
         "controls_total": int(len(controls)),
