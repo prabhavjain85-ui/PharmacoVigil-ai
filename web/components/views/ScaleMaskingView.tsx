@@ -5,8 +5,8 @@ import { HelpTip, PageHeader } from "@/components/AppShell";
 import { Badge } from "@/components/ui/Badge";
 import { useData } from "@/lib/context/DataContext";
 import type { MaskingCheckSummary, MaskingShiftRow } from "@/lib/pipeline/types";
-import scaleBenchmarkData from "../../../evaluation/scale_benchmark_results.json";
-import timeIndexedData from "../../../evaluation/time_indexed_evaluation.json";
+import scaleBenchmarkData from "@/lib/pipeline/scale_benchmark_results.json";
+import timeIndexedData from "@/lib/pipeline/time_indexed_evaluation.json";
 
 export function ScaleMaskingView() {
   const { analysis } = useData();

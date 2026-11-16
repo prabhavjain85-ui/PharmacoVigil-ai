@@ -15,7 +15,7 @@ const NAV = [
   { href: "/nlp", label: "Narratives" },
   { href: "/compare", label: "Compare" },
   { href: "/trends", label: "Trends" },
-  { href: "/scale", label: "Scale \{ href: "/trends", label: "Trends" }, Masking" },
+  { href: "/scale", label: "Scale & Masking" },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
