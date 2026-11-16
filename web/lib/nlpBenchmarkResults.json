@@ -1,13 +1,39 @@
 {
+  "evaluated_at": "2026-11-14",
   "dataset_summary": {
     "total_narratives": 60,
     "negated_or_historical_or_uncertain_narratives": 20,
-    "disclaimer": "Synthetic benchmark narratives constructed for technical pipeline evaluation only. Does not establish clinical validity or regulatory readiness.",
-    "positive_only_narratives": 40
+    "positive_only_narratives": 40,
+    "disclaimer": "Development set (60 synthetic narratives) was used during rule construction. See `independent_test_set` (64 published open-access PubMed Central case reports) for out-of-sample evaluation."
+  },
+  "independent_test_set_summary": {
+    "total_narratives": 64,
+    "source": "PubMed Central Open Access Case Reports retrieved via NCBI E-utilities",
+    "annotation_guideline": "tests/narratives/ANNOTATION_GUIDELINE.md",
+    "negated_or_historical_narratives": 5,
+    "total_reaction_mentions": 108,
+    "disclaimer": "Verbatim clinical case report excerpts from open-access PMC articles (with PMID, PMCID, and Creative Commons licence). Rules were not tuned on this set."
+  },
+  "term_mapping_evaluation": {
+    "matcher_name": "Character-trigram & lexical synonym cosine similarity (128-dim hashed projection)",
+    "candidate_pool_size": 41,
+    "independent_test_mentions": 108,
+    "trigram_plus_lexical_synonym": {
+      "top1_correct": 96,
+      "top1_accuracy": 0.8889,
+      "top3_correct": 98,
+      "top3_accuracy": 0.9074
+    },
+    "trigram_and_concept_hash_only": {
+      "top1_correct": 91,
+      "top1_accuracy": 0.8426,
+      "top3_correct": 97,
+      "top3_accuracy": 0.8981
+    }
   },
   "extractors": {
     "legacy_regex": {
-      "name": "Old Regex (10 drugs, 7 reactions, no negation)",
+      "name": "Legacy Regex Baseline (10 drugs, 7 reactions, no negation)",
       "metrics": {
         "suspect_drugs": {
           "tp": 16,
@@ -73,11 +99,76 @@
           "recall": 0.0849,
           "f1": 0.1487
         }
+      },
+      "independent_test_metrics": {
+        "suspect_drugs": {
+          "tp": 23,
+          "fp": 2,
+          "fn": 64,
+          "precision": 0.92,
+          "recall": 0.2644,
+          "f1": 0.4107
+        },
+        "concomitant_drugs": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 5,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "active_reactions": {
+          "tp": 20,
+          "fp": 5,
+          "fn": 88,
+          "precision": 0.8,
+          "recall": 0.1852,
+          "f1": 0.3008
+        },
+        "negated_or_historical_reactions": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 5,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "seriousness": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 55,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "demographics": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 128,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "clinical_course_and_reporter": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 20,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "micro_overall": {
+          "tp": 43,
+          "fp": 7,
+          "fn": 365,
+          "precision": 0.86,
+          "recall": 0.1054,
+          "f1": 0.1878
+        }
       }
     },
-    "local_extractor": {
-      "name": "Local Biomedical NER + NegEx/ConText Extractor",
-      "model_id": "onnx-community/biomedical-ner-all-ONNX (d4data/biomedical-ner-all, Apache-2.0, ~63.9 MB quantized ONNX)",
+    "rule_based": {
+      "name": "Rule-Based Dictionary + NegEx/ConText + Trigram/Lexical Synonym Matcher",
       "metrics": {
         "suspect_drugs": {
           "tp": 60,
@@ -143,12 +234,351 @@
           "recall": 0.9639,
           "f1": 0.9774
         }
+      },
+      "independent_test_metrics": {
+        "suspect_drugs": {
+          "tp": 80,
+          "fp": 12,
+          "fn": 7,
+          "precision": 0.8696,
+          "recall": 0.9195,
+          "f1": 0.8939
+        },
+        "concomitant_drugs": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 5,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "active_reactions": {
+          "tp": 90,
+          "fp": 10,
+          "fn": 18,
+          "precision": 0.9,
+          "recall": 0.8333,
+          "f1": 0.8654
+        },
+        "negated_or_historical_reactions": {
+          "tp": 3,
+          "fp": 5,
+          "fn": 2,
+          "precision": 0.375,
+          "recall": 0.6,
+          "f1": 0.4615
+        },
+        "seriousness": {
+          "tp": 45,
+          "fp": 2,
+          "fn": 10,
+          "precision": 0.9574,
+          "recall": 0.8182,
+          "f1": 0.8824
+        },
+        "demographics": {
+          "tp": 128,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "clinical_course_and_reporter": {
+          "tp": 4,
+          "fp": 2,
+          "fn": 16,
+          "precision": 0.6667,
+          "recall": 0.2,
+          "f1": 0.3077
+        },
+        "micro_overall": {
+          "tp": 350,
+          "fp": 31,
+          "fn": 58,
+          "precision": 0.9186,
+          "recall": 0.8578,
+          "f1": 0.8872
+        }
+      }
+    },
+    "transformers_ner": {
+      "name": "Biomedical NER (onnx-community/biomedical-ner-all-ONNX via @xenova/transformers) + NegEx/ConText",
+      "model_id": "onnx-community/biomedical-ner-all-ONNX (d4data/biomedical-ner-all) (Apache-2.0, ~63.9 MB quantized ONNX)",
+      "metrics": {
+        "suspect_drugs": {
+          "tp": 42,
+          "fp": 3,
+          "fn": 18,
+          "precision": 0.9333,
+          "recall": 0.7,
+          "f1": 0.8
+        },
+        "concomitant_drugs": {
+          "tp": 6,
+          "fp": 0,
+          "fn": 5,
+          "precision": 1,
+          "recall": 0.5455,
+          "f1": 0.7059
+        },
+        "active_reactions": {
+          "tp": 87,
+          "fp": 9,
+          "fn": 6,
+          "precision": 0.9063,
+          "recall": 0.9355,
+          "f1": 0.9206
+        },
+        "negated_or_historical_reactions": {
+          "tp": 28,
+          "fp": 1,
+          "fn": 8,
+          "precision": 0.9655,
+          "recall": 0.7778,
+          "f1": 0.8615
+        },
+        "seriousness": {
+          "tp": 29,
+          "fp": 4,
+          "fn": 1,
+          "precision": 0.8788,
+          "recall": 0.9667,
+          "f1": 0.9206
+        },
+        "demographics": {
+          "tp": 120,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "clinical_course_and_reporter": {
+          "tp": 107,
+          "fp": 0,
+          "fn": 14,
+          "precision": 1,
+          "recall": 0.8843,
+          "f1": 0.9386
+        },
+        "micro_overall": {
+          "tp": 419,
+          "fp": 17,
+          "fn": 52,
+          "precision": 0.961,
+          "recall": 0.8896,
+          "f1": 0.9239
+        }
+      },
+      "independent_test_metrics": {
+        "suspect_drugs": {
+          "tp": 76,
+          "fp": 65,
+          "fn": 11,
+          "precision": 0.539,
+          "recall": 0.8736,
+          "f1": 0.6667
+        },
+        "concomitant_drugs": {
+          "tp": 0,
+          "fp": 1,
+          "fn": 5,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "active_reactions": {
+          "tp": 65,
+          "fp": 34,
+          "fn": 43,
+          "precision": 0.6566,
+          "recall": 0.6019,
+          "f1": 0.628
+        },
+        "negated_or_historical_reactions": {
+          "tp": 2,
+          "fp": 6,
+          "fn": 3,
+          "precision": 0.25,
+          "recall": 0.4,
+          "f1": 0.3077
+        },
+        "seriousness": {
+          "tp": 42,
+          "fp": 3,
+          "fn": 13,
+          "precision": 0.9333,
+          "recall": 0.7636,
+          "f1": 0.84
+        },
+        "demographics": {
+          "tp": 128,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "clinical_course_and_reporter": {
+          "tp": 4,
+          "fp": 2,
+          "fn": 16,
+          "precision": 0.6667,
+          "recall": 0.2,
+          "f1": 0.3077
+        },
+        "micro_overall": {
+          "tp": 317,
+          "fp": 111,
+          "fn": 91,
+          "precision": 0.7407,
+          "recall": 0.777,
+          "f1": 0.7584
+        }
+      }
+    },
+    "local_extractor": {
+      "name": "Rule-Based Dictionary + NegEx/ConText + Trigram/Lexical Synonym Matcher",
+      "model_id": "Deterministic local dictionary + NegEx/ConText (see transformers_ner for ONNX NER)",
+      "metrics": {
+        "suspect_drugs": {
+          "tp": 60,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.9836,
+          "recall": 1,
+          "f1": 0.9917
+        },
+        "concomitant_drugs": {
+          "tp": 10,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1,
+          "recall": 0.9091,
+          "f1": 0.9524
+        },
+        "active_reactions": {
+          "tp": 92,
+          "fp": 2,
+          "fn": 1,
+          "precision": 0.9787,
+          "recall": 0.9892,
+          "f1": 0.984
+        },
+        "negated_or_historical_reactions": {
+          "tp": 36,
+          "fp": 1,
+          "fn": 0,
+          "precision": 0.973,
+          "recall": 1,
+          "f1": 0.9863
+        },
+        "seriousness": {
+          "tp": 29,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1,
+          "recall": 0.9667,
+          "f1": 0.9831
+        },
+        "demographics": {
+          "tp": 120,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "clinical_course_and_reporter": {
+          "tp": 107,
+          "fp": 0,
+          "fn": 14,
+          "precision": 1,
+          "recall": 0.8843,
+          "f1": 0.9386
+        },
+        "micro_overall": {
+          "tp": 454,
+          "fp": 4,
+          "fn": 17,
+          "precision": 0.9913,
+          "recall": 0.9639,
+          "f1": 0.9774
+        }
+      },
+      "independent_test_metrics": {
+        "suspect_drugs": {
+          "tp": 80,
+          "fp": 12,
+          "fn": 7,
+          "precision": 0.8696,
+          "recall": 0.9195,
+          "f1": 0.8939
+        },
+        "concomitant_drugs": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 5,
+          "precision": 0,
+          "recall": 0,
+          "f1": 0
+        },
+        "active_reactions": {
+          "tp": 90,
+          "fp": 10,
+          "fn": 18,
+          "precision": 0.9,
+          "recall": 0.8333,
+          "f1": 0.8654
+        },
+        "negated_or_historical_reactions": {
+          "tp": 3,
+          "fp": 5,
+          "fn": 2,
+          "precision": 0.375,
+          "recall": 0.6,
+          "f1": 0.4615
+        },
+        "seriousness": {
+          "tp": 45,
+          "fp": 2,
+          "fn": 10,
+          "precision": 0.9574,
+          "recall": 0.8182,
+          "f1": 0.8824
+        },
+        "demographics": {
+          "tp": 128,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1,
+          "recall": 1,
+          "f1": 1
+        },
+        "clinical_course_and_reporter": {
+          "tp": 4,
+          "fp": 2,
+          "fn": 16,
+          "precision": 0.6667,
+          "recall": 0.2,
+          "f1": 0.3077
+        },
+        "micro_overall": {
+          "tp": 350,
+          "fp": 31,
+          "fn": 58,
+          "precision": 0.9186,
+          "recall": 0.8578,
+          "f1": 0.8872
+        }
       }
     },
     "llm_extractor": {
       "name": "Optional Server LLM Extractor (Structured JSON + Verbatim Span Validation)",
-      "status": "off_by_default_requires_server_key_and_consent",
-      "metrics": null
+      "status": "not_run_no_api_key",
+      "metrics": null,
+      "independent_test_metrics": null
     }
   }
 }

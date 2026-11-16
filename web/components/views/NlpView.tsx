@@ -28,6 +28,7 @@ import {
   validateAndAnchorLlmExtraction,
   rankReactionCandidates,
   LOCAL_NER_MODEL_INFO,
+  TERM_MATCHER_NAME,
   type NarrativeExtractionResult,
   type ExtractedDrug,
   type ExtractedReaction,
@@ -38,9 +39,17 @@ import {
 import { lookupRxNormOnline } from "@/lib/pipeline/drugMap";
 import benchmarkData from "@/lib/nlpBenchmarkResults.json";
 import goldNarrativesData from "@/lib/goldNarratives.json";
+import pmcIndependentTestSetData from "@/lib/pmcIndependentTestSet.json";
 
 interface GoldNarrativeEntry {
   id: string;
+  pmid?: string;
+  pmcid?: string;
+  doi?: string;
+  journal?: string;
+  year?: string;
+  license?: string;
+  title?: string;
   category: string;
   text: string;
   gold: {
@@ -58,6 +67,7 @@ interface GoldNarrativeEntry {
 }
 
 const GOLD_NARRATIVES = goldNarrativesData as GoldNarrativeEntry[];
+const PMC_TEST_NARRATIVES = pmcIndependentTestSetData as GoldNarrativeEntry[];
 
 const CURATED_SAMPLE_NARRATIVES: {
   id: string;
@@ -305,6 +315,7 @@ export function NlpView() {
   const [externalConsent, setExternalConsent] = useState<boolean>(false);
   const [showPiiPreview, setShowPiiPreview] = useState<boolean>(false);
   const [llmError, setLlmError] = useState<string | null>(null);
+  const [nerError, setNerError] = useState<string | null>(null);
 
   // RxNav online lookup state per drug canonical name
   const [rxNavResults, setRxNavResults] = useState<
@@ -319,16 +330,20 @@ export function NlpView() {
   // Dataset addition confirmation
   const [lastAddedCaseId, setLastAddedCaseId] = useState<string | null>(null);
 
-  // Selected gold narrative filter in evaluation section
+  // Selected benchmark dataset ("independent_pmc" vs "development_synthetic") and category filter
+  const [benchmarkDatasetTab, setBenchmarkDatasetTab] = useState<
+    "independent_pmc" | "development_synthetic"
+  >("independent_pmc");
   const [goldCategoryFilter, setGoldCategoryFilter] = useState<string>("all");
 
   // Compute PII redaction preview synchronously
   const piiPreview = useMemo(() => redactNarrativePiiDetailed(narrative), [narrative]);
 
-  // Run extraction whenever triggered or initially with sync rules then upgrade to local NER
+  // Run extraction without silent fallback
   const runExtraction = useCallback(
     async (textToProcess: string, mode: "local-ner" | "local-rules" | "llm-server") => {
       setLlmError(null);
+      setNerError(null);
       setLastAddedCaseId(null);
 
       if (!textToProcess.trim()) {
@@ -344,25 +359,43 @@ export function NlpView() {
 
       if (mode === "local-ner") {
         setIsExtracting(true);
-        // Immediate rule-based render while model warms up
-        const immediate = extractClinicalNarrativeSync(textToProcess, reacPts);
-        setExtraction(immediate);
+        setModelProgress({
+          status: "loading",
+          progress: 25,
+          message: "Running onnx-community/biomedical-ner-all-ONNX via @xenova/transformers...",
+        });
         try {
-          const nerResult = await extractWithLocalModel(textToProcess, reacPts, (prog) => {
-            setModelProgress({
-              status: prog.status,
-              progress: Math.round(prog.progress ?? 50),
-              message:
-                prog.status === "ready"
-                  ? "Biomedical NER model active in browser"
-                  : prog.file
-                    ? `Loading ${prog.file}...`
-                    : `Model status: ${prog.status}`,
-            });
-          });
+          const nerResult = await extractWithLocalModel(
+            textToProcess,
+            reacPts,
+            (prog) => {
+              setModelProgress({
+                status: prog.status,
+                progress: Math.round(prog.progress ?? 50),
+                message:
+                  prog.status === "ready"
+                    ? "Biomedical NER model active in browser (transformers-local)"
+                    : prog.file
+                      ? `Loading ${prog.file}...`
+                      : `Model status: ${prog.status}`,
+              });
+            },
+            { pureNerOnly: true, allowRuleFallbackOnError: false },
+          );
           setExtraction(nerResult);
-        } catch {
-          // Fallback already applied
+        } catch (err) {
+          const msg =
+            err instanceof Error
+              ? err.message
+              : "Failed to load onnx-community/biomedical-ner-all-ONNX in browser.";
+          setNerError(
+            `Biomedical NER model error: ${msg}. Switch to "Local Rule-Based + NegEx Extractor" if running in an environment that blocks Hugging Face Hub downloads.`,
+          );
+          setModelProgress({
+            status: "error",
+            progress: 0,
+            message: `NER load failed: ${msg}`,
+          });
         } finally {
           setIsExtracting(false);
         }
@@ -693,18 +726,31 @@ export function NlpView() {
     setLastAddedCaseId(createdId);
   };
 
+  const activeCorpus =
+    benchmarkDatasetTab === "independent_pmc" ? PMC_TEST_NARRATIVES : GOLD_NARRATIVES;
+
   const filteredGoldNarratives = useMemo(() => {
-    if (goldCategoryFilter === "all") return GOLD_NARRATIVES;
+    if (goldCategoryFilter === "all") return activeCorpus;
     if (goldCategoryFilter === "negated_any") {
-      return GOLD_NARRATIVES.filter(
+      return activeCorpus.filter(
         (n) => (n.gold.negated_or_historical_reactions || []).length > 0,
       );
     }
-    return GOLD_NARRATIVES.filter((n) => n.category === goldCategoryFilter);
-  }, [goldCategoryFilter]);
+    return activeCorpus.filter((n) => n.category === goldCategoryFilter);
+  }, [activeCorpus, goldCategoryFilter]);
 
-  const legacyMetrics = benchmarkData.extractors.legacy_regex.metrics;
-  const localMetrics = benchmarkData.extractors.local_extractor.metrics;
+  const legacyMetrics =
+    benchmarkDatasetTab === "independent_pmc"
+      ? benchmarkData.extractors.legacy_regex.independent_test_metrics
+      : benchmarkData.extractors.legacy_regex.metrics;
+  const ruleBasedMetrics =
+    benchmarkDatasetTab === "independent_pmc"
+      ? benchmarkData.extractors.rule_based.independent_test_metrics
+      : benchmarkData.extractors.rule_based.metrics;
+  const transformersNerMetrics =
+    benchmarkDatasetTab === "independent_pmc"
+      ? benchmarkData.extractors.transformers_ner.independent_test_metrics
+      : benchmarkData.extractors.transformers_ner.metrics;
 
   const benchmarkRows: {
     key: keyof typeof legacyMetrics;
@@ -749,7 +795,7 @@ export function NlpView() {
     {
       key: "micro_overall",
       label: "Micro-Averaged Overall",
-      description: "Aggregate performance across all entity mentions on the 60 gold narratives",
+      description: "Aggregate performance across all entity mentions in the selected dataset",
     },
   ];
 
@@ -757,7 +803,7 @@ export function NlpView() {
     <div>
       <PageHeader
         title="Adverse event narrative structured extraction"
-        hint="In-browser biomedical NER + NegEx/ConText clinical narrative extractor. Extracts suspect & concomitant drugs (with dose, route, start/stop dates), reactions with top-3 loaded REAC PT embedding candidates, negation/history/uncertainty flags, seriousness criteria, dechallenge/rechallenge, outcome, and demographics. Every item carries its verbatim character span and confidence score."
+        hint="In-browser biomedical NER (onnx-community/biomedical-ner-all-ONNX via @xenova/transformers) and rule-based NegEx/ConText clinical narrative extractors. Extracts suspect & concomitant drugs, reactions with top-3 loaded REAC PT candidates by character-trigram & lexical synonym cosine similarity, negation/history/uncertainty flags, seriousness criteria, dechallenge/rechallenge, outcome, and demographics."
       />
 
       {/* Mandatory Human Review & Non-Regulatory Banner */}
@@ -861,6 +907,11 @@ export function NlpView() {
                 style={{ width: `${Math.max(5, modelProgress.progress)}%` }}
               />
             </div>
+            {nerError && (
+              <p className="mt-2 rounded border border-rose-500/40 bg-rose-500/10 px-2.5 py-1.5 font-mono text-xs text-rose-700 dark:text-rose-300">
+                {nerError}
+              </p>
+            )}
           </div>
         )}
 
@@ -991,13 +1042,20 @@ export function NlpView() {
 
             {extraction && (
               <div className="flex flex-wrap items-center gap-2 font-mono text-[11px] text-muted">
-                <span>
-                  Active Extractor:{" "}
-                  <strong className="text-ink">{extraction.extractorUsed}</strong>
+                <span className="rounded border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-ink">
+                  Extractor Producing Current Output:{" "}
+                  <strong className="font-semibold text-emerald-800 dark:text-emerald-300">
+                    {extraction.extractorUsed === "transformers-local"
+                      ? "transformers_ner (onnx-community/biomedical-ner-all-ONNX)"
+                      : extraction.extractorUsed === "rule-fallback"
+                        ? "rule_based (Local Dictionary + NegEx)"
+                        : extraction.extractorUsed}
+                  </strong>
                 </span>
                 {extraction.modelInfo && (
                   <span className="rounded bg-surface px-1.5 py-0.5 text-[10px]">
-                    {extraction.modelInfo.name}
+                    {extraction.modelInfo.name} ({extraction.modelInfo.license},{" "}
+                    {extraction.modelInfo.downloadSizeMb} MB)
                   </span>
                 )}
               </div>
@@ -1328,7 +1386,7 @@ export function NlpView() {
             </div>
           </div>
 
-          {/* B. Reactions Table with Top-3 REAC Embedding Candidates & Negation/History Flags */}
+          {/* B. Reactions Table with Top-3 REAC Trigram & Lexical Synonym Candidates & Negation/History Flags */}
           <div className="mb-6">
             <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
               <div>
@@ -1337,8 +1395,9 @@ export function NlpView() {
                 </h3>
                 <p className="text-[11px] text-muted">
                   MedDRA is licensed and not bundled. Terms are mapped against the currently loaded{" "}
-                  <code>REAC</code> dataset ({reacPts.length} PTs) by clinical embedding cosine
-                  similarity. Pick any of the top 3 candidates or edit directly.
+                  <code>REAC</code> dataset ({reacPts.length} PTs) by{" "}
+                  <strong>{TERM_MATCHER_NAME}</strong> (not a neural sentence embedding). Pick any of
+                  the top 3 candidates or edit directly.
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -1927,23 +1986,82 @@ export function NlpView() {
         </Card>
       )}
 
-      {/* Evaluation Benchmark Section (60 Gold-Annotated Synthetic Narratives) */}
+      {/* Evaluation Benchmark Section: Independent PMC Test Set vs Development Set */}
       <Card className="mb-6">
         <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
           <div>
             <SectionTitle>
-              5. Evaluation Benchmark (60 Synthetic Narratives with Gold Annotations)
+              5. Honest Evaluation Benchmark: 3 Separate Extractors Across Independent &amp; Development Sets
             </SectionTitle>
             <p className="text-xs text-muted">
-              Evaluated on{" "}
-              <code className="font-mono text-ink">tests/narratives/gold_narratives.json</code> (
-              {benchmarkData.dataset_summary.total_narratives} synthetic narratives:{" "}
-              {benchmarkData.dataset_summary.negated_or_historical_or_uncertain_narratives}{" "}
-              containing negated, historical, family-history, or uncertain mentions, and{" "}
-              {benchmarkData.dataset_summary.positive_only_narratives} positive clinical cases).{" "}
-              <strong>{benchmarkData.dataset_summary.disclaimer}</strong>
+              Evaluated by <code className="font-mono text-ink">scripts/evaluate_nlp.mjs</code> across
+              three distinct local extractors (<strong>legacy_regex</strong>,{" "}
+              <strong>rule_based</strong>, and <strong>transformers_ner</strong> actually loaded and
+              executed via <code className="font-mono">@xenova/transformers</code>) on two strictly
+              separated datasets: an <strong>independent test set</strong> of{" "}
+              {benchmarkData.independent_test_set_summary.total_narratives} published open-access
+              PubMed Central case reports (<code className="font-mono">tests/narratives/pmc_independent_test_set.json</code>,
+              annotated under <code className="font-mono">tests/narratives/ANNOTATION_GUIDELINE.md</code>)
+              and the <strong>development set</strong> of{" "}
+              {benchmarkData.dataset_summary.total_narratives} synthetic narratives (
+              <code className="font-mono">tests/narratives/gold_narratives.json</code>).
             </p>
           </div>
+
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setBenchmarkDatasetTab("independent_pmc");
+                setGoldCategoryFilter("all");
+              }}
+              className={`rounded border px-3 py-1.5 font-mono text-xs font-medium transition ${
+                benchmarkDatasetTab === "independent_pmc"
+                  ? "border-accent bg-accent text-white"
+                  : "border-line bg-surface text-ink hover:border-ink"
+              }`}
+            >
+              Independent Test Set ({benchmarkData.independent_test_set_summary.total_narratives}{" "}
+              Open-Access PMC Case Reports)
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setBenchmarkDatasetTab("development_synthetic");
+                setGoldCategoryFilter("all");
+              }}
+              className={`rounded border px-3 py-1.5 font-mono text-xs font-medium transition ${
+                benchmarkDatasetTab === "development_synthetic"
+                  ? "border-accent bg-accent text-white"
+                  : "border-line bg-surface text-ink hover:border-ink"
+              }`}
+            >
+              Development Set ({benchmarkData.dataset_summary.total_narratives} Synthetic Narratives)
+            </button>
+          </div>
+        </div>
+
+        <div className="mb-4 rounded border border-line bg-bg/50 p-3 text-xs text-muted">
+          {benchmarkDatasetTab === "independent_pmc" ? (
+            <p>
+              <strong className="text-ink">Independent Test Set (Out-of-Sample):</strong>{" "}
+              {benchmarkData.independent_test_set_summary.disclaimer} Each record carries its{" "}
+              <code className="font-mono">PMID</code>, <code className="font-mono">PMCID</code>,{" "}
+              <code className="font-mono">DOI</code>, and open-access Creative Commons licence. On
+              this unseen published literature set, <strong>rule_based</strong> achieves{" "}
+              <strong>{(ruleBasedMetrics.micro_overall.f1 * 100).toFixed(1)}% Micro-F1</strong>,
+              standalone <strong>transformers_ner</strong> (
+              <code className="font-mono">onnx-community/biomedical-ner-all-ONNX</code>) achieves{" "}
+              <strong>{(transformersNerMetrics.micro_overall.f1 * 100).toFixed(1)}% Micro-F1</strong>,
+              and <strong>legacy_regex</strong> achieves{" "}
+              <strong>{(legacyMetrics.micro_overall.f1 * 100).toFixed(1)}% Micro-F1</strong>.
+            </p>
+          ) : (
+            <p>
+              <strong className="text-ink">Development Set (In-Sample Synthetic):</strong>{" "}
+              {benchmarkData.dataset_summary.disclaimer}
+            </p>
+          )}
         </div>
 
         <div className="overflow-x-auto">
@@ -1951,31 +2069,38 @@ export function NlpView() {
             <thead>
               <tr className="border-b border-line font-mono text-[10px] uppercase text-muted">
                 <th className="py-2 pr-3">Entity / Extraction Task</th>
-                <th className="border-l border-line px-3 py-2 text-center" colSpan={3}>
-                  Old Regex (10 drugs, 7 reactions, no negation)
+                <th className="border-l border-line px-2 py-2 text-center" colSpan={3}>
+                  1. legacy_regex (10 drugs, 7 reactions)
                 </th>
-                <th className="border-l border-line px-3 py-2 text-center" colSpan={3}>
-                  Local Biomedical NER + NegEx Extractor
+                <th className="border-l border-line px-2 py-2 text-center" colSpan={3}>
+                  2. rule_based (Dictionary + NegEx/ConText)
                 </th>
-                <th className="border-l border-line px-3 py-2 text-center">
-                  Optional Server LLM Extractor
+                <th className="border-l border-line px-2 py-2 text-center" colSpan={3}>
+                  3. transformers_ner (biomedical-ner-all-ONNX)
+                </th>
+                <th className="border-l border-line px-2 py-2 text-center">
+                  4. Server LLM Extractor
                 </th>
               </tr>
               <tr className="border-b border-line font-mono text-[10px] text-muted">
                 <th className="py-1.5 pr-3"></th>
-                <th className="border-l border-line px-2 py-1.5 text-right">Precision</th>
-                <th className="px-2 py-1.5 text-right">Recall</th>
-                <th className="px-2 py-1.5 text-right">F1</th>
-                <th className="border-l border-line px-2 py-1.5 text-right">Precision</th>
-                <th className="px-2 py-1.5 text-right">Recall</th>
-                <th className="px-2 py-1.5 text-right">F1</th>
-                <th className="border-l border-line px-3 py-1.5 text-center">Status / Key</th>
+                <th className="border-l border-line px-1.5 py-1.5 text-right">P</th>
+                <th className="px-1.5 py-1.5 text-right">R</th>
+                <th className="px-1.5 py-1.5 text-right">F1</th>
+                <th className="border-l border-line px-1.5 py-1.5 text-right">P</th>
+                <th className="px-1.5 py-1.5 text-right">R</th>
+                <th className="px-1.5 py-1.5 text-right">F1</th>
+                <th className="border-l border-line px-1.5 py-1.5 text-right">P</th>
+                <th className="px-1.5 py-1.5 text-right">R</th>
+                <th className="px-1.5 py-1.5 text-right">F1</th>
+                <th className="border-l border-line px-2 py-1.5 text-center">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-line">
               {benchmarkRows.map((row) => {
                 const leg = legacyMetrics[row.key];
-                const loc = localMetrics[row.key];
+                const rul = ruleBasedMetrics[row.key];
+                const ner = transformersNerMetrics[row.key];
                 const isOverall = row.key === "micro_overall";
                 return (
                   <tr
@@ -1986,27 +2111,35 @@ export function NlpView() {
                       <p className="font-medium text-ink">{row.label}</p>
                       <p className="text-[11px] font-normal text-muted">{row.description}</p>
                     </td>
-                    <td className="border-l border-line px-2 py-2.5 text-right font-mono">
+                    <td className="border-l border-line px-1.5 py-2.5 text-right font-mono">
                       {(leg.precision * 100).toFixed(1)}%
                     </td>
-                    <td className="px-2 py-2.5 text-right font-mono">
+                    <td className="px-1.5 py-2.5 text-right font-mono">
                       {(leg.recall * 100).toFixed(1)}%
                     </td>
-                    <td className="px-2 py-2.5 text-right font-mono text-rose-700 dark:text-rose-300">
+                    <td className="px-1.5 py-2.5 text-right font-mono text-rose-700 dark:text-rose-300">
                       {(leg.f1 * 100).toFixed(1)}%
                     </td>
-                    <td className="border-l border-line px-2 py-2.5 text-right font-mono">
-                      {(loc.precision * 100).toFixed(1)}%
+                    <td className="border-l border-line px-1.5 py-2.5 text-right font-mono">
+                      {(rul.precision * 100).toFixed(1)}%
                     </td>
-                    <td className="px-2 py-2.5 text-right font-mono">
-                      {(loc.recall * 100).toFixed(1)}%
+                    <td className="px-1.5 py-2.5 text-right font-mono">
+                      {(rul.recall * 100).toFixed(1)}%
                     </td>
-                    <td className="px-2 py-2.5 text-right font-mono font-semibold text-emerald-700 dark:text-emerald-300">
-                      {(loc.f1 * 100).toFixed(1)}%
+                    <td className="px-1.5 py-2.5 text-right font-mono font-semibold text-emerald-700 dark:text-emerald-300">
+                      {(rul.f1 * 100).toFixed(1)}%
                     </td>
-                    <td className="border-l border-line px-3 py-2.5 text-center font-mono text-[11px] text-muted">
-                      Off by default (requires server{" "}
-                      <code className="text-ink">NLP_LLM_API_KEY</code> &amp; consent)
+                    <td className="border-l border-line px-1.5 py-2.5 text-right font-mono">
+                      {(ner.precision * 100).toFixed(1)}%
+                    </td>
+                    <td className="px-1.5 py-2.5 text-right font-mono">
+                      {(ner.recall * 100).toFixed(1)}%
+                    </td>
+                    <td className="px-1.5 py-2.5 text-right font-mono font-semibold text-sky-700 dark:text-sky-300">
+                      {(ner.f1 * 100).toFixed(1)}%
+                    </td>
+                    <td className="border-l border-line px-2 py-2.5 text-center font-mono text-[10px] text-muted">
+                      not run (no <code className="text-ink">NLP_LLM_API_KEY</code>)
                     </td>
                   </tr>
                 );
@@ -2015,17 +2148,104 @@ export function NlpView() {
           </table>
         </div>
 
-        {/* Interactive Gold Narrative Browser (All 60 Narratives) */}
+        {/* Preferred Term (PT) Candidate Mapping Evaluation Card */}
+        <div className="mt-6 rounded border border-line bg-bg/40 p-4">
+          <h3 className="font-mono text-xs font-semibold uppercase tracking-wider text-ink">
+            Preferred Term (PT) Candidate Mapping Benchmark ({benchmarkData.term_mapping_evaluation.independent_test_mentions}{" "}
+            Verbatim Reaction Mentions in 64 Open-Access PMC Case Reports → {benchmarkData.term_mapping_evaluation.candidate_pool_size} MedDRA PTs)
+          </h3>
+          <p className="mt-1 text-xs text-muted">
+            Because MedDRA is proprietary, reaction phrases are mapped to the loaded{" "}
+            <code className="font-mono">REAC</code> Preferred Term vocabulary using deterministic{" "}
+            <strong>{benchmarkData.term_mapping_evaluation.matcher_name}</strong> (hashed character
+            3-grams + word projections + lexical concept groups — <strong>not</strong> a neural
+            sentence-embedding model). Measured accuracy on the{" "}
+            {benchmarkData.term_mapping_evaluation.independent_test_mentions} verbatim clinical
+            reaction mentions in the independent PubMed Central test set:
+          </p>
+          <div className="mt-3 overflow-x-auto">
+            <table className="w-full border-collapse text-left text-xs">
+              <thead>
+                <tr className="border-b border-line font-mono text-[10px] uppercase text-muted">
+                  <th className="py-1.5 pr-4">Term-Mapping Method</th>
+                  <th className="px-3 py-1.5 text-right">Mentions Evaluated</th>
+                  <th className="px-3 py-1.5 text-right">Top-1 Accuracy</th>
+                  <th className="px-3 py-1.5 text-right">Top-3 Accuracy</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-line font-mono">
+                <tr>
+                  <td className="py-2 pr-4 font-sans font-medium text-ink">
+                    Character-trigram + lexical synonym table (<code>rankReactionCandidates</code>)
+                  </td>
+                  <td className="px-3 py-2 text-right">
+                    {benchmarkData.term_mapping_evaluation.independent_test_mentions}
+                  </td>
+                  <td className="px-3 py-2 text-right font-semibold text-emerald-700 dark:text-emerald-300">
+                    {(
+                      benchmarkData.term_mapping_evaluation.trigram_plus_lexical_synonym
+                        .top1_accuracy * 100
+                    ).toFixed(1)}
+                    % ({benchmarkData.term_mapping_evaluation.trigram_plus_lexical_synonym.top1_correct} /{" "}
+                    {benchmarkData.term_mapping_evaluation.independent_test_mentions})
+                  </td>
+                  <td className="px-3 py-2 text-right font-semibold text-emerald-700 dark:text-emerald-300">
+                    {(
+                      benchmarkData.term_mapping_evaluation.trigram_plus_lexical_synonym
+                        .top3_accuracy * 100
+                    ).toFixed(1)}
+                    % ({benchmarkData.term_mapping_evaluation.trigram_plus_lexical_synonym.top3_correct} /{" "}
+                    {benchmarkData.term_mapping_evaluation.independent_test_mentions})
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-2 pr-4 font-sans text-muted">
+                    Character-trigram &amp; concept hash projection only (no regex synonym hint)
+                  </td>
+                  <td className="px-3 py-2 text-right">
+                    {benchmarkData.term_mapping_evaluation.independent_test_mentions}
+                  </td>
+                  <td className="px-3 py-2 text-right">
+                    {(
+                      benchmarkData.term_mapping_evaluation.trigram_and_concept_hash_only
+                        .top1_accuracy * 100
+                    ).toFixed(1)}
+                    % ({benchmarkData.term_mapping_evaluation.trigram_and_concept_hash_only.top1_correct} /{" "}
+                    {benchmarkData.term_mapping_evaluation.independent_test_mentions})
+                  </td>
+                  <td className="px-3 py-2 text-right">
+                    {(
+                      benchmarkData.term_mapping_evaluation.trigram_and_concept_hash_only
+                        .top3_accuracy * 100
+                    ).toFixed(1)}
+                    % ({benchmarkData.term_mapping_evaluation.trigram_and_concept_hash_only.top3_correct} /{" "}
+                    {benchmarkData.term_mapping_evaluation.independent_test_mentions})
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Interactive Narrative Browser (64 Open-Access PMC Case Reports or 60 Development Narratives) */}
         <div className="mt-6 border-t border-line pt-4">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
             <h3 className="font-mono text-xs font-semibold uppercase tracking-wider text-ink">
-              Inspect Any of the 60 Gold-Annotated Benchmark Narratives (Click to Load Above)
+              {benchmarkDatasetTab === "independent_pmc"
+                ? `Inspect Any of the ${PMC_TEST_NARRATIVES.length} Open-Access PubMed Central Case Reports (Click to Load Above)`
+                : `Inspect Any of the ${GOLD_NARRATIVES.length} Synthetic Development Narratives (Click to Load Above)`}
             </h3>
             <div className="flex flex-wrap gap-1.5 font-mono text-[11px]">
               {[
-                { id: "all", label: "All (60)" },
-                { id: "negated_any", label: "Negated / History / Uncertain (20)" },
-                { id: "positive", label: "Positive Cases (40)" },
+                { id: "all", label: `All (${activeCorpus.length})` },
+                {
+                  id: "negated_any",
+                  label: `Negated / History (${
+                    activeCorpus.filter(
+                      (n) => (n.gold.negated_or_historical_reactions || []).length > 0,
+                    ).length
+                  })`,
+                },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -2043,7 +2263,7 @@ export function NlpView() {
             </div>
           </div>
 
-          <div className="grid max-h-64 grid-cols-1 gap-2 overflow-y-auto pr-1 md:grid-cols-2">
+          <div className="grid max-h-72 grid-cols-1 gap-2 overflow-y-auto pr-1 md:grid-cols-2">
             {filteredGoldNarratives.map((item) => (
               <button
                 key={item.id}
@@ -2055,18 +2275,18 @@ export function NlpView() {
                 className="flex flex-col justify-between rounded border border-line bg-bg p-2.5 text-left text-xs transition hover:border-accent"
               >
                 <div>
-                  <div className="mb-1 flex items-center justify-between gap-2 font-mono text-[10px]">
-                    <span className="font-bold text-ink">{item.id}</span>
-                    <span
-                      className={`rounded px-1.5 py-0.5 uppercase ${
-                        item.category === "positive"
-                          ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
-                          : "bg-amber-500/20 text-amber-800 dark:text-amber-300"
-                      }`}
-                    >
-                      {item.category}
+                  <div className="mb-1 flex flex-wrap items-center justify-between gap-2 font-mono text-[10px]">
+                    <span className="font-bold text-ink">
+                      {item.id}
+                      {item.pmid ? ` · PMID ${item.pmid} · ${item.pmcid}` : ""}
+                    </span>
+                    <span className="rounded bg-surface px-1.5 py-0.5 text-muted">
+                      {item.license ? item.license : item.category}
                     </span>
                   </div>
+                  {item.title && (
+                    <p className="mb-1 font-medium text-ink">{item.title}</p>
+                  )}
                   <p className="line-clamp-2 text-[11px] text-muted">{item.text}</p>
                 </div>
                 <div className="mt-1.5 flex flex-wrap gap-1 font-mono text-[10px]">

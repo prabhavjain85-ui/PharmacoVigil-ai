@@ -388,11 +388,15 @@ function hashToken(str: string, seed = 0): number {
   return h >>> 0;
 }
 
+export const TERM_MATCHER_NAME =
+  "Character-trigram & lexical synonym cosine similarity (128-dim hashed projection)";
+
 /**
- * Computes a normalized 128-dim clinical semantic + character 3-gram embedding
+ * Computes a normalized 128-dim character 3-gram + lexical synonym group vector
  * for fast cosine-similarity matching against loaded REAC preferred terms.
+ * (Deterministic lexical/trigram feature vector, not a neural sentence embedding.)
  */
-export function computeClinicalEmbedding(text: string): Float32Array {
+export function computeTrigramLexicalVector(text: string): Float32Array {
   const vec = new Float32Array(EMBED_DIM);
   const norm = text
     .toLowerCase()
@@ -412,7 +416,7 @@ export function computeClinicalEmbedding(text: string): Float32Array {
 
   const words = norm.split(" ");
 
-  // 1. Concept cluster dimensions (0..31)
+  // 1. Lexical concept synonym dimensions (0..31)
   for (let c = 0; c < SEMANTIC_CONCEPT_CLUSTERS.length; c++) {
     const cluster = SEMANTIC_CONCEPT_CLUSTERS[c];
     for (const w of words) {
@@ -448,6 +452,9 @@ export function computeClinicalEmbedding(text: string): Float32Array {
   return vec;
 }
 
+/** Backwards-compatible alias for `computeTrigramLexicalVector`. */
+export const computeClinicalEmbedding = computeTrigramLexicalVector;
+
 export function cosineSimilarity(a: Float32Array, b: Float32Array): number {
   let dot = 0;
   const len = Math.min(a.length, b.length);
@@ -455,9 +462,19 @@ export function cosineSimilarity(a: Float32Array, b: Float32Array): number {
   return Math.max(0, Math.min(1, dot));
 }
 
+function resolveCanonicalReactionHint(verbatim: string): string | null {
+  for (const anchor of CLINICAL_SYNONYM_ANCHORS) {
+    const re = new RegExp(anchor.pattern.source, "i");
+    if (re.test(verbatim)) {
+      return anchor.canonicalPt;
+    }
+  }
+  return null;
+}
+
 /**
  * Maps a reaction phrase to the top 3 Preferred Term candidates in `availableReacPts`
- * by embedding cosine similarity.
+ * by character-trigram & lexical synonym cosine similarity.
  */
 export function rankReactionCandidates(
   verbatim: string,
@@ -472,14 +489,15 @@ export function rankReactionCandidates(
     ),
   );
 
-  const queryText = canonicalHint ? `${verbatim} ${canonicalHint}` : verbatim;
-  const queryVec = computeClinicalEmbedding(queryText);
+  const resolvedHint = canonicalHint ?? resolveCanonicalReactionHint(verbatim);
+  const queryText = resolvedHint ? `${verbatim} ${resolvedHint}` : verbatim;
+  const queryVec = computeTrigramLexicalVector(queryText);
   const verbatimUpper = normalizePt(verbatim);
 
   const scored = uniquePts.map((pt) => {
-    const ptVec = computeClinicalEmbedding(pt);
+    const ptVec = computeTrigramLexicalVector(pt);
     let sim = cosineSimilarity(queryVec, ptVec);
-    if (canonicalHint && pt === normalizePt(canonicalHint)) {
+    if (resolvedHint && pt === normalizePt(resolvedHint)) {
       sim = Math.max(sim, 0.96);
     }
     if (pt === verbatimUpper) {
@@ -1324,16 +1342,271 @@ export type ModelProgressCallback = (info: {
   progress?: number;
 }) => void;
 
+function findTokenOffsetInText(
+  lowerText: string,
+  originalText: string,
+  cleanLowerToken: string,
+  isSubword: boolean,
+  startFrom: number,
+): number {
+  let search = startFrom;
+  while (search < lowerText.length) {
+    const idx = lowerText.indexOf(cleanLowerToken, search);
+    if (idx < 0 || idx > startFrom + 200) return -1;
+    const prevIsWord = idx > 0 && /[A-Za-z0-9]/.test(originalText[idx - 1]);
+    if (isSubword ? prevIsWord : !prevIsWord) {
+      return idx;
+    }
+    search = idx + 1;
+  }
+  return -1;
+}
+
+export type ReconstructedNerSpan = {
+  word: string;
+  entity_group: string;
+  start: number;
+  end: number;
+  score: number;
+};
+
+/**
+ * Reconstructs contiguous word-boundary-aligned entity spans from `@xenova/transformers`
+ * raw BIO + WordPiece subword tokens (`B-Medication`, `I-Medication`, `B-Sign_symptom`,
+ * `B-Disease_disorder`, `B-Biological_structure`, `B-Detailed_description`, `B-Age`, `B-Sex`).
+ */
+export function reconstructBiomedicalNerSpans(
+  text: string,
+  rawEntities: {
+    entity_group?: string;
+    entity?: string;
+    word: string;
+    score: number;
+    start?: number | null;
+    end?: number | null;
+  }[],
+): ReconstructedNerSpan[] {
+  if (!Array.isArray(rawEntities) || rawEntities.length === 0) return [];
+  const lower = text.toLowerCase();
+  let cursor = 0;
+
+  const mapped: {
+    label: string;
+    start: number;
+    end: number;
+    score: number;
+    text: string;
+  }[] = [];
+
+  for (const tok of rawEntities) {
+    const isSubword = tok.word.startsWith("##");
+    const clean = tok.word.replace(/^##/, "").trim().toLowerCase();
+    if (!clean) continue;
+    const rawTag = tok.entity_group ?? tok.entity ?? "O";
+    const label = rawTag.replace(/^[BI]-/, "");
+
+    let pos = findTokenOffsetInText(lower, text, clean, isSubword, cursor);
+    if (pos < 0) {
+      pos = findTokenOffsetInText(lower, text, clean, isSubword, Math.max(0, cursor - 15));
+    }
+    if (pos < 0) continue;
+
+    let start = pos;
+    let end = pos + clean.length;
+    cursor = end;
+
+    // Expand subword token to enclosing word boundaries
+    while (start > 0 && /[A-Za-z0-9-]/.test(text[start - 1])) start--;
+    while (end < text.length && /[A-Za-z0-9-]/.test(text[end])) end++;
+
+    const prev = mapped[mapped.length - 1];
+    if (prev && prev.label === label && start <= prev.end + 1) {
+      prev.end = Math.max(prev.end, end);
+      prev.score = Math.max(prev.score, tok.score || 0);
+      prev.text = text.slice(prev.start, prev.end);
+    } else if (prev && start < prev.end) {
+      prev.end = Math.max(prev.end, end);
+      prev.text = text.slice(prev.start, prev.end);
+    } else {
+      mapped.push({
+        label,
+        start,
+        end,
+        score: tok.score || 0,
+        text: text.slice(start, end),
+      });
+    }
+  }
+
+  // Combine adjacent [Detailed_description / Biological_structure] + [Sign_symptom / Disease_disorder]
+  // (e.g., [Biological_structure: "gastrointestinal"] + [Sign_symptom: "hemorrhage"])
+  const combined: ReconstructedNerSpan[] = [];
+  for (let i = 0; i < mapped.length; i++) {
+    const cur = { ...mapped[i] };
+    while (
+      i + 1 < mapped.length &&
+      (cur.label === "Biological_structure" ||
+        cur.label === "Detailed_description" ||
+        cur.label === "Sign_symptom" ||
+        cur.label === "Disease_disorder") &&
+      (mapped[i + 1].label === "Sign_symptom" || mapped[i + 1].label === "Disease_disorder") &&
+      mapped[i + 1].start - cur.end <= 2 &&
+      !/[,.;()]/.test(text.slice(cur.end, mapped[i + 1].start))
+    ) {
+      cur.end = mapped[i + 1].end;
+      cur.label = mapped[i + 1].label;
+      cur.score = Math.max(cur.score, mapped[i + 1].score);
+      cur.text = text.slice(cur.start, cur.end);
+      i++;
+    }
+    combined.push({
+      word: cur.text,
+      entity_group: cur.label,
+      start: cur.start,
+      end: cur.end,
+      score: cur.score,
+    });
+  }
+
+  return combined;
+}
+
+/**
+ * Extracts structured narrative entities strictly from the reconstructed
+ * `onnx-community/biomedical-ner-all-ONNX` neural token-classification spans
+ * (`Medication`, `Sign_symptom`, `Disease_disorder`) paired with NegEx/ConText
+ * context modifier detection and character-trigram/lexical PT candidate ranking.
+ */
+export function extractPureTransformersNerFromSpans(
+  text: string,
+  nerSpans: ReconstructedNerSpan[],
+  availableReacPts: string[] = DEFAULT_REAC_PTS,
+): NarrativeExtraction {
+  const suspectDrugs: ExtractedDrug[] = [];
+  const concomitantDrugs: ExtractedDrug[] = [];
+
+  const medSpans = nerSpans
+    .filter((s) => /Medication/i.test(s.entity_group) && s.score >= 0.55)
+    .sort((a, b) => a.start - b.start);
+
+  const nonOverlappingMeds: ReconstructedNerSpan[] = [];
+  for (const m of medSpans) {
+    const cleanedWord = m.word
+      .replace(/\b(?:medication|therapy|treatment|tablets?|capsules?|oral|iv|intravenous|infusion)\b/gi, "")
+      .trim();
+    if (cleanedWord.length < 3) continue;
+    // Skip generic class nouns that are not specific drugs unless known in dictionary
+    if (
+      /^(?:antibiotics?|corticosteroids?|steroids?|statins?|anticoagulants?|chemotherapy|immunosuppressive|medications?|drugs?)$/i.test(
+        cleanedWord,
+      )
+    ) {
+      continue;
+    }
+    if (nonOverlappingMeds.some((d) => m.start < d.end && m.end > d.start)) continue;
+    nonOverlappingMeds.push({ ...m, word: cleanedWord });
+  }
+
+  nonOverlappingMeds.forEach((d, idx) => {
+    const ctx = detectContextModifiers(text, d.start, d.end);
+    const attrs = extractDrugContextAttributes(text, d.start, d.end);
+    const canonical = canonicalizeDrug(d.word);
+    if (!canonical || canonical.length < 3) return;
+    const item: ExtractedDrug = {
+      id: `ner-drug-${idx + 1}`,
+      role: attrs.role,
+      verbatim: text.slice(d.start, d.end),
+      canonical,
+      dose: attrs.dose,
+      route: attrs.route,
+      startDate: attrs.startDate,
+      stopDate: attrs.stopDate,
+      indication: attrs.indication,
+      negated: ctx.negated,
+      uncertain: ctx.uncertain,
+      historical: ctx.historical,
+      span: { start: d.start, end: d.end, text: text.slice(d.start, d.end) },
+      confidence: Math.round(d.score * 100) / 100,
+      status: "pending",
+    };
+    if (item.role === "C") {
+      concomitantDrugs.push(item);
+    } else {
+      suspectDrugs.push(item);
+    }
+  });
+
+  const reacSpans = nerSpans
+    .filter((s) => /Sign_symptom|Disease_disorder/i.test(s.entity_group) && s.score >= 0.55)
+    .sort((a, b) => a.start - b.start);
+
+  const reactions: ExtractedReaction[] = [];
+  reacSpans.forEach((r, idx) => {
+    const verbatim = text.slice(r.start, r.end).trim();
+    if (verbatim.length < 3) return;
+    if (nonOverlappingMeds.some((d) => r.start < d.end && r.end > d.start)) return;
+    const pre = text.slice(Math.max(0, r.start - 25), r.start);
+    if (/\b(?:on\s+\w+\s+for|started\s+for|treated\s+for|prescribed\s+for|initiation\s+for)\s*$/i.test(pre)) {
+      return;
+    }
+    const hint = resolveCanonicalReactionHint(verbatim);
+    const candidates = rankReactionCandidates(verbatim, hint, availableReacPts);
+    // Require either a clinical synonym anchor match or >= 0.42 character-trigram/lexical similarity to a loaded REAC PT
+    if (!hint && (candidates[0]?.score ?? 0) < 0.42) return;
+    const mappedTerm = candidates[0]?.pt ?? normalizePt(hint ?? verbatim);
+    const ctx = detectContextModifiers(text, r.start, r.end);
+    const onset = extractOnsetNearReaction(text, r.start, r.end);
+
+    reactions.push({
+      id: `ner-reac-${idx + 1}`,
+      verbatim,
+      mappedTerm,
+      candidates,
+      negated: ctx.negated,
+      uncertain: ctx.uncertain,
+      historical: ctx.historical,
+      contextCue: ctx.cue,
+      onset,
+      span: { start: r.start, end: r.end, text: verbatim },
+      confidence: Math.round(r.score * 100) / 100,
+      status: "pending",
+    });
+  });
+
+  const seriousness = extractSeriousnessCriteria(text, reactions);
+
+  return {
+    suspectDrugs,
+    concomitantDrugs,
+    reactions,
+    dechallenge: extractDechallenge(text),
+    rechallenge: extractRechallenge(text),
+    outcome: extractOutcome(text),
+    seriousness,
+    patientAge: extractPatientAge(text),
+    patientSex: extractPatientSex(text),
+    reporterType: extractReporterType(text),
+    extractorUsed: "transformers-local",
+    modelInfo: LOCAL_NER_MODEL_INFO,
+    requiresHumanReview: true,
+    regulatoryDisclaimer: REGULATORY_DISCLAIMER,
+  };
+}
+
 /**
  * Runs the in-browser biomedical NER pipeline (`onnx-community/biomedical-ner-all-ONNX`,
- * Apache-2.0, ~63.9 MB quantized ONNX) via `@xenova/transformers`, lazy-loaded only on /nlp.
- * Automatically falls back to `rule-fallback` if offline or WebAssembly/ONNX fails.
+ * Apache-2.0, ~63.9 MB quantized ONNX) via `@xenova/transformers`.
+ * By default (`pureNerOnly = true`), returns entities extracted directly by the ONNX
+ * biomedical NER model rather than silently returning rule-based output.
  */
 export async function extractWithLocalModel(
   text: string,
   availableReacPts: string[] = DEFAULT_REAC_PTS,
   onProgress?: ModelProgressCallback,
+  options?: { pureNerOnly?: boolean; allowRuleFallbackOnError?: boolean },
 ): Promise<NarrativeExtraction> {
+  const pureNerOnly = options?.pureNerOnly ?? true;
+  const allowFallback = options?.allowRuleFallbackOnError ?? false;
   try {
     if (!nerPipelinePromise) {
       nerPipelinePromise = (async () => {
@@ -1361,50 +1634,28 @@ export async function extractWithLocalModel(
         entity?: string;
         word: string;
         score: number;
-        start?: number;
-        end?: number;
+        start?: number | null;
+        end?: number | null;
       }[]
     >;
 
     onProgress?.({ status: "ready", progress: 100 });
-    const rawEntities = await classifier(text, { aggregation_strategy: "simple" });
+    const rawEntities = await classifier(text);
+    const nerSpans = reconstructBiomedicalNerSpans(text, rawEntities ?? []);
 
-    const nerSpans: {
-      word: string;
-      entity_group: string;
-      start: number;
-      end: number;
-      score: number;
-    }[] = [];
-
-    for (const ent of rawEntities ?? []) {
-      const cleanWord = ent.word.replace(/^##/, "").trim();
-      if (!cleanWord) continue;
-      let start = ent.start;
-      let end = ent.end;
-      if (start === undefined || end === undefined) {
-        const found = text.toLowerCase().indexOf(cleanWord.toLowerCase());
-        if (found >= 0) {
-          start = found;
-          end = found + cleanWord.length;
-        }
-      }
-      if (start !== undefined && end !== undefined) {
-        nerSpans.push({
-          word: cleanWord,
-          entity_group: ent.entity_group ?? ent.entity ?? "",
-          start,
-          end,
-          score: ent.score,
-        });
-      }
+    if (pureNerOnly) {
+      return extractPureTransformersNerFromSpans(text, nerSpans, availableReacPts);
     }
-
     return extractClinicalNarrativeSync(text, availableReacPts, nerSpans, "transformers-local");
-  } catch {
+  } catch (err) {
     nerPipelinePromise = null;
-    onProgress?.({ status: "fallback", progress: 100 });
-    return extractClinicalNarrativeSync(text, availableReacPts, [], "rule-fallback");
+    onProgress?.({ status: "error", progress: 0 });
+    if (allowFallback) {
+      return extractClinicalNarrativeSync(text, availableReacPts, [], "rule-fallback");
+    }
+    throw err instanceof Error
+      ? err
+      : new Error("Failed to load or execute onnx-community/biomedical-ner-all-ONNX via @xenova/transformers");
   }
 }
 
