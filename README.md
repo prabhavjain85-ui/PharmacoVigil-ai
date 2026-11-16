@@ -28,6 +28,7 @@ Pharmacovigilance teams screen spontaneous adverse event reports for unexpected 
 | `/nlp` | **Case narratives** | Local browser biomedical NER (`transformers.js`), NegEx clinical context detection (negation, uncertainty, history), MedDRA PT similarity candidate ranking, RxNorm mapping, and optional de-identified server LLM extraction behind explicit consent. |
 | `/compare` | **Drug comparison** | Select 2–3 drugs and compare PRR side by side across shared adverse events. |
 | `/trends` | **Temporal signals** | Cumulative BCPNN IC with 95% credible intervals (`[IC025, IC975]`) by quarter or month, date $\text{IC}_{025}$ first exceeded zero, and 2-segment Poisson Log-Likelihood Ratio ($G^2$) + Page's CUSUM change-point detection on reporting rates. |
+| `/scale` | **Scale & Masking** | Competition-bias (masking) sensitivity analysis removing top-$K$ background drugs, full-quarter `2024Q2` FAERS (`5.75M` rows) scale benchmark metrics, and time-indexed historical `event_dt` cutoff validation. |
 
 ---
 
@@ -43,7 +44,7 @@ For each drug–event pair with $a \ge \text{min\_cases}$, a $2 \times 2$ contin
 - **PRR (Proportional Reporting Ratio):** $\text{PRR} = \frac{a/(a+b)}{c/(c+d)}$ (Evans et al., 2001).
 - **ROR (Reporting Odds Ratio):** $\text{ROR} = \frac{a \cdot d}{b \cdot c}$ with 95% CI $\exp(\ln(\text{ROR}) \pm 1.96\sqrt{1/a + 1/b + 1/c + 1/d})$ (Rothman et al., 2004).
 - **Yates-corrected $\chi^2$ & exact $p$-value:** Both Python and TypeScript compute the 1-degree-of-freedom Yates continuity-corrected $\chi^2$ and exact upper-tail survival probability $p = 1 - P(1/2, \chi^2/2) = \text{erfc}(\sqrt{\chi^2/2})$.
-- **Benjamini–Hochberg FDR $q$-values:** Screening $m$ drug–event pairs simultaneously inflates family-wise Type I error. We compute step-up Benjamini–Hochberg adjusted $q$-values $q_{(k)} = \min_{j \ge k} \frac{m \cdot p_{(j)}}{j}$ and provide an interactive FDR filter ($q < 0.05, q < 0.01, q < 0.001$).
+- **Benjamini–Hochberg FDR $q$-values:** Screening $m$ drug–event pairs simultaneously inflates family-wise Type I error. We compute step-up Benjamini–Hochberg adjusted $q$-values $q_{(k)} = \min_{j \ge k} \frac{m \cdot p_{(j)}}{j}$ and provide an interactive FDR filter ($q < 0.05, q < 0.01, q < 0.10$).
 - **Primary references:**
   - Evans SJW, Waller PC, Davis S (2001). *Use of proportional reporting ratios (PRRs) for signal generation from spontaneous adverse drug reaction reports.* Pharmacoepidemiology and Drug Safety, 10(6):483–486.
   - Rothman KJ, Lanes S, Sacks ST (2004). *The reporting odds ratio and its advantages over the proportional reporting ratio.* Pharmacoepidemiology and Drug Safety, 13(8):519–523.
@@ -89,17 +90,68 @@ For each drug–event pair with $a \ge \text{min\_cases}$, a $2 \times 2$ contin
   An interaction signal is flagged when $\Omega_{025} > 0$. To keep the browser responsive on polypharmacy extracts, per-case drug combinations are capped at 12 suspect drugs and the top 200 co-reported triplets are evaluated.
 - **Primary reference:** Norén GN, Sundberg R, Bate A, Edwards IR (2008). *A statistical methodology for drug–drug interaction surveillance.* Statistics in Medicine, 27(16):3057–3070.
 
-### 9. Web Worker Off-Main-Thread Performance
-- **Architecture:** `web/lib/pipeline/analysisWorker.ts` and `web/lib/pipeline/workerClient.ts` run CSV parsing (`parseCsv`) and the entire `runAnalysis` pipeline inside a dedicated Web Worker with staged progress messages (`10%` column validation & version deduplication $\rightarrow$ `22%` probable-duplicate scoring $\rightarrow$ `35%` pair table join $\rightarrow$ `50%` disproportionality, exact EBGM & BH FDR $\rightarrow$ `68%` Mantel–Haenszel & Weibull MLE $\rightarrow$ `84%` ML features & $\Omega$ DDI search $\rightarrow$ `100%` complete).
-- **Largest Dataset Tested:** Benchmarked on a synthetic full-quarter FAERS stress dataset of **50,000 deduplicated DEMO cases** (`52,500` raw DEMO rows with `2,500` superseded case versions dropped), **152,500 DRUG rows**, and **152,500 REAC rows** (**300,000** suspect drug–event pair rows), completing in **11.9 seconds** (`390 ms` CSV parse + `11.5 s` full statistical, stratified, Weibull, and $\Omega$ analysis) inside the background worker without blocking the UI thread.
+### 9. Competition-Bias (Masking) Sensitivity Check (`/scale`)
+- **Formulation:** In spontaneous reporting databases, a small number of ultra-high-volume drugs (often specialty biologics with manufacturer patient-support programs) can contribute a large fraction of all reports for specific MedDRA Preferred Terms, inflating the background count $c$ in the $2 \times 2$ table and suppressing disproportionality ratios ($\text{PRR}, \text{ROR}, \text{IC}_{025}, \text{EB}_{05}$) for other drugs sharing those events — a phenomenon known as **competition bias** or **masking** (Pariente et al., 2007; Maignen et al., 2014).
+- **Implementation (`computeMaskingCheck` in TypeScript / `compute_masking_check` in Python):** Identifies the top-$K$ ($K=5$) drugs by distinct report volume, removes all reports containing those top-$K$ drugs from the background cohort, refits the $2 \times 2$ counts and Gamma–Poisson prior on the remaining cohort, and flags every drug–event pair whose binary signal status ($\text{PRR} \ge 2 \land \chi^2 \ge 4$, $\text{IC}_{025} > 0$, or $\text{EB}_{05} \ge 2$) flips (`unmasked_new_signal` vs. `unmasked_lost_signal`).
+- **Empirical Findings on Full-Quarter `2024Q2` FAERS (`evaluation/scale_benchmark_results.json`):**
+  - Removing the top 5 drugs (`DUPIXENT` `23,522` reports [`5.92%`], `EVOLOCUMAB` `9,254` [`2.33%`], `ADALIMUMAB` `8,443` [`2.13%`], `METHOTREXATE` `7,006` [`1.76%`], `CIMZIA` `6,419` [`1.62%`]) reduces the background cohort from `397,119` to `352,382` reports (`238,462` remaining pairs with $a \ge 3$).
+  - Across those `238,462` pairs, **9,854 pairs change signal status**: **2,117 newly unmasked signals** emerge and **7,737 borderline pairs are de-flagged**.
+  - Because `DUPIXENT` (dupilumab) accounts for `5.92%` of all `2024Q2` FAERS reports and heavily reports `DERMATITIS ATOPIC`, unmasking reveals previously suppressed `DERMATITIS ATOPIC` disproportionality signals across other immunomodulators (e.g., `HYDROCORTISONE → DERMATITIS ATOPIC`: PRR `0.861 → 5.611`, $\text{IC}_{025}$ `-1.290 → +1.370`, $\text{EB}_{05}$ `0.443 → 2.697`; `CYCLOSPORINE → DERMATITIS ATOPIC`: PRR `0.561 → 3.642`, $\text{IC}_{025}$ `-1.999 → +0.662`; `CERTOLIZUMAB PEGOL → DERMATITIS ATOPIC`: PRR `1.180 → 7.747`, $\text{EB}_{05}$ `0.661 → 4.198`).
+- **Primary references:**
+  - Pariente A, Gregoire F, Fourrier-Reglat A, Haramburu F, Moore N (2007). *Impact of safety alerts on measures of disproportionality in spontaneous reporting databases: the notoriety bias.* Drug Safety, 30(10):891–898.
+  - Maignen F, Hauben M, Hung E, Holle LV, Dogne JM (2014). *A conceptual approach to the masking effect of measures of disproportionality.* Pharmacoepidemiology and Drug Safety, 23(2):208–217.
 
-### 10. Supervised ML Prioritisation (`/ml`)
-- **Offline Training & Reference Sets:** Trained offline by `train_prioritizer.py` on published ground-truth controls from the **OMOP** (Ryan et al., 2013) and **EU-ADR** (Coloma et al., 2013) reference sets and exported to `web/lib/pipeline/prioritizerModel.json`.
+### 10. Full-Quarter FAERS (`2024Q2`) Scale Benchmark & Web Worker Performance
+- **Web Worker Architecture:** `web/lib/pipeline/analysisWorker.ts` and `web/lib/pipeline/workerClient.ts` run CSV parsing (`parseCsv`) and the entire `runAnalysis` pipeline inside a dedicated Web Worker with monomorphic row factories, string unpinning, string interning, and contiguous integer case indexing.
+- **Full Raw FDA FAERS Quarter (`2024Q2`) Benchmark (`scripts/benchmark_full_quarter.mjs` → `evaluation/scale_benchmark_results.json`):**
+
+| Metric | Full `2024Q2` FAERS Value |
+| :--- | :---: |
+| Raw `DEMO24Q2` / Deduplicated Cases | `397,119` / `397,119` (`200` cross-`caseid` probable duplicates flagged) |
+| Raw `DRUG24Q2` / `REAC24Q2` Rows | `1,888,937` / `1,445,044` |
+| Raw `OUTC24Q2` / `INDI24Q2` / `THER24Q2` Rows | `291,572` / `1,187,626` / `539,334` |
+| **Total Raw ASCII Table Rows** | **5,749,632** |
+| **Deduplicated Case–Drug–Event Pairs** | **6,232,442** |
+| **Evaluated Drug–Event Signals ($a \ge 3$)** | **243,664** (`186,504` PRR, `198,343` BCPNN, `172,023` EBGM, `185,763` BH-FDR) |
+| Weibull TTO Fitted Pairs ($n \ge 10$) | `9,801` |
+| Parse Time (all 6 ASCII tables) | **9.49 s** |
+| Full Statistical + ML + Masking Analysis Time | **121.24 s** |
+| **Total End-to-End Wall-Clock Time** | **130.73 s** |
+| **Peak V8 Heap / Process RSS** | **2,130.9 MB / 2,501 MB** |
+
+### 11. Time-Indexed Historical Cutoff Evaluation (`scripts/evaluate_time_indexed.py` → `evaluation/time_indexed_evaluation.json`)
+- **Methodology:** Following Harpaz et al. (*Clin Pharmacol Ther* 2014;96(2):239–246), we evaluate whether disproportionality detectors and the ML prioritizer identify known positive drug–event associations strictly from reports whose adverse event occurred on or before sequential historical cutoff dates (`DEMO.event_dt <= cutoff_date`, restricted to valid 8-digit `YYYYMMDD` dates) against 60 published positive and negative controls (`reference_data/time_indexed_reference_set.csv`: 30 positives, 30 negatives).
+- **Empirical Results Across Sequential `DEMO.event_dt` Cutoffs (`2024Q2` Extract):**
+
+| Historical Cutoff (`event_dt <=`) | Pre-Cutoff Cases | Scored Controls ($a \ge 3$) | PRR ($\ge 2, \chi^2 \ge 4$) Sens / Spec / PPV | BCPNN ($\text{IC}_{025} > 0$) Sens / Spec / PPV | MGPS ($\text{EB}_{05} \ge 2$) Sens / Spec / PPV | $\text{IC}_{025}$ ROC-AUC | ML Prioritizer ROC-AUC / PR-AUC |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| `20231231` | `74,643` | `36/60` (`+23 / -13`) | `95.7% / 46.2% / 75.9%` | `95.7% / 46.2% / 75.9%` | `91.3% / 69.2% / 84.0%` | `0.8428` | **0.8428 / 0.9004** |
+| `20240331` | `125,253` | `39/60` (`+25 / -14`) | `92.0% / 50.0% / 76.7%` | `92.0% / 50.0% / 76.7%` | `92.0% / 64.3% / 82.1%` | `0.8886` | **0.8914 / 0.9406** |
+| `20240515` | `161,412` | `40/60` (`+26 / -14`) | `88.5% / 57.1% / 79.3%` | `88.5% / 50.0% / 76.7%` | `88.5% / 64.3% / 82.1%` | `0.8819` | **0.8970 / 0.9509** |
+| `20240630` | `178,263` | `41/60` (`+27 / -14`) | `85.2% / 57.1% / 79.3%` | `85.2% / 57.1% / 79.3%` | `85.2% / 64.3% / 82.1%` | `0.8677` | **0.8757 / 0.9414** |
+
+- **Trade-offs & Limitations of `event_dt` Historical Slicing:** Filtering by `DEMO.event_dt` measures signal accumulation by true clinical onset date, but `~55%` of quarterly FAERS reports omit a complete 8-digit `YYYYMMDD` `event_dt`, and retrospective `event_dt` filtering within a later quarterly file includes delayed follow-up reports received after the cutoff (`fda_dt > event_dt`). Conversely,MGPS ($\text{EB}_{05} \ge 2$) consistently improves specificity (`64.3%–69.2%` vs. `46.2%–57.1%` for PRR/BCPNN) and PPV (`82.1%–84.0%`) by shrinking noisy low-count negative controls toward the prior.
+- **Primary reference:** Harpaz R, Odgers D, Gaskin G, DuMouchel W, Winnenburg R, Bodenreider O, et al. (2014). *A time-indexed reference standard of adverse drug reactions.* Scientific Data / Clinical Pharmacology & Therapeutics, 96(2):239–246.
+
+### 12. Supervised ML Prioritisation (`/ml`)
+- **Offline Training on Real Multi-Quarter FAERS (`2023Q3–2024Q2`):** Trained by `train_prioritizer.py` across **4 consecutive FDA FAERS quarters** (`1,490,754` deduplicated cases, `135,401` superseded case versions dropped) against `215` scored controls (`127` positive, `88` negative) from the **OMOP** (Ryan et al., 2013) and **EU-ADR** (Coloma et al., 2013) reference standards and exported to `web/lib/pipeline/prioritizerModel.json`.
+- **5× Repeated 5-Fold Drug-Grouped Cross-Validation (`prioritizerModel.json`):**
+
+| Ranker / Model | Drug-Grouped CV ROC-AUC | Drug-Grouped CV PR-AUC | Precision@10 | Precision@25 | Precision@50 |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **L2 Logistic Regression (All 17 Features)** | **0.8808 ± 0.0080** | **0.9104 ± 0.0093** | **0.980** | **0.976** | **0.956** |
+| Gradient Boosting (All 17 Features) | `0.8800 ± 0.0042` | `0.9145 ± 0.0043` | `1.000` | `0.992` | `0.968` |
+| L2 Logistic Regression (Disproportionality Only) | `0.8360 ± 0.0034` | `0.8796 ± 0.0035` | `1.000` | `0.936` | `0.940` |
+| Baseline: ROR Lower 95% Bound | `0.8185` | `0.8439` | `0.800` | `0.920` | `0.900` |
+| Baseline: MGPS $\text{EB}_{05}$ | `0.8177` | `0.8428` | `0.800` | `0.880` | `0.900` |
+| Baseline: BCPNN $\text{IC}_{025}$ | `0.8148` | `0.8399` | `0.800` | `0.880` | `0.900` |
+| Baseline: PRR | `0.7870` | `0.8090` | `0.800` | `0.840` | `0.860` |
+
 - **Primary references:**
   - Ryan PB, Schuemie MJ, Welebob E, Duke J, Valentine S, Hartzema AG (2013). *Defining a reference set to support methodological research in drug safety.* Drug Safety, 36(Suppl 1):S33–S47.
   - Coloma PM, Avillach P, Salvo F, Schuemie MJ, Ferrajolo C, Pariente A, et al. (2013). *A reference standard for evaluation of methods for drug safety signal detection using electronic healthcare record databases.* Drug Safety, 36(1):13–23.
 
-### 11. Optional Backend Features: Signal Assessment Drafts, "Ask Your Data" JSON Filter & Live openFDA Counts (`signal_copilot.py` & `main.py`)
+### 13. Optional Backend Features: Signal Assessment Drafts, "Ask Your Data" JSON Filter & Live openFDA Counts (`signal_copilot.py` & `main.py`)
 - **Static-First Architecture:** The public Next.js site (`web/`) is a static export (`output: "export"`) with no server. All external-API and LLM features are **off by default** and enabled only when `NEXT_PUBLIC_API_URL` is configured. With no backend configured, the site builds and behaves identically to before, with backend buttons disabled and accompanied by an explicit explanation. API keys (`NLP_LLM_API_KEY`, `OPENFDA_API_KEY`, `NCBI_API_KEY`) live exclusively on the server (`main.py`), never in client code, the static bundle, the repo, or logs.
 - **Signal Assessment Drafts (`POST /api/signals/assess`, button on each row of `/signals`):**
   - Accepts **only aggregate statistics** (`AggregatePairStatsModel` with `extra="forbid"`, rejecting any report-level data).
@@ -134,18 +186,20 @@ For each drug–event pair with $a \ge \text{min\_cases}$, a $2 \times 2$ contin
 
 ## Verification & Python–Browser Parity
 
-Run the Python unit test suite (including hand-checked arithmetic tests in `tests/test_advanced_statistics.py` and copilot evaluation tests in `tests/test_signal_copilot.py`):
+Run the Python unit test suite (including hand-checked arithmetic & masking tests in `tests/test_advanced_statistics.py`, copilot evaluation tests in `tests/test_signal_copilot.py`, and time-indexed historical evaluation):
 
 ```bash
 pip install -r requirements.txt
 pytest tests/
 python3 scripts/evaluate_signal_copilot.py
+python3 scripts/evaluate_time_indexed.py
 ```
 
-Regenerate and verify the Python–TypeScript parity fixture across all 110 sample pairs, 17 ML features, EBGM/EB05 (within `0.02`), $p$-values, BH $q$-values, Mantel–Haenszel estimates, Weibull TTO shapes, $\Omega$ interactions, and temporal series:
+Regenerate and verify the Python–TypeScript parity fixture across all 110 sample pairs, 17 ML features, EBGM/EB05 (within `0.02`), $p$-values, BH $q$-values, Mantel–Haenszel estimates, Weibull TTO shapes, $\Omega$ interactions, competition-bias masking check, and temporal series:
 
 ```bash
 PYTHONPATH=. python3 scripts/export_parity_fixture.py
-cd web && npm install && npx tsc --noEmit && npm run lint && npm run parity
+npx tsx scripts/parity-check.mjs
 ```
+
 

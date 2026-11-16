@@ -274,6 +274,7 @@ export function caseLevelFeatures(
   pairs: PairRow[],
   context: CaseContext = {},
   eventMapper?: (pt: string) => string,
+  eligiblePairKeys?: Set<string>,
 ): Map<string, FeatureMap> {
   const result = new Map<string, FeatureMap>();
   if (pairs.length === 0) return result;
@@ -308,38 +309,76 @@ export function caseLevelFeatures(
   }
 
   type PairAccum = {
-    death: number[];
-    hosp_lt: number[];
-    serious: number[];
-    hcp: number[];
-    female: number[];
-    age_years: number[];
+    deathSum: number;
+    deathN: number;
+    hospLtSum: number;
+    hospLtN: number;
+    seriousSum: number;
+    seriousN: number;
+    hcpSum: number;
+    hcpN: number;
+    femaleSum: number;
+    femaleN: number;
+    ageSum: number;
+    ageN: number;
     tto: number[];
-    tto_30d: number[];
-    n_drugs: number[];
-    primary: number[];
-    event_is_indication: number[];
+    tto30dSum: number;
+    tto30dN: number;
+    nDrugsSum: number;
+    nDrugsN: number;
+    primarySum: number;
+    primaryN: number;
+    indiSum: number;
+    indiN: number;
   };
+
+  let eligibleByDrug: Map<string, Set<string>> | null = null;
+  if (eligiblePairKeys) {
+    eligibleByDrug = new Map();
+    for (const k of eligiblePairKeys) {
+      const sepIdx = k.indexOf("|");
+      const d = k.slice(0, sepIdx);
+      const ev = k.slice(sepIdx + 1);
+      let s = eligibleByDrug.get(d);
+      if (!s) {
+        s = new Set();
+        eligibleByDrug.set(d, s);
+      }
+      s.add(ev);
+    }
+  }
 
   const groups = new Map<string, PairAccum>();
 
   for (const p of pairs) {
-    const pid = p.primaryid.trim();
+    if (eligibleByDrug && !eligibleByDrug.get(p.drugname)?.has(p.pt)) continue;
     const key = `${p.drugname}|${p.pt}`;
+
+    const pid = p.primaryid.trim();
     let acc = groups.get(key);
     if (!acc) {
       acc = {
-        death: [],
-        hosp_lt: [],
-        serious: [],
-        hcp: [],
-        female: [],
-        age_years: [],
+        deathSum: 0,
+        deathN: 0,
+        hospLtSum: 0,
+        hospLtN: 0,
+        seriousSum: 0,
+        seriousN: 0,
+        hcpSum: 0,
+        hcpN: 0,
+        femaleSum: 0,
+        femaleN: 0,
+        ageSum: 0,
+        ageN: 0,
         tto: [],
-        tto_30d: [],
-        n_drugs: [],
-        primary: [],
-        event_is_indication: [],
+        tto30dSum: 0,
+        tto30dN: 0,
+        nDrugsSum: 0,
+        nDrugsN: 0,
+        primarySum: 0,
+        primaryN: 0,
+        indiSum: 0,
+        indiN: 0,
       };
       groups.set(key, acc);
     }
@@ -347,21 +386,34 @@ export function caseLevelFeatures(
     const attr = cases.get(pid);
 
     if (hasOutc && attr) {
-      if (attr.death != null) acc.death.push(attr.death);
-      if (attr.hosp_lt != null) acc.hosp_lt.push(attr.hosp_lt);
-      if (attr.serious != null) acc.serious.push(attr.serious);
+      if (attr.death != null) {
+        acc.deathSum += attr.death;
+        acc.deathN += 1;
+      }
+      if (attr.hosp_lt != null) {
+        acc.hospLtSum += attr.hosp_lt;
+        acc.hospLtN += 1;
+      }
+      if (attr.serious != null) {
+        acc.seriousSum += attr.serious;
+        acc.seriousN += 1;
+      }
     }
     if (hasHcp && attr?.hcp != null) {
-      acc.hcp.push(attr.hcp);
+      acc.hcpSum += attr.hcp;
+      acc.hcpN += 1;
     }
     if (hasFemale && attr?.female != null) {
-      acc.female.push(attr.female);
+      acc.femaleSum += attr.female;
+      acc.femaleN += 1;
     }
     if (hasAge && attr?.age_years != null) {
-      acc.age_years.push(attr.age_years);
+      acc.ageSum += attr.age_years;
+      acc.ageN += 1;
     }
     if (hasNDrugs && attr?.n_drugs != null) {
-      acc.n_drugs.push(attr.n_drugs);
+      acc.nDrugsSum += attr.n_drugs;
+      acc.nDrugsN += 1;
     }
 
     if (hasTto && attr?.event_date != null) {
@@ -377,7 +429,8 @@ export function caseLevelFeatures(
         const days = Math.round((attr.event_date - start) / 86_400_000);
         if (days >= 0 && days <= MAX_TTO_DAYS) {
           acc.tto.push(days);
-          acc.tto_30d.push(days <= 30 ? 1.0 : 0.0);
+          acc.tto30dSum += days <= 30 ? 1.0 : 0.0;
+          acc.tto30dN += 1;
         }
       }
     }
@@ -385,20 +438,20 @@ export function caseLevelFeatures(
     if (hasRoleCod) {
       const role = (p.role_cod ?? "").trim().toUpperCase();
       if (role !== "") {
-        acc.primary.push(role === "PS" ? 1.0 : 0.0);
+        acc.primarySum += role === "PS" ? 1.0 : 0.0;
+        acc.primaryN += 1;
       }
     }
 
     if (hasIndi) {
-      acc.event_is_indication.push(indSet.has(`${pid}|${p.pt}`) ? 1.0 : 0.0);
+      acc.indiSum += indSet.has(`${pid}|${p.pt}`) ? 1.0 : 0.0;
+      acc.indiN += 1;
     }
   }
 
-  const meanOf = (arr: number[], enabled: boolean): number | null => {
-    if (!enabled || arr.length === 0) return null;
-    let sum = 0;
-    for (let i = 0; i < arr.length; i++) sum += arr[i];
-    return sum / arr.length;
+  const meanFrom = (sum: number, count: number, enabled: boolean): number | null => {
+    if (!enabled || count === 0) return null;
+    return sum / count;
   };
 
   const medianOf = (arr: number[]): number | null => {
@@ -410,20 +463,20 @@ export function caseLevelFeatures(
   };
 
   for (const [key, acc] of groups) {
-    const meanDrugs = meanOf(acc.n_drugs, hasNDrugs);
+    const meanDrugs = meanFrom(acc.nDrugsSum, acc.nDrugsN, hasNDrugs);
     const medTto = hasTto ? medianOf(acc.tto) : null;
     result.set(key, {
-      frac_death: meanOf(acc.death, hasOutc),
-      frac_hosp_lt: meanOf(acc.hosp_lt, hasOutc),
-      frac_serious: meanOf(acc.serious, hasOutc),
-      frac_hcp: meanOf(acc.hcp, hasHcp),
-      frac_female: meanOf(acc.female, hasFemale),
-      mean_age: meanOf(acc.age_years, hasAge),
+      frac_death: meanFrom(acc.deathSum, acc.deathN, hasOutc),
+      frac_hosp_lt: meanFrom(acc.hospLtSum, acc.hospLtN, hasOutc),
+      frac_serious: meanFrom(acc.seriousSum, acc.seriousN, hasOutc),
+      frac_hcp: meanFrom(acc.hcpSum, acc.hcpN, hasHcp),
+      frac_female: meanFrom(acc.femaleSum, acc.femaleN, hasFemale),
+      mean_age: meanFrom(acc.ageSum, acc.ageN, hasAge),
       log_median_tto: medTto !== null ? Math.log1p(medTto) : null,
-      frac_tto_30d: meanOf(acc.tto_30d, hasTto),
+      frac_tto_30d: meanFrom(acc.tto30dSum, acc.tto30dN, hasTto),
       log_mean_drugs: meanDrugs !== null && meanDrugs > 0 ? Math.log(meanDrugs) : null,
-      frac_primary_suspect: meanOf(acc.primary, hasRoleCod),
-      frac_event_is_indication: meanOf(acc.event_is_indication, hasIndi),
+      frac_primary_suspect: meanFrom(acc.primarySum, acc.primaryN, hasRoleCod),
+      frac_event_is_indication: meanFrom(acc.indiSum, acc.indiN, hasIndi),
     });
   }
 

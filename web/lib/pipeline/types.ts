@@ -301,6 +301,49 @@ export type PrioritizerModel = {
   features: ModelFeature[];
 };
 
+export type MaskingRemovedDrug = {
+  drug: string;
+  report_count: number;
+  share_of_reports_pct: number;
+};
+
+export type MaskingShiftRow = {
+  drug: string;
+  adverse_event: string;
+  case_count_a: number;
+  baseline_PRR: number;
+  unmasked_PRR: number;
+  delta_PRR: number;
+  baseline_ROR: number;
+  unmasked_ROR: number;
+  delta_ROR: number;
+  baseline_IC025: number;
+  unmasked_IC025: number;
+  delta_IC025: number;
+  baseline_EB05: number;
+  unmasked_EB05: number;
+  delta_EB05: number;
+  baseline_signal_prr: boolean;
+  unmasked_signal_prr: boolean;
+  baseline_signal_bcpnn: boolean;
+  unmasked_signal_bcpnn: boolean;
+  baseline_signal_ebgm: boolean;
+  unmasked_signal_ebgm: boolean;
+  change_type: "unmasked_new_signal" | "de_flagged_signal";
+};
+
+export type MaskingCheckSummary = {
+  top_k_drugs: number;
+  removed_drugs: MaskingRemovedDrug[];
+  baseline_total_reports: number;
+  unmasked_total_reports: number;
+  pairs_evaluated: number;
+  status_changed_count: number;
+  newly_unmasked_count: number;
+  de_flagged_count: number;
+  status_changed_pairs: MaskingShiftRow[];
+};
+
 export type AnalysisResult = {
   meta: DatasetMeta;
   pairs: PairRow[];
@@ -312,6 +355,7 @@ export type AnalysisResult = {
   stratified: Record<string, StratifiedPairSummary>;
   weibull: Record<string, WeibullTtoResult>;
   interactions: InteractionSignalRow[];
+  masking?: MaskingCheckSummary;
 };
 
 export type SignalFilterOperator =

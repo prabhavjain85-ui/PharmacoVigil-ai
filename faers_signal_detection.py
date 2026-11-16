@@ -1264,6 +1264,144 @@ def compute_drug_interactions(
     return results
 
 
+def compute_masking_check(
+    pairs: pd.DataFrame,
+    min_cases: int = 3,
+    top_k_drugs: int = 5,
+) -> dict[str, Any]:
+    """
+    Masking (competition bias) check:
+    Identifies the `top_k_drugs` most-reported suspect drugs in `pairs`, removes their reports
+    from the background contingency table, recomputes disproportionality (`PRR`, `ROR`, `IC025`, `EB05`),
+    and returns all pairs whose signal status (`signal_detected`, `signal_bcpnn`, or `signal_ebgm`) changes.
+    """
+    if pairs.empty:
+        return {
+            "top_k_drugs": top_k_drugs,
+            "removed_drugs": [],
+            "baseline_total_reports": 0,
+            "unmasked_total_reports": 0,
+            "pairs_evaluated": 0,
+            "status_changed_count": 0,
+            "newly_unmasked_count": 0,
+            "de_flagged_count": 0,
+            "status_changed_pairs": [],
+        }
+
+    baseline_total = int(pairs["primaryid"].nunique())
+    drug_counts_s = pairs.groupby("drugname")["primaryid"].nunique()
+    sorted_drugs = sorted(
+        [(str(d), int(cnt)) for d, cnt in drug_counts_s.items()],
+        key=lambda x: (-x[1], x[0]),
+    )
+    removed_drugs = [
+        {
+            "drug": d,
+            "report_count": cnt,
+            "share_of_reports_pct": _js_round((cnt / baseline_total) * 100.0, 3),
+        }
+        for d, cnt in sorted_drugs[:top_k_drugs]
+    ]
+    removed_set = {d["drug"] for d in removed_drugs}
+
+    baseline_df = compute_disproportionality(pairs, min_cases=min_cases, score=False)
+    unmasked_pairs = pairs[~pairs["drugname"].isin(removed_set)].copy()
+    unmasked_total = int(unmasked_pairs["primaryid"].nunique()) if not unmasked_pairs.empty else 0
+    unmasked_df = (
+        compute_disproportionality(unmasked_pairs, min_cases=min_cases, score=False)
+        if not unmasked_pairs.empty
+        else pd.DataFrame(columns=SIGNAL_COLUMNS)
+    )
+
+    base_map: dict[str, dict[str, Any]] = {}
+    for row in baseline_df.to_dict(orient="records"):
+        if row["drug"] not in removed_set:
+            base_map[f"{row['drug']}|{row['adverse_event']}"] = row
+
+    status_changed: list[dict[str, Any]] = []
+    newly_unmasked_count = 0
+    de_flagged_count = 0
+    pairs_evaluated = 0
+
+    for unm in unmasked_df.to_dict(orient="records"):
+        key = f"{unm['drug']}|{unm['adverse_event']}"
+        base = base_map.get(key)
+        if base is None:
+            continue
+        pairs_evaluated += 1
+
+        base_prr_sig = bool(base["signal_detected"])
+        unm_prr_sig = bool(unm["signal_detected"])
+        base_bcp_sig = bool(base["signal_bcpnn"])
+        unm_bcp_sig = bool(unm["signal_bcpnn"])
+        base_ebg_sig = bool(base["signal_ebgm"])
+        unm_ebg_sig = bool(unm["signal_ebgm"])
+
+        if (
+            base_prr_sig == unm_prr_sig
+            and base_bcp_sig == unm_bcp_sig
+            and base_ebg_sig == unm_ebg_sig
+        ):
+            continue
+
+        gained_signal = (
+            (not base_prr_sig and unm_prr_sig)
+            or (not base_bcp_sig and unm_bcp_sig)
+            or (not base_ebg_sig and unm_ebg_sig)
+        )
+        change_type = "unmasked_new_signal" if gained_signal else "de_flagged_signal"
+        if gained_signal:
+            newly_unmasked_count += 1
+        else:
+            de_flagged_count += 1
+
+        status_changed.append({
+            "drug": str(unm["drug"]),
+            "adverse_event": str(unm["adverse_event"]),
+            "case_count_a": int(unm["case_count_a"]),
+            "baseline_PRR": float(base["PRR"]),
+            "unmasked_PRR": float(unm["PRR"]),
+            "delta_PRR": _js_round(float(unm["PRR"]) - float(base["PRR"]), 3),
+            "baseline_ROR": float(base["ROR"]),
+            "unmasked_ROR": float(unm["ROR"]),
+            "delta_ROR": _js_round(float(unm["ROR"]) - float(base["ROR"]), 3),
+            "baseline_IC025": float(base["IC025"]),
+            "unmasked_IC025": float(unm["IC025"]),
+            "delta_IC025": _js_round(float(unm["IC025"]) - float(base["IC025"]), 4),
+            "baseline_EB05": float(base["EB05"]),
+            "unmasked_EB05": float(unm["EB05"]),
+            "delta_EB05": _js_round(float(unm["EB05"]) - float(base["EB05"]), 4),
+            "baseline_signal_prr": base_prr_sig,
+            "unmasked_signal_prr": unm_prr_sig,
+            "baseline_signal_bcpnn": base_bcp_sig,
+            "unmasked_signal_bcpnn": unm_bcp_sig,
+            "baseline_signal_ebgm": base_ebg_sig,
+            "unmasked_signal_ebgm": unm_ebg_sig,
+            "change_type": change_type,
+        })
+
+    status_changed.sort(
+        key=lambda x: (
+            -x["delta_IC025"],
+            -x["delta_PRR"],
+            x["drug"],
+            x["adverse_event"],
+        )
+    )
+
+    return {
+        "top_k_drugs": top_k_drugs,
+        "removed_drugs": removed_drugs,
+        "baseline_total_reports": baseline_total,
+        "unmasked_total_reports": unmasked_total,
+        "pairs_evaluated": pairs_evaluated,
+        "status_changed_count": len(status_changed),
+        "newly_unmasked_count": newly_unmasked_count,
+        "de_flagged_count": de_flagged_count,
+        "status_changed_pairs": status_changed[:200],
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="FAERS drug-ADR signal detection (PRR/ROR)")
     parser.add_argument("--demo", required=True, help="Path to DEMO table")
