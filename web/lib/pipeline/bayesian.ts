@@ -74,10 +74,9 @@ function negLogMarginal(alpha: number, beta: number, o: number[], e: number[]): 
     const lnBetaPlusE = Math.log(beta + ei);
     sum +=
       logGamma(oi + alpha) -
-      lgAlpha -
-      logGamma(oi + 1) +
-      alpha * (lnBeta - lnBetaPlusE) +
-      oi * (Math.log(ei) - lnBetaPlusE);
+      lgAlpha +
+      alpha * (lnBeta - lnBetaPlusE) -
+      oi * lnBetaPlusE;
   }
   return -sum;
 }
@@ -89,7 +88,8 @@ function negLogMarginal(alpha: number, beta: number, o: number[], e: number[]): 
 export function fitGammaPoissonPrior(observed: number[], expected: number[]): GammaPrior {
   const o: number[] = [];
   const e: number[] = [];
-  for (let i = 0; i < observed.length; i++) {
+  const stride = observed.length > 4000 ? Math.ceil(observed.length / 4000) : 1;
+  for (let i = 0; i < observed.length; i += stride) {
     if (expected[i] > 0 && observed[i] >= 0) {
       o.push(observed[i]);
       e.push(expected[i]);

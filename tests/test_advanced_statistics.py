@@ -17,6 +17,7 @@ from faers_signal_detection import (
     build_case_level_table,
     compute_disproportionality,
     compute_drug_interactions,
+    compute_masking_check,
     compute_stratified_analysis,
     compute_temporal_signal_series,
     deduplicate_demo_by_caseid,
@@ -262,3 +263,71 @@ def test_temporal_signal_series_and_changepoint():
     assert abs(series["changepoint_llr"] - 22.1807) < 0.001
     assert series["pre_rate"] == 0.0
     assert series["post_rate"] == 0.8
+
+
+def test_masking_competition_bias_check():
+    """
+    Hand-checked competition bias (masking) test:
+    - Top 5 most-reported drugs:
+      * BLOCKBUSTER_1: 80 reports of EVENT_MASKED
+      * BLOCKBUSTER_2..5: 60 reports each of HEADACHE (240 reports)
+      -> Top 5 drugs account for 320 reports.
+    - TARGET_DRUG: 20 reports (a = 5 with EVENT_MASKED, b = 15 with NAUSEA)
+    - BG_DRUG: 160 reports (5 with EVENT_MASKED, 155 with NAUSEA), plus 3 reports of DIZZINESS so BG_DRUG stays eligible
+      Wait: let BG_DRUG have 5 reports of EVENT_MASKED and 155 reports of NAUSEA (total 160 reports, > 80? Wait: to keep BLOCKBUSTER_1..5 as top 5, split BG_DRUG into BG_DRUG_1..4 with 40 reports each!).
+      Specifically, BG_DRUG_1..4 each have 40 reports (total 160 background reports: 5 with EVENT_MASKED across BG_DRUG_1..2 and 155 with NAUSEA).
+    Baseline (N = 500):
+      - TARGET_DRUG + EVENT_MASKED: a = 5, b = 15, c = 80 + 5 = 85, d = 480 - 85 = 395
+      - Baseline PRR = (5 / 20) / (85 / 480) = 0.25 / 0.1770833 = 1.412 (< 2.0 -> not flagged)
+    Unmasked after removing top 5 drugs BLOCKBUSTER_1..5 (N_unmasked = 180):
+      - TARGET_DRUG + EVENT_MASKED: a = 5, b = 15, c = 5, d = 160 - 5 = 155
+      - Unmasked PRR = (5 / 20) / (5 / 160) = 0.25 / 0.03125 = 8.000 (>= 2.0, Yates chi2 = 12.3125 >= 4.0 -> flagged!)
+      - Delta PRR = 8.000 - 1.412 = +6.588, change_type == "unmasked_new_signal".
+    """
+    rows = []
+    pid = 1
+    # BLOCKBUSTER_1: 80 reports of EVENT_MASKED
+    for _ in range(80):
+        rows.append({"primaryid": f"M{pid}", "drugname": "BLOCKBUSTER_1", "pt": "EVENT_MASKED"})
+        pid += 1
+    # BLOCKBUSTER_2..5: 60 reports each of HEADACHE
+    for b_idx in range(2, 6):
+        for _ in range(60):
+            rows.append({"primaryid": f"M{pid}", "drugname": f"BLOCKBUSTER_{b_idx}", "pt": "HEADACHE"})
+            pid += 1
+    # TARGET_DRUG: 5 EVENT_MASKED, 15 NAUSEA
+    for i in range(20):
+        ev = "EVENT_MASKED" if i < 5 else "NAUSEA"
+        rows.append({"primaryid": f"M{pid}", "drugname": "TARGET_DRUG", "pt": ev})
+        pid += 1
+    # BG_DRUG_1..4: 40 reports each (total 160 reports: 5 EVENT_MASKED, 155 NAUSEA)
+    bg_events = ["EVENT_MASKED"] * 5 + ["NAUSEA"] * 155
+    for idx, ev in enumerate(bg_events):
+        bg_drug = f"BG_DRUG_{(idx // 40) + 1}"
+        rows.append({"primaryid": f"M{pid}", "drugname": bg_drug, "pt": ev})
+        pid += 1
+
+    pairs = pd.DataFrame(rows)
+    res = compute_masking_check(pairs, min_cases=3, top_k_drugs=5)
+    assert res["baseline_total_reports"] == 500
+    assert res["unmasked_total_reports"] == 180
+    removed_names = [d["drug"] for d in res["removed_drugs"]]
+    assert removed_names == [
+        "BLOCKBUSTER_1",
+        "BLOCKBUSTER_2",
+        "BLOCKBUSTER_3",
+        "BLOCKBUSTER_4",
+        "BLOCKBUSTER_5",
+    ]
+    target_row = next(
+        r
+        for r in res["status_changed_pairs"]
+        if r["drug"] == "TARGET_DRUG" and r["adverse_event"] == "EVENT_MASKED"
+    )
+    assert target_row["baseline_PRR"] == 1.412
+    assert target_row["unmasked_PRR"] == 8.0
+    assert target_row["delta_PRR"] == 6.588
+    assert target_row["baseline_signal_prr"] is False
+    assert target_row["unmasked_signal_prr"] is True
+    assert target_row["change_type"] == "unmasked_new_signal"
+

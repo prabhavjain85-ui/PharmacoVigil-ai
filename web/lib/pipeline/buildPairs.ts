@@ -163,15 +163,31 @@ export function detectProbableDuplicates(
     reacs: string[];
   };
 
-  // Index cases by suspect drug so we only compare pairs sharing >= 1 suspect drug
+  // Index cases by suspect drug (or (drug, reaction) for full-quarter scale > 2,000 cases)
   const profiles: CaseProfile[] = [];
-  const byDrug = new Map<string, number[]>();
+  const byBucket = new Map<string, number[]>();
+  const isLargeDataset = dedupedDemo.length > 2000;
+  const bucketCap = isLargeDataset ? 60 : 500;
+  const maxComparisons = isLargeDataset ? 150_000 : Infinity;
 
   for (const row of dedupedDemo) {
     const pid = row.primaryid.trim();
     const dSet = drugsByPid.get(pid);
     const rSet = reacsByPid.get(pid);
+    drugsByPid.delete(pid);
+    reacsByPid.delete(pid);
     if (!dSet || dSet.size === 0 || !rSet || rSet.size === 0) continue;
+
+    const eventDtStr = (row.event_dt ?? "").trim();
+    const eventMs = parseFaersDateMs(row.event_dt);
+    const ageStr = (row.age ?? "").trim();
+    const ageYrs = parseAgeYears(row);
+    const sex = (row.sex ?? "").trim().toUpperCase();
+    const country = getCountry(row);
+
+    // On full-quarter datasets (>2,000 cases), skip profiles lacking both event_dt and age
+    // since they cannot reliably establish cross-caseid duplicate identity
+    if (isLargeDataset && eventMs === null && ageYrs === null) continue;
 
     const drugs = [...dSet].sort();
     const reacs = [...rSet].sort();
@@ -179,24 +195,36 @@ export function detectProbableDuplicates(
     profiles.push({
       pid,
       caseid: (row.caseid ?? pid).trim() || pid,
-      eventDtStr: (row.event_dt ?? "").trim(),
-      eventMs: parseFaersDateMs(row.event_dt),
-      ageStr: (row.age ?? "").trim(),
-      ageYrs: parseAgeYears(row),
-      sex: (row.sex ?? "").trim().toUpperCase(),
-      country: getCountry(row),
+      eventDtStr,
+      eventMs,
+      ageStr,
+      ageYrs,
+      sex,
+      country,
       drugs,
       reacs,
     });
 
-    for (const dName of drugs) {
-      let bucket = byDrug.get(dName);
+    if (isLargeDataset) {
+      const bKey = `${drugs[0]}|${reacs[0]}|${sex}|${country}`;
+      let bucket = byBucket.get(bKey);
       if (!bucket) {
         bucket = [];
-        byDrug.set(dName, bucket);
+        byBucket.set(bKey, bucket);
       }
-      if (bucket.length < 500) {
+      if (bucket.length < bucketCap) {
         bucket.push(idx);
+      }
+    } else {
+      for (const dName of drugs) {
+        let bucket = byBucket.get(dName);
+        if (!bucket) {
+          bucket = [];
+          byBucket.set(dName, bucket);
+        }
+        if (bucket.length < bucketCap) {
+          bucket.push(idx);
+        }
       }
     }
   }
@@ -204,11 +232,12 @@ export function detectProbableDuplicates(
   const compared = new Set<string>();
   const flaggedPairs: ProbableDuplicatePair[] = [];
 
-  for (const indices of byDrug.values()) {
+  outerLoop: for (const indices of byBucket.values()) {
     const len = indices.length;
     for (let i = 0; i < len; i++) {
       const a = profiles[indices[i]];
       for (let j = i + 1; j < len; j++) {
+        if (compared.size >= maxComparisons) break outerLoop;
         const b = profiles[indices[j]];
         if (a.caseid === b.caseid) continue;
         const [first, second] = a.pid < b.pid ? [a, b] : [b, a];
@@ -342,20 +371,36 @@ export function buildCaseLevelTable(
   });
 
   const pairs: PairRow[] = [];
-  const seen = new Set<string>();
 
-  const reacByCase = new Map<string, FaersRow[]>();
+  // Store deduplicated normalized PTs per case in appearance order
+  const reacByCase = new Map<string, string[]>();
   for (const r of reac) {
     const pid = r.primaryid?.trim();
     if (!pid || !valid.has(pid)) continue;
-    if (!reacByCase.has(pid)) reacByCase.set(pid, []);
-    reacByCase.get(pid)!.push(r);
+    const pt = normalizePt(r.pt ?? "");
+    if (!pt) continue;
+    let pts = reacByCase.get(pid);
+    if (!pts) {
+      pts = [pt];
+      reacByCase.set(pid, pts);
+    } else if (!pts.includes(pt)) {
+      pts.push(pt);
+    }
   }
+
+  // Store deduplicated suspect drugs per case (preserving first role_cod and drug_seq)
+  const drugsByCase = new Map<
+    string,
+    { drugname: string; role_cod?: string; drug_seq?: string }[]
+  >();
+  const seenDrugInCase = new Map<string, Set<string>>();
 
   for (const d of drug) {
     const pid = d.primaryid?.trim();
     const rawName = d.drugname?.trim();
     if (!pid || !rawName || !valid.has(pid)) continue;
+    const reactions = reacByCase.get(pid);
+    if (!reactions || reactions.length === 0) continue;
     const roleRaw = d.role_cod?.trim();
     if (roleRaw) {
       const role = roleRaw.toUpperCase();
@@ -363,27 +408,58 @@ export function buildCaseLevelTable(
     }
     const drugname = canonicalizeDrug(rawName);
     if (!drugname) continue;
-    const drugSeq = d.drug_seq?.trim();
-    const reactions = reacByCase.get(pid) ?? [];
-    for (const r of reactions) {
-      const pt = normalizePt(r.pt ?? "");
-      if (!pt) continue;
-      const key = `${pid}|${drugname}|${pt}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      pairs.push({
-        primaryid: pid,
-        drugname,
-        pt,
-        event_dt: eventByCase.get(pid),
-        role_cod: roleRaw,
-        drug_seq: drugSeq,
-      });
+
+    let seenSet = seenDrugInCase.get(pid);
+    if (!seenSet) {
+      seenSet = new Set();
+      seenDrugInCase.set(pid, seenSet);
+    }
+    if (seenSet.has(drugname)) continue;
+    seenSet.add(drugname);
+
+    let dList = drugsByCase.get(pid);
+    if (!dList) {
+      dList = [];
+      drugsByCase.set(pid, dList);
+    }
+    dList.push({
+      drugname,
+      role_cod: roleRaw,
+      drug_seq: d.drug_seq?.trim(),
+    });
+  }
+  seenDrugInCase.clear();
+
+  for (const [pid, dList] of drugsByCase.entries()) {
+    const reactions = reacByCase.get(pid);
+    if (!reactions) continue;
+    const evDt = eventByCase.get(pid);
+    for (let di = 0; di < dList.length; di++) {
+      const dItem = dList[di];
+      for (let ri = 0; ri < reactions.length; ri++) {
+        pairs.push({
+          primaryid: pid,
+          drugname: dItem.drugname,
+          pt: reactions[ri],
+          event_dt: evDt,
+          role_cod: dItem.role_cod,
+          drug_seq: dItem.drug_seq,
+        });
+      }
     }
   }
   return pairs;
 }
 
 export function uniqueCases(pairs: PairRow[]): number {
-  return new Set(pairs.map((p) => p.primaryid)).size;
+  const seen = new Set<string>();
+  let prevPid = "";
+  for (let i = 0; i < pairs.length; i++) {
+    const pid = pairs[i].primaryid;
+    if (pid !== prevPid) {
+      seen.add(pid);
+      prevPid = pid;
+    }
+  }
+  return seen.size;
 }

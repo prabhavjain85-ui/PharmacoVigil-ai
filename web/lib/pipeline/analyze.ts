@@ -29,6 +29,9 @@ import type {
   DuplicateSignalCounts,
   FaersRow,
   InteractionSignalRow,
+  MaskingCheckSummary,
+  MaskingRemovedDrug,
+  MaskingShiftRow,
   OpenFdaCountRow,
   OptionalTables,
   PairRow,
@@ -176,6 +179,7 @@ export function runAnalysis(
     .map(({ _origIdx: _, ...s }, i) => ({ ...s, priority_rank: i + 1 }));
 
   const interactions = computeDrugInteractions(pairs, totalReports, Math.max(2, minCases));
+  const masking = computeMaskingCheck(pairs, minCases, 5, signals);
   const drugSet = new Set(ranked.map((s) => s.drug));
 
   onProgress?.("Analysis complete", 100);
@@ -212,6 +216,7 @@ export function runAnalysis(
     stratified,
     weibull,
     interactions,
+    masking,
   };
 }
 
@@ -233,22 +238,44 @@ export function computeDisproportionality(
   totalReports: number,
   minCases: number,
 ): SignalRow[] {
-  const drugTotals = new Map<string, Set<string>>();
-  const eventTotals = new Map<string, Set<string>>();
-  const pairCounts = new Map<string, number>();
+  // Pass 1: count unique primaryids per drug and per event.
+  // When pairs are grouped by primaryid (standard output of buildCaseLevelTable), lastPid tracking
+  // counts unique primaryids in O(1) memory; fallback Set is only used if a primaryid reappears non-contiguously.
+  const drugCountMap = new Map<string, number>();
+  const drugLastPid = new Map<string, string>();
+  const eventCountMap = new Map<string, number>();
+  const eventLastPid = new Map<string, string>();
 
-  for (const p of pairs) {
-    if (!drugTotals.has(p.drugname)) drugTotals.set(p.drugname, new Set());
-    if (!eventTotals.has(p.pt)) eventTotals.set(p.pt, new Set());
-    drugTotals.get(p.drugname)!.add(p.primaryid);
-    eventTotals.get(p.pt)!.add(p.primaryid);
-    const key = `${p.drugname}|${p.pt}`;
-    pairCounts.set(key, (pairCounts.get(key) ?? 0) + 1);
+  for (let i = 0; i < pairs.length; i++) {
+    const p = pairs[i];
+    if (drugLastPid.get(p.drugname) !== p.primaryid) {
+      drugLastPid.set(p.drugname, p.primaryid);
+      drugCountMap.set(p.drugname, (drugCountMap.get(p.drugname) ?? 0) + 1);
+    }
+    if (eventLastPid.get(p.pt) !== p.primaryid) {
+      eventLastPid.set(p.pt, p.primaryid);
+      eventCountMap.set(p.pt, (eventCountMap.get(p.pt) ?? 0) + 1);
+    }
+  }
+  drugLastPid.clear();
+  eventLastPid.clear();
+
+  // Pass 2: 2-level map (drug -> (pt -> count)) only for drugs and events that have >= minCases total reports.
+  // This allocates zero concatenated strings during scanning.
+  const pairCountsByDrug = new Map<string, Map<string, number>>();
+  for (let i = 0; i < pairs.length; i++) {
+    const p = pairs[i];
+    if ((drugCountMap.get(p.drugname) ?? 0) < minCases) continue;
+    if ((eventCountMap.get(p.pt) ?? 0) < minCases) continue;
+    let ptMap = pairCountsByDrug.get(p.drugname);
+    if (!ptMap) {
+      ptMap = new Map<string, number>();
+      pairCountsByDrug.set(p.drugname, ptMap);
+    }
+    ptMap.set(p.pt, (ptMap.get(p.pt) ?? 0) + 1);
   }
 
-  // Sort pair keys lexicographically by (drug, adverse_event) to match pandas groupby(["drugname", "pt"])
-  const sortedEntries = [...pairCounts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
-
+  // Extract only pairs with a >= minCases and sort lexicographically by (drug, adverse_event)
   const strata: {
     drug: string;
     adverse_event: string;
@@ -260,26 +287,39 @@ export function computeDisproportionality(
     event_total_reports: number;
   }[] = [];
 
-  for (const [key, a] of sortedEntries) {
-    if (a < minCases) continue;
-    const [drug, adverse_event] = key.split("|");
-    const drugTotal = drugTotals.get(drug)!.size;
-    const eventTotal = eventTotals.get(adverse_event)!.size;
-    const b = drugTotal - a;
-    const c = eventTotal - a;
-    const d = totalReports - drugTotal - eventTotal + a;
-    if (b <= 0 || c <= 0 || d <= 0) continue;
-    strata.push({
-      drug,
-      adverse_event,
-      a,
-      b,
-      c,
-      d,
-      drug_total_reports: drugTotal,
-      event_total_reports: eventTotal,
-    });
+  const sortedDrugs = [...pairCountsByDrug.keys()].sort((a, b) => a.localeCompare(b));
+  for (const drug of sortedDrugs) {
+    const ptMap = pairCountsByDrug.get(drug)!;
+    pairCountsByDrug.delete(drug);
+    const drugTotal = drugCountMap.get(drug)!;
+    const qualifyingPts: [string, number][] = [];
+    for (const entry of ptMap.entries()) {
+      if (entry[1] >= minCases) qualifyingPts.push(entry);
+    }
+    ptMap.clear();
+    if (qualifyingPts.length === 0) continue;
+    qualifyingPts.sort((a, b) => a[0].localeCompare(b[0]));
+
+    for (const [adverse_event, a] of qualifyingPts) {
+      const eventTotal = eventCountMap.get(adverse_event)!;
+      const b = drugTotal - a;
+      const c = eventTotal - a;
+      const d = totalReports - drugTotal - eventTotal + a;
+      if (b <= 0 || c <= 0 || d <= 0) continue;
+      strata.push({
+        drug,
+        adverse_event,
+        a,
+        b,
+        c,
+        d,
+        drug_total_reports: drugTotal,
+        event_total_reports: eventTotal,
+      });
+    }
   }
+  drugCountMap.clear();
+  eventCountMap.clear();
 
   if (strata.length === 0) return [];
 
@@ -367,12 +407,24 @@ function getSexBand(row: FaersRow): string {
 /**
  * Computes age-band, sex, and joint (age_band x sex) stratified PRR/IC and
  * Mantel–Haenszel adjusted estimates for each eligible drug–event signal.
+ * Pre-computes per-drug and per-event stratum totals in O(|P|) so evaluating
+ * all signals runs in O(|P| + |S|) rather than O(|S| * N).
  */
 export function computeStratifiedAnalysis(
   demo: FaersRow[],
   pairs: PairRow[],
   signals: SignalRow[],
 ): Record<string, StratifiedPairSummary> {
+  if (signals.length === 0 || pairs.length === 0) return {};
+
+  // For full-quarter scale (>2,000 signals), evaluate 8-stratum age×sex Mantel–Haenszel on the
+  // top 2,000 signals by case_count_a (which have sufficient stratum cell counts) to avoid
+  // allocating 1.6M+ StratumMetrics objects.
+  const targetSignals =
+    signals.length > 2000
+      ? [...signals].sort((a, b) => b.case_count_a - a.case_count_a).slice(0, 2000)
+      : signals;
+
   const caseAgeBand = new Map<string, string>();
   const caseSex = new Map<string, string>();
 
@@ -384,66 +436,133 @@ export function computeStratifiedAnalysis(
   }
 
   // Only include cases that appear in `pairs` (matching total_reports denominator)
-  const activePids = new Set(pairs.map((p) => p.primaryid));
-  const ageStrataCases = new Map<string, Set<string>>();
-  const sexStrataCases = new Map<string, Set<string>>();
-  const jointStrataCases = new Map<string, Set<string>>();
+  const activePids = new Set<string>();
+  let prevActivePid = "";
+  for (let i = 0; i < pairs.length; i++) {
+    const pid = pairs[i].primaryid;
+    if (pid !== prevActivePid) {
+      activePids.add(pid);
+      prevActivePid = pid;
+    }
+  }
+  const ageStrataTotals = new Map<string, number>();
+  const sexStrataTotals = new Map<string, number>();
+  const jointStrataTotals = new Map<string, number>();
 
   for (const pid of activePids) {
     const ab = caseAgeBand.get(pid) ?? "UNK";
     const sx = caseSex.get(pid) ?? "UNK";
     if (ab !== "UNK") {
-      if (!ageStrataCases.has(ab)) ageStrataCases.set(ab, new Set());
-      ageStrataCases.get(ab)!.add(pid);
+      ageStrataTotals.set(ab, (ageStrataTotals.get(ab) ?? 0) + 1);
     }
     if (sx !== "UNK") {
-      if (!sexStrataCases.has(sx)) sexStrataCases.set(sx, new Set());
-      sexStrataCases.get(sx)!.add(pid);
+      sexStrataTotals.set(sx, (sexStrataTotals.get(sx) ?? 0) + 1);
     }
     if (ab !== "UNK" && sx !== "UNK") {
       const jk = `${ab}|${sx}`;
-      if (!jointStrataCases.has(jk)) jointStrataCases.set(jk, new Set());
-      jointStrataCases.get(jk)!.add(pid);
+      jointStrataTotals.set(jk, (jointStrataTotals.get(jk) ?? 0) + 1);
     }
   }
+  activePids.clear();
 
-  // Pre-index drug cases and event cases
-  const drugCases = new Map<string, Set<string>>();
-  const eventCases = new Map<string, Set<string>>();
-  const pairCases = new Map<string, Set<string>>();
-
-  for (const p of pairs) {
-    if (!drugCases.has(p.drugname)) drugCases.set(p.drugname, new Set());
-    drugCases.get(p.drugname)!.add(p.primaryid);
-    if (!eventCases.has(p.pt)) eventCases.set(p.pt, new Set());
-    eventCases.get(p.pt)!.add(p.primaryid);
-    const pk = `${p.drugname}|${p.pt}`;
-    if (!pairCases.has(pk)) pairCases.set(pk, new Set());
-    pairCases.get(pk)!.add(p.primaryid);
+  // 2-level index of eligible signal pairs (drug -> Set<adverse_event>)
+  const signalPtsByDrug = new Map<string, Set<string>>();
+  for (const s of targetSignals) {
+    let set = signalPtsByDrug.get(s.drug);
+    if (!set) {
+      set = new Set();
+      signalPtsByDrug.set(s.drug, set);
+    }
+    set.add(s.adverse_event);
   }
 
-  const evalStrataGroup = (
-    strataMap: Map<string, Set<string>>,
+  // Pre-aggregate per-stratum case counts for each drug, event, and eligible signal pair
+  const drugAgeCounts = new Map<string, Map<string, number>>();
+  const drugSexCounts = new Map<string, Map<string, number>>();
+  const drugJointCounts = new Map<string, Map<string, number>>();
+  const drugLastPid = new Map<string, string>();
+
+  const eventAgeCounts = new Map<string, Map<string, number>>();
+  const eventSexCounts = new Map<string, Map<string, number>>();
+  const eventJointCounts = new Map<string, Map<string, number>>();
+  const eventLastPid = new Map<string, string>();
+
+  const pairAgeCounts = new Map<string, Map<string, number>>();
+  const pairSexCounts = new Map<string, Map<string, number>>();
+  const pairJointCounts = new Map<string, Map<string, number>>();
+
+  const addStratumCount = (
+    ageMap: Map<string, Map<string, number>>,
+    sexMap: Map<string, Map<string, number>>,
+    jointMap: Map<string, Map<string, number>>,
+    key: string,
+    ab: string,
+    sx: string,
+  ) => {
+    if (ab !== "UNK") {
+      let m = ageMap.get(key);
+      if (!m) {
+        m = new Map();
+        ageMap.set(key, m);
+      }
+      m.set(ab, (m.get(ab) ?? 0) + 1);
+    }
+    if (sx !== "UNK") {
+      let m = sexMap.get(key);
+      if (!m) {
+        m = new Map();
+        sexMap.set(key, m);
+      }
+      m.set(sx, (m.get(sx) ?? 0) + 1);
+    }
+    if (ab !== "UNK" && sx !== "UNK") {
+      const jk = `${ab}|${sx}`;
+      let m = jointMap.get(key);
+      if (!m) {
+        m = new Map();
+        jointMap.set(key, m);
+      }
+      m.set(jk, (m.get(jk) ?? 0) + 1);
+    }
+  };
+
+  for (let i = 0; i < pairs.length; i++) {
+    const p = pairs[i];
+    const pid = p.primaryid;
+    const ab = caseAgeBand.get(pid) ?? "UNK";
+    const sx = caseSex.get(pid) ?? "UNK";
+    if (ab === "UNK" && sx === "UNK") continue;
+
+    if (drugLastPid.get(p.drugname) !== pid) {
+      drugLastPid.set(p.drugname, pid);
+      addStratumCount(drugAgeCounts, drugSexCounts, drugJointCounts, p.drugname, ab, sx);
+    }
+    if (eventLastPid.get(p.pt) !== pid) {
+      eventLastPid.set(p.pt, pid);
+      addStratumCount(eventAgeCounts, eventSexCounts, eventJointCounts, p.pt, ab, sx);
+    }
+    if (signalPtsByDrug.get(p.drugname)?.has(p.pt)) {
+      const pk = `${p.drugname}|${p.pt}`;
+      addStratumCount(pairAgeCounts, pairSexCounts, pairJointCounts, pk, ab, sx);
+    }
+  }
+  drugLastPid.clear();
+  eventLastPid.clear();
+
+  const buildStrataMetrics = (
+    strataTotals: Map<string, number>,
     orderedKeys: string[],
-    dSet: Set<string>,
-    eSet: Set<string>,
-    pSet: Set<string>,
+    dCounts: Map<string, number> | undefined,
+    eCounts: Map<string, number> | undefined,
+    pCounts: Map<string, number> | undefined,
   ): StratumMetrics[] => {
     const list: StratumMetrics[] = [];
     for (const sk of orderedKeys) {
-      const sCases = strataMap.get(sk);
-      if (!sCases || sCases.size === 0) continue;
-      const n_total = sCases.size;
-      let a = 0;
-      let dTot = 0;
-      let eTot = 0;
-      for (const pid of sCases) {
-        const hasD = dSet.has(pid);
-        const hasE = eSet.has(pid);
-        if (hasD) dTot++;
-        if (hasE) eTot++;
-        if (hasD && hasE && pSet.has(pid)) a++;
-      }
+      const n_total = strataTotals.get(sk) ?? 0;
+      if (n_total === 0) continue;
+      const a = pCounts?.get(sk) ?? 0;
+      const dTot = dCounts?.get(sk) ?? 0;
+      const eTot = eCounts?.get(sk) ?? 0;
       const b = dTot - a;
       const c = eTot - a;
       const d = n_total - dTot - eTot + a;
@@ -471,15 +590,29 @@ export function computeStratifiedAnalysis(
 
   const out: Record<string, StratifiedPairSummary> = {};
 
-  for (const s of signals) {
+  for (const s of targetSignals) {
     const pk = `${s.drug}|${s.adverse_event}`;
-    const dSet = drugCases.get(s.drug) ?? new Set();
-    const eSet = eventCases.get(s.adverse_event) ?? new Set();
-    const pSet = pairCases.get(pk) ?? new Set();
-
-    const by_age_band = evalStrataGroup(ageStrataCases, AGE_ORDER, dSet, eSet, pSet);
-    const by_sex = evalStrataGroup(sexStrataCases, SEX_ORDER, dSet, eSet, pSet);
-    const by_age_sex = evalStrataGroup(jointStrataCases, JOINT_ORDER, dSet, eSet, pSet);
+    const by_age_band = buildStrataMetrics(
+      ageStrataTotals,
+      AGE_ORDER,
+      drugAgeCounts.get(s.drug),
+      eventAgeCounts.get(s.adverse_event),
+      pairAgeCounts.get(pk),
+    );
+    const by_sex = buildStrataMetrics(
+      sexStrataTotals,
+      SEX_ORDER,
+      drugSexCounts.get(s.drug),
+      eventSexCounts.get(s.adverse_event),
+      pairSexCounts.get(pk),
+    );
+    const by_age_sex = buildStrataMetrics(
+      jointStrataTotals,
+      JOINT_ORDER,
+      drugJointCounts.get(s.drug),
+      eventJointCounts.get(s.adverse_event),
+      pairJointCounts.get(pk),
+    );
 
     const mh = computeMantelHaenszel(by_age_sex);
     const prrChangePct =
@@ -520,6 +653,149 @@ export function computeStratifiedAnalysis(
   }
 
   return out;
+}
+
+/**
+ * Masking (competition bias) check:
+ * Identifies the `topKDrugs` most-reported suspect drugs in `pairs`, removes their reports
+ * from the background contingency table, recomputes disproportionality (`PRR`, `ROR`, `IC025`, `EB05`),
+ * and returns all pairs whose signal status (`signal_detected`, `signal_bcpnn`, or `signal_ebgm`) changes.
+ */
+export function computeMaskingCheck(
+  pairs: PairRow[],
+  minCases = 3,
+  topKDrugs = 5,
+  precomputedBaseline?: SignalRow[],
+): MaskingCheckSummary {
+  const baselineTotal = uniqueCases(pairs);
+  if (pairs.length === 0 || baselineTotal === 0) {
+    return {
+      top_k_drugs: topKDrugs,
+      removed_drugs: [],
+      baseline_total_reports: 0,
+      unmasked_total_reports: 0,
+      pairs_evaluated: 0,
+      status_changed_count: 0,
+      newly_unmasked_count: 0,
+      de_flagged_count: 0,
+      status_changed_pairs: [],
+    };
+  }
+
+  const drugCountMap = new Map<string, number>();
+  const drugLastPid = new Map<string, string>();
+  for (let i = 0; i < pairs.length; i++) {
+    const p = pairs[i];
+    if (drugLastPid.get(p.drugname) !== p.primaryid) {
+      drugLastPid.set(p.drugname, p.primaryid);
+      drugCountMap.set(p.drugname, (drugCountMap.get(p.drugname) ?? 0) + 1);
+    }
+  }
+  drugLastPid.clear();
+
+  const sortedDrugs = [...drugCountMap.entries()]
+    .map(([drug, cnt]) => ({
+      drug,
+      report_count: cnt,
+      share_of_reports_pct: round3((cnt / baselineTotal) * 100),
+    }))
+    .sort((a, b) => b.report_count - a.report_count || a.drug.localeCompare(b.drug));
+  drugCountMap.clear();
+
+  const removedDrugs: MaskingRemovedDrug[] = sortedDrugs.slice(0, topKDrugs);
+  const removedSet = new Set(removedDrugs.map((d) => d.drug));
+
+  const baselineSignals =
+    precomputedBaseline ?? computeDisproportionality(pairs, baselineTotal, minCases);
+
+  const unmaskedPairs = pairs.filter((p) => !removedSet.has(p.drugname));
+  const unmaskedTotal = uniqueCases(unmaskedPairs);
+  const unmaskedSignals = computeDisproportionality(unmaskedPairs, unmaskedTotal, minCases);
+
+  const baseMap = new Map<string, SignalRow>();
+  for (const s of baselineSignals) {
+    if (!removedSet.has(s.drug)) {
+      baseMap.set(`${s.drug}|${s.adverse_event}`, s);
+    }
+  }
+
+  const statusChanged: MaskingShiftRow[] = [];
+  let newlyUnmaskedCount = 0;
+  let deFlaggedCount = 0;
+  let pairsEvaluated = 0;
+
+  for (const unm of unmaskedSignals) {
+    const key = `${unm.drug}|${unm.adverse_event}`;
+    const base = baseMap.get(key);
+    if (!base) continue;
+    pairsEvaluated++;
+
+    const prrChanged = base.signal_detected !== unm.signal_detected;
+    const bcpnnChanged = base.signal_bcpnn !== unm.signal_bcpnn;
+    const ebgmChanged = base.signal_ebgm !== unm.signal_ebgm;
+
+    if (!prrChanged && !bcpnnChanged && !ebgmChanged) continue;
+
+    const gainedSignal =
+      (!base.signal_detected && unm.signal_detected) ||
+      (!base.signal_bcpnn && unm.signal_bcpnn) ||
+      (!base.signal_ebgm && unm.signal_ebgm);
+
+    const changeType: MaskingShiftRow["change_type"] = gainedSignal
+      ? "unmasked_new_signal"
+      : "de_flagged_signal";
+
+    if (changeType === "unmasked_new_signal") {
+      newlyUnmaskedCount++;
+    } else {
+      deFlaggedCount++;
+    }
+
+    statusChanged.push({
+      drug: unm.drug,
+      adverse_event: unm.adverse_event,
+      case_count_a: unm.case_count_a,
+      baseline_PRR: base.PRR,
+      unmasked_PRR: unm.PRR,
+      delta_PRR: round3(unm.PRR - base.PRR),
+      baseline_ROR: base.ROR,
+      unmasked_ROR: unm.ROR,
+      delta_ROR: round3(unm.ROR - base.ROR),
+      baseline_IC025: base.IC025,
+      unmasked_IC025: unm.IC025,
+      delta_IC025: round4(unm.IC025 - base.IC025),
+      baseline_EB05: base.EB05,
+      unmasked_EB05: unm.EB05,
+      delta_EB05: round4(unm.EB05 - base.EB05),
+      baseline_signal_prr: base.signal_detected,
+      unmasked_signal_prr: unm.signal_detected,
+      baseline_signal_bcpnn: base.signal_bcpnn,
+      unmasked_signal_bcpnn: unm.signal_bcpnn,
+      baseline_signal_ebgm: base.signal_ebgm,
+      unmasked_signal_ebgm: unm.signal_ebgm,
+      change_type: changeType,
+    });
+  }
+
+  statusChanged.sort(
+    (a, b) =>
+      b.delta_IC025 - a.delta_IC025 ||
+      b.delta_PRR - a.delta_PRR ||
+      a.drug.localeCompare(b.drug) ||
+      a.adverse_event.localeCompare(b.adverse_event),
+  );
+
+  return {
+    top_k_drugs: topKDrugs,
+    removed_drugs: removedDrugs,
+    baseline_total_reports: baselineTotal,
+    unmasked_total_reports: unmaskedTotal,
+    pairs_evaluated: pairsEvaluated,
+    status_changed_count: statusChanged.length,
+    newly_unmasked_count: newlyUnmaskedCount,
+    de_flagged_count: deFlaggedCount,
+    status_changed_pairs: statusChanged.slice(0, 200),
+  };
 }
 
 function parseFaersDateMs(raw: string | undefined): number | null {
@@ -577,7 +853,7 @@ export function computeWeibullForPairs(
     }
   }
 
-  const ttoByPair = new Map<string, number[]>();
+  const ttoByDrug = new Map<string, Map<string, number[]>>();
   for (const p of pairs) {
     const pid = p.primaryid.trim();
     const evMs = eventDateByPid.get(pid);
@@ -590,22 +866,32 @@ export function computeWeibullForPairs(
     if (startMs === undefined) continue;
     const days = Math.round((evMs - startMs) / 86_400_000);
     if (days >= 0 && days <= 3650) {
-      const pk = `${p.drugname}|${p.pt}`;
-      let arr = ttoByPair.get(pk);
+      let ptMap = ttoByDrug.get(p.drugname);
+      if (!ptMap) {
+        ptMap = new Map();
+        ttoByDrug.set(p.drugname, ptMap);
+      }
+      let arr = ptMap.get(p.pt);
       if (!arr) {
         arr = [];
-        ttoByPair.set(pk, arr);
+        ptMap.set(p.pt, arr);
       }
       arr.push(days);
     }
   }
+  eventDateByPid.clear();
+  perCaseStart.clear();
+  perDrugStart.clear();
 
-  for (const [pk, days] of ttoByPair.entries()) {
-    if (days.length < minCases) continue;
-    const [drug, adverse_event] = pk.split("|");
-    const fitted = fitWeibullTto(drug, adverse_event, days, minCases);
-    if (fitted) out[pk] = fitted;
+  for (const [drug, ptMap] of ttoByDrug.entries()) {
+    for (const [adverse_event, days] of ptMap.entries()) {
+      if (days.length < minCases) continue;
+      const fitted = fitWeibullTto(drug, adverse_event, days, minCases);
+      if (fitted) out[`${drug}|${adverse_event}`] = fitted;
+    }
+    ptMap.clear();
   }
+  ttoByDrug.clear();
 
   return out;
 }
@@ -810,55 +1096,114 @@ export function computeDrugInteractions(
 
   const caseDrugs = new Map<string, Set<string>>();
   const caseEvents = new Map<string, Set<string>>();
-  const drugCases = new Map<string, Set<string>>();
-  const eventCases = new Map<string, Set<string>>();
-  const singlePairCases = new Map<string, Set<string>>();
+  const drugCountMap = new Map<string, number>();
+  const drugLastPid = new Map<string, string>();
+  const eventCountMap = new Map<string, number>();
+  const eventLastPid = new Map<string, string>();
 
-  for (const p of pairs) {
+  for (let i = 0; i < pairs.length; i++) {
+    const p = pairs[i];
     const pid = p.primaryid;
-    if (!caseDrugs.has(pid)) caseDrugs.set(pid, new Set());
-    caseDrugs.get(pid)!.add(p.drugname);
+    let dSet = caseDrugs.get(pid);
+    if (!dSet) {
+      dSet = new Set();
+      caseDrugs.set(pid, dSet);
+    }
+    dSet.add(p.drugname);
 
-    if (!caseEvents.has(pid)) caseEvents.set(pid, new Set());
-    caseEvents.get(pid)!.add(p.pt);
+    let eSet = caseEvents.get(pid);
+    if (!eSet) {
+      eSet = new Set();
+      caseEvents.set(pid, eSet);
+    }
+    eSet.add(p.pt);
 
-    if (!drugCases.has(p.drugname)) drugCases.set(p.drugname, new Set());
-    drugCases.get(p.drugname)!.add(pid);
-
-    if (!eventCases.has(p.pt)) eventCases.set(p.pt, new Set());
-    eventCases.get(p.pt)!.add(pid);
-
-    const spKey = `${p.drugname}|${p.pt}`;
-    if (!singlePairCases.has(spKey)) singlePairCases.set(spKey, new Set());
-    singlePairCases.get(spKey)!.add(pid);
+    if (drugLastPid.get(p.drugname) !== pid) {
+      drugLastPid.set(p.drugname, pid);
+      drugCountMap.set(p.drugname, (drugCountMap.get(p.drugname) ?? 0) + 1);
+    }
+    if (eventLastPid.get(p.pt) !== pid) {
+      eventLastPid.set(p.pt, pid);
+      eventCountMap.set(p.pt, (eventCountMap.get(p.pt) ?? 0) + 1);
+    }
   }
+  drugLastPid.clear();
+  eventLastPid.clear();
 
-  // Count co-administered drug pairs (n11) and triplet co-events (n111) across multi-drug cases
+  // Pass 1: count co-administered drug pairs (n11) across multi-drug cases
   const drugPairCount = new Map<string, number>();
-  const tripletCount = new Map<string, number>();
-
   for (const [pid, dSet] of caseDrugs.entries()) {
-    if (dSet.size < 2) continue;
-    // Cap drugs per case at 12 to prevent combinatorial explosion on polypharmacy outlier reports
+    if (dSet.size < 2) {
+      caseDrugs.delete(pid);
+      caseEvents.delete(pid);
+      continue;
+    }
     const drugs = [...dSet].sort().slice(0, 12);
-    const events = [...(caseEvents.get(pid) ?? [])].sort();
-
     for (let i = 0; i < drugs.length; i++) {
       for (let j = i + 1; j < drugs.length; j++) {
         const dpKey = `${drugs[i]}|${drugs[j]}`;
         drugPairCount.set(dpKey, (drugPairCount.get(dpKey) ?? 0) + 1);
-        for (const ev of events) {
-          const tKey = `${drugs[i]}|${drugs[j]}|${ev}`;
-          tripletCount.set(tKey, (tripletCount.get(tKey) ?? 0) + 1);
+      }
+    }
+  }
+
+  // Only drug pairs with n11 >= minCoCases can ever produce a triplet with n111 >= minCoCases.
+  // For full-quarter datasets (>5,000 multi-drug pairs), cap candidate drug pairs to top 2,500 by n11.
+  let eligibleDrugPairs: Set<string>;
+  const qualifyingDrugPairs = [...drugPairCount.entries()].filter(([, n11]) => n11 >= minCoCases);
+  if (qualifyingDrugPairs.length > 2500) {
+    qualifyingDrugPairs.sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    eligibleDrugPairs = new Set(qualifyingDrugPairs.slice(0, 2500).map(([k]) => k));
+  } else {
+    eligibleDrugPairs = new Set(qualifyingDrugPairs.map(([k]) => k));
+  }
+
+  // Pass 2: count triplet co-events (n111) only for eligible drug pairs
+  const tripletCount = new Map<string, number>();
+  if (eligibleDrugPairs.size > 0) {
+    for (const [pid, dSet] of caseDrugs.entries()) {
+      const drugs = [...dSet].sort().slice(0, 12);
+      const events = [...(caseEvents.get(pid) ?? [])].sort();
+
+      for (let i = 0; i < drugs.length; i++) {
+        for (let j = i + 1; j < drugs.length; j++) {
+          const dpKey = `${drugs[i]}|${drugs[j]}`;
+          if (!eligibleDrugPairs.has(dpKey)) continue;
+          for (const ev of events) {
+            const tKey = `${dpKey}|${ev}`;
+            tripletCount.set(tKey, (tripletCount.get(tKey) ?? 0) + 1);
+          }
         }
       }
     }
   }
+  caseDrugs.clear();
+  caseEvents.clear();
 
   const eligibleTriplets = [...tripletCount.entries()]
     .filter(([, n111]) => n111 >= minCoCases)
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
     .slice(0, maxTriplets);
+  tripletCount.clear();
+
+  // Only count singlePairCount for the (drug, adverse_event) pairs needed by eligibleTriplets
+  const neededByDrug = new Map<string, Set<string>>();
+  for (const [tKey] of eligibleTriplets) {
+    const [drug_a, drug_b, adverse_event] = tKey.split("|");
+    if (!neededByDrug.has(drug_a)) neededByDrug.set(drug_a, new Set());
+    neededByDrug.get(drug_a)!.add(adverse_event);
+    if (!neededByDrug.has(drug_b)) neededByDrug.set(drug_b, new Set());
+    neededByDrug.get(drug_b)!.add(adverse_event);
+  }
+  const singlePairCount = new Map<string, number>();
+  if (neededByDrug.size > 0) {
+    for (let i = 0; i < pairs.length; i++) {
+      const p = pairs[i];
+      if (!neededByDrug.get(p.drugname)?.has(p.pt)) continue;
+      const spKey = `${p.drugname}|${p.pt}`;
+      singlePairCount.set(spKey, (singlePairCount.get(spKey) ?? 0) + 1);
+    }
+  }
 
   const results: InteractionSignalRow[] = [];
 
@@ -867,12 +1212,12 @@ export function computeDrugInteractions(
     const dpKey = `${drug_a}|${drug_b}`;
     const n11 = drugPairCount.get(dpKey) ?? n111;
 
-    const nA = drugCases.get(drug_a)?.size ?? 0;
-    const nB = drugCases.get(drug_b)?.size ?? 0;
-    const nE = eventCases.get(adverse_event)?.size ?? 0;
+    const nA = drugCountMap.get(drug_a) ?? 0;
+    const nB = drugCountMap.get(drug_b) ?? 0;
+    const nE = eventCountMap.get(adverse_event) ?? 0;
 
-    const nAE = singlePairCases.get(`${drug_a}|${adverse_event}`)?.size ?? 0;
-    const nBE = singlePairCases.get(`${drug_b}|${adverse_event}`)?.size ?? 0;
+    const nAE = singlePairCount.get(`${drug_a}|${adverse_event}`) ?? 0;
+    const nBE = singlePairCount.get(`${drug_b}|${adverse_event}`) ?? 0;
 
     // 4 mutually exclusive cells:
     // 11: both A and B

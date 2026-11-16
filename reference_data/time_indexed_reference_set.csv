@@ -1,0 +1,61 @@
+drug,adverse_event,label,index_date,source,notes
+SEMAGLUTIDE,PANCREATITIS ACUTE,1,20240515,FDA SrLC / GLP-1 Safety Review,GLP-1 receptor agonist acute pancreatitis warning & post-marketing surveillance
+SEMAGLUTIDE,INTESTINAL OBSTRUCTION,1,20240515,FDA SrLC Sept 2023 / 2024 Follow-up,Ileus and intestinal obstruction added to Warnings & Precautions
+TIRZEPATIDE,PANCREATITIS ACUTE,1,20240515,FDA SrLC / GLP-1-GIP Safety Review,Acute pancreatitis post-marketing signal monitoring
+EMPAGLIFLOZIN,DIABETIC KETOACIDOSIS,1,20240515,FDA DSC / Harpaz Time-Indexed Standard,SGLT2 inhibitor euglycemic ketoacidosis safety communication
+DAPAGLIFLOZIN,DIABETIC KETOACIDOSIS,1,20240515,FDA DSC / Harpaz Time-Indexed Standard,SGLT2 inhibitor diabetic ketoacidosis warning
+CANAGLIFLOZIN,DIABETIC KETOACIDOSIS,1,20240515,FDA DSC / Harpaz Time-Indexed Standard,SGLT2 inhibitor ketoacidosis safety label change
+PEMBROLIZUMAB,MYOCARDITIS,1,20240515,FDA SrLC Immune-Mediated ADR,Immune checkpoint inhibitor myocarditis warning
+NIVOLUMAB,MYOCARDITIS,1,20240515,FDA SrLC Immune-Mediated ADR,Immune checkpoint inhibitor myocarditis warning
+PEMBROLIZUMAB,PNEUMONITIS,1,20240515,FDA SrLC Immune-Mediated ADR,Immune-mediated pneumonitis warning
+APIXABAN,GASTROINTESTINAL HAEMORRHAGE,1,20240515,Harpaz et al. CPT 2014 / OMOP,Direct oral anticoagulant major GI bleeding positive control
+RIVAROXABAN,GASTROINTESTINAL HAEMORRHAGE,1,20240515,Harpaz et al. CPT 2014 / OMOP,Direct oral anticoagulant major GI bleeding positive control
+WARFARIN,GASTROINTESTINAL HAEMORRHAGE,1,20240515,Harpaz et al. CPT 2014 / OMOP,Vitamin K antagonist haemorrhage positive control
+ATORVASTATIN,RHABDOMYOLYSIS,1,20240515,Harpaz et al. CPT 2014 / OMOP,HMG-CoA reductase inhibitor myopathy/rhabdomyolysis positive control
+ROSUVASTATIN,RHABDOMYOLYSIS,1,20240515,Harpaz et al. CPT 2014 / OMOP,HMG-CoA reductase inhibitor rhabdomyolysis positive control
+AMIODARONE,PULMONARY FIBROSIS,1,20240515,Harpaz et al. CPT 2014 / OMOP,Antiarrhythmic pulmonary toxicity positive control
+METHOTREXATE,PANCYTOPENIA,1,20240515,Harpaz et al. CPT 2014 / EU-ADR,Antimetabolite bone marrow suppression positive control
+CLOZAPINE,AGRANULOCYTOSIS,1,20240515,Harpaz et al. CPT 2014 / EU-ADR,Atypical antipsychotic agranulocytosis boxed warning
+LAMOTRIGINE,STEVENS-JOHNSON SYNDROME,1,20240515,Harpaz et al. CPT 2014 / OMOP,Anticonvulsant severe cutaneous adverse reaction positive control
+ALLOPURINOL,DRUG REACTION WITH EOSINOPHILIA AND SYSTEMIC SYMPTOMS,1,20240515,FDA SrLC / SCAR Reference Standard,Xanthine oxidase inhibitor DRESS syndrome positive control
+VANCOMYCIN,ACUTE KIDNEY INJURY,1,20240515,Harpaz et al. CPT 2014 / OMOP,Glycopeptide nephrotoxicity positive control
+OLANZAPINE,DIABETES MELLITUS,1,20240515,Harpaz et al. CPT 2014 / OMOP,Second-generation antipsychotic metabolic hyperglycemia positive control
+QUETIAPINE,SOMNOLENCE,1,20240515,Harpaz et al. CPT 2014 / OMOP,Atypical antipsychotic sedation positive control
+LISINOPRIL,ANGIOEDEMA,1,20240515,Harpaz et al. CPT 2014 / OMOP,ACE inhibitor bradykinin-mediated angioedema positive control
+FUROSEMIDE,HYPOKALAEMIA,1,20240515,Harpaz et al. CPT 2014 / EU-ADR,Loop diuretic electrolyte depletion positive control
+METFORMIN,LACTIC ACIDOSIS,1,20240515,Harpaz et al. CPT 2014 / EU-ADR,Biguanide lactic acidosis boxed warning positive control
+DENOSUMAB,OSTEONECROSIS OF JAW,1,20240515,FDA SrLC / Antiresorptive Safety Review,RANKL inhibitor medication-related osteonecrosis of the jaw
+DUPILUMAB,CONJUNCTIVITIS,1,20240515,FDA SrLC / Post-Marketing Label Addition,IL-4/IL-13 inhibitor ocular surface adverse reaction
+VEDOLIZUMAB,INFUSION RELATED REACTION,1,20240515,FDA SrLC / Biologic Safety Review,Integrin receptor antagonist infusion reaction
+OSIMERTINIB,INTERSTITIAL LUNG DISEASE,1,20240515,FDA SrLC / Oncology Safety Review,EGFR TKI interstitial lung disease warning
+SACUBITRIL\VALSARTAN,HYPOTENSION,1,20240515,FDA SrLC / Cardiovascular Safety Review,ARNI symptomatic hypotension warning
+SEMAGLUTIDE,ALOPECIA,0,20240515,Time-Indexed Negative Control (Unlabelled),Unassociated/under-investigation pair not established as causal in label at cutoff
+ATORVASTATIN,GASTROINTESTINAL HAEMORRHAGE,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+METFORMIN,RHABDOMYOLYSIS,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+LISINOPRIL,HEPATIC FAILURE,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+AMLODIPINE,ACUTE KIDNEY INJURY,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+OMEPRAZOLE,MYOCARDIAL INFARCTION,0,20240515,Harpaz et al. CPT 2014 / EU-ADR Negative Control,EU-ADR negative control pair
+LEVOTHYROXINE,GASTROINTESTINAL HAEMORRHAGE,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+GABAPENTIN,HEPATIC FAILURE,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+LOSARTAN,RHABDOMYOLYSIS,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+SERTRALINE,ACUTE KIDNEY INJURY,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+METOPROLOL,PANCYTOPENIA,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+PANTOPRAZOLE,AGRANULOCYTOSIS,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+MONTELUKAST,ACUTE KIDNEY INJURY,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+ESCITALOPRAM,HEPATIC FAILURE,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+ROSUVASTATIN,GASTROINTESTINAL HAEMORRHAGE,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+DULOXETINE,RHABDOMYOLYSIS,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+ALBUTEROL,ACUTE KIDNEY INJURY,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+PREGABALIN,GASTROINTESTINAL HAEMORRHAGE,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+APREMILAST,MYOCARDIAL INFARCTION,0,20240515,Harpaz et al. CPT 2014 / Negative Control,Negative control pair
+ADALIMUMAB,HYPOKALAEMIA,0,20240515,Harpaz et al. CPT 2014 / Negative Control,Negative control pair
+USTEKINUMAB,RHABDOMYOLYSIS,0,20240515,Harpaz et al. CPT 2014 / Negative Control,Negative control pair
+SECUKINUMAB,ACUTE KIDNEY INJURY,0,20240515,Harpaz et al. CPT 2014 / Negative Control,Negative control pair
+DUPILUMAB,GASTROINTESTINAL HAEMORRHAGE,0,20240515,Harpaz et al. CPT 2014 / Negative Control,Negative control pair
+PEMBROLIZUMAB,ALOPECIA,0,20240515,Harpaz et al. CPT 2014 / Negative Control,Negative control pair
+NIVOLUMAB,ALOPECIA,0,20240515,Harpaz et al. CPT 2014 / Negative Control,Negative control pair
+APIXABAN,RHABDOMYOLYSIS,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+RIVAROXABAN,RHABDOMYOLYSIS,0,20240515,Harpaz et al. CPT 2014 / OMOP Negative Control,OMOP negative control pair
+EMPAGLIFLOZIN,ALOPECIA,0,20240515,Harpaz et al. CPT 2014 / Negative Control,Negative control pair
+DAPAGLIFLOZIN,ALOPECIA,0,20240515,Harpaz et al. CPT 2014 / Negative Control,Negative control pair
+TIRZEPATIDE,ALOPECIA,0,20240515,Harpaz et al. CPT 2014 / Negative Control,Negative control pair
